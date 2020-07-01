@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as mat;
 import 'package:path_provider/path_provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -19,7 +19,8 @@ class SpotifyService {
     enabled = true;
   }
 
-  //User get myUser => _api == null ? null : _api.me.get();
+  Future<User> get myUser => api == null ? null : api.me.get();
+
 
   void login() {
     logedin = true;

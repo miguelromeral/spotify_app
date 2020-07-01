@@ -30,6 +30,7 @@ dependencies:
   path_provider: ^1.6.11
   webview_flutter: ^0.3.22+1
   flutter_webview_plugin: ^0.3.11
+  cached_network_image: ^2.2.0+1
 
 
 
