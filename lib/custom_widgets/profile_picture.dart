@@ -3,7 +3,7 @@ import 'package:spotify/spotify.dart';
 
 class ProfilePicture extends StatelessWidget {
 
-  User user;
+  UserPublic user;
   double size;
 
   ProfilePicture({ this.user, this.size });
