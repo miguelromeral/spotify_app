@@ -13,19 +13,19 @@ import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Home extends StatefulWidget {
+class SavedSongs extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _SavedSongsState createState() => _SavedSongsState();
 }
 
-class _HomeState extends State<Home> {
+class _SavedSongsState extends State<SavedSongs> {
   @override
   Widget build(BuildContext context) {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
     return Scaffold(
       backgroundColor: Colors.brown[100],
-      appBar: CustomAppBar(title: 'Feed',),
+      appBar: CustomAppBar(title: 'My Saved Songs',),
       body: Center(
         child: FutureBuilder<User>(
           future: state.myUser,

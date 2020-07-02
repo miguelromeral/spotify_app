@@ -4,9 +4,11 @@ import 'package:flutter/material.dart' as mat;
 import 'package:path_provider/path_provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:spotify_app/services/auth.dart';
 
 class SpotifyService {
   SpotifyApi api;
+  AuthService auth;
   bool enabled = false;
   bool logedin = false;
 

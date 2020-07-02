@@ -56,7 +56,6 @@ class _AuthenticateState extends State<Authenticate> {
       final spotify = SpotifyApi(credentials);
       context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
     } else {
-      print("End Getting credentials");
       credentials = await SpotifyService.readCredentialsFile();
       final grant = SpotifyApi.authorizationCodeGrant(credentials);
       final scopes = ['user-read-email', 'user-library-read'];
@@ -66,11 +65,7 @@ class _AuthenticateState extends State<Authenticate> {
         scopes: scopes, // scopes are optional
       );
 
-      print("Ready to launch");
-
       await redirect(authUri);
-
-      print("Ready to Listen");
 
       _sub = getUriLinksStream().listen((Uri uri) {
         print("listeniing: $uri");
@@ -81,8 +76,6 @@ class _AuthenticateState extends State<Authenticate> {
           context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
 
           _sub.cancel();
-          print("We did it!");
-          //return uri.toString();
         }
       }, onError: (err) {
         // Handle exception by warning the user their action did not succeed
@@ -101,6 +94,8 @@ class _AuthenticateState extends State<Authenticate> {
       var refreshToken = prefs.getString('refreshToken') ?? "";
       var scopes = prefs.getStringList('scopes') ?? List();
       var expiration = DateTime.parse(prefs.getString('expiration') ?? "");
+
+      print("Expiration Date: ${expiration.toString()}");
 
       if (clientId.isNotEmpty && clientSecret.isNotEmpty) {
         return SpotifyApiCredentials(

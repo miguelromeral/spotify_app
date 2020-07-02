@@ -1,9 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:spotify/spotify.dart' as sp;
+import 'package:spotify/spotify.dart';
 
-class GUI {
-  static Widget getProfilePicture(sp.User user, double size) {
+class ProfilePicture extends StatelessWidget {
+
+  User user;
+  double size;
+
+  ProfilePicture({ this.user, this.size });
+
+  @override
+  Widget build(BuildContext context) {
     Widget child = null;
     if (user.images.isEmpty) {
       child = CircleAvatar(child: Text(user.displayName[0]));
@@ -18,13 +24,6 @@ class GUI {
       width: size,
       margin: const EdgeInsets.only(right: 16.0),
       child: child,
-    );
-  }
-
-  static Widget getAlbumPic(sp.Track track, double size) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => CircularProgressIndicator(),
-      imageUrl: track.album.images[0].url,
     );
   }
 }

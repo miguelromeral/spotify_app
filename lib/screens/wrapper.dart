@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
+import 'package:spotify_app/screens/tabs_page.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -14,7 +15,7 @@ class Wrapper extends StatelessWidget {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         if(state.logedin){
-          return Home();
+          return TabsPage();
         }else {
           return Authenticate();
         }

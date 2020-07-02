@@ -16,38 +16,39 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   @override
   Stream<SpotifyService> mapEventToState(SpotifyEventBase event) async* {
     if (event is LoginEvent) {
-      /*  AuthService _auth = AuthService();
-        String email = "";
-        String pwd = "";
-   */   try {
+      AuthService _auth = AuthService();
+      String email = "";
+      String pwd = "";
+      try {
         var cred = await event.service.api.getCredentials();
         _saveCredentials(cred);
-    /*    var user = await event.service.api.me.get();
+        var user = await event.service.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
         dynamic result = await _auth.signInWithEmailAndPassword(email, pwd);
-        print("Result: $result");
+        print("Logged $email Successfully: $result");
       } on PlatformException catch (err) {
         print("Error while login: PlatformException: $err");
-        if(err.code == "ERROR_USER_NOT_FOUND"){
-          try{
-            dynamic result = await _auth.registerWithEmailAndPassword(email, pwd);
+        if (err.code == "ERROR_USER_NOT_FOUND") {
+          try {
+            dynamic result =
+                await _auth.registerWithEmailAndPassword(email, pwd);
             dynamic r2 = await _auth.signInWithEmailAndPassword(email, pwd);
-          }catch(e){
+            print("Registered $email and loged in successfully.");
+          } catch (e) {
             print("Error while registering new user and login in again: $e");
           }
         }
-  */    } catch (e) {
+      } catch (e) {
         print("Error while login: $e");
       }
-
+      event.service.auth = _auth;
       yield event.service;
     } else {
       throw Exception('oops');
     }
   }
 
-  
   Future _saveCredentials(SpotifyApiCredentials cred) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("accessToken", cred.accessToken);
@@ -58,5 +59,3 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     prefs.setString("expiration", cred.expiration.toString());
   }
 }
-
-
