@@ -29,7 +29,7 @@ class AuthService {
     }*/
   }
 
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future<FirebaseUser> registerWithEmailAndPassword(String email, String password) async {
     //try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);

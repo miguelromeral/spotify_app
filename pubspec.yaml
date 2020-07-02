@@ -32,6 +32,7 @@ dependencies:
   cached_network_image: ^2.2.0+1
   firebase_auth: ^0.14.0+5
   shared_preferences: ^0.5.7+3
+  cloud_firestore: ^0.13.7
 
 
 

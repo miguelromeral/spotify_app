@@ -25,7 +25,9 @@ class _SavedSongsState extends State<SavedSongs> {
 
     return Scaffold(
       backgroundColor: Colors.brown[100],
-      appBar: CustomAppBar(title: 'My Saved Songs',),
+      appBar: CustomAppBar(
+        title: 'My Saved Songs',
+      ),
       body: Center(
         child: FutureBuilder<User>(
           future: state.myUser,
@@ -33,32 +35,20 @@ class _SavedSongsState extends State<SavedSongs> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               User user = snapshot.data;
-              return Column(
-                children: [
-                  ProfilePicture(
-                    user: user,
-                    size: 100.0,
-                  ),
-                  Text(user.displayName),
-                  Text(user.email),
-                  Text(user.followers.total.toString()),
-                  Text(user.id),
-                  FutureBuilder<Iterable<TrackSaved>>(
-                    future: state.api.tracks.me.saved.all(),
-                    initialData: null,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<TrackSaved> tracks = snapshot.data.toList();
-                        return ListSongs(
-                          tracks: tracks.map((e) => e.track).toList(),
-                        );
-                        //return Text("Tracks: ${tracks.length}");
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                ],
+              return FutureBuilder<Iterable<TrackSaved>>(
+                future: state.api.tracks.me.saved.all(),
+                initialData: null,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<TrackSaved> tracks = snapshot.data.toList();
+                    return ListSongs(
+                      tracks: tracks.map((e) => e.track).toList(),
+                    );
+                    //return Text("Tracks: ${tracks.length}");
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");

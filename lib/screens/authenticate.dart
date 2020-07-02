@@ -22,6 +22,11 @@ class _AuthenticateState extends State<Authenticate> {
   StreamSubscription _sub;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[100],
@@ -48,15 +53,24 @@ class _AuthenticateState extends State<Authenticate> {
     }
   }
 
+  void automaticLogin(BuildContext context) async {
+    var credentials = await _loadCredentials();
+    if (credentials != null && credentials.expiration.isBefore(DateTime.now())) {
+      final spotify = SpotifyApi(credentials);
+      context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
+    }
+    print("End logging automatically.");
+  }
+
   void login(BuildContext context) async {
     print("Getting credentials");
 
-    var credentials = await _loadCredentials();
-    if (credentials != null) {
+/*    var credentials = await _loadCredentials();
+    if (credentials != null && credentials.expiration.isBefore(DateTime.now())) {
       final spotify = SpotifyApi(credentials);
       context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
     } else {
-      credentials = await SpotifyService.readCredentialsFile();
+  */ var    credentials = await SpotifyService.readCredentialsFile();
       final grant = SpotifyApi.authorizationCodeGrant(credentials);
       final scopes = ['user-read-email', 'user-library-read'];
 
@@ -81,7 +95,7 @@ class _AuthenticateState extends State<Authenticate> {
         // Handle exception by warning the user their action did not succeed
         print("Error while listening: $err");
       });
-    }
+   // }
     print("End Clicking");
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/custom_widgets/album_picture.dart';
 
 class ListSongs extends StatefulWidget {
@@ -14,6 +16,8 @@ class ListSongs extends StatefulWidget {
 class _ListSongsState extends State<ListSongs> {
   @override
   Widget build(BuildContext context) {
+    var state = BlocProvider.of<SpotifyBloc>(context).state;
+
     return Flexible(
       child: ListView.builder(
           itemCount: widget.tracks.length,
@@ -29,7 +33,11 @@ class _ListSongsState extends State<ListSongs> {
               //trailing: icon,
               //isThreeLine: true,
               // Interactividad:
-              onTap: () {},
+              onTap: () async {
+                var spUser = await state.myUser;
+                state.db.updateUserData(spUser.id, saved.id);
+                print("Updated!");
+              },
               //onLongPress: () => _pressCallback,
               //enabled: false,
               //selected: true,

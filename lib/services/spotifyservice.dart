@@ -4,11 +4,13 @@ import 'package:flutter/material.dart' as mat;
 import 'package:path_provider/path_provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:spotify_app/services/DatabaseService.dart';
 import 'package:spotify_app/services/auth.dart';
 
 class SpotifyService {
   SpotifyApi api;
   AuthService auth;
+  DatabaseService db;
   bool enabled = false;
   bool logedin = false;
 
@@ -23,6 +25,7 @@ class SpotifyService {
 
   Future<User> get myUser => api == null ? null : api.me.get();
 
+  Future<Iterable<PlaylistSimple>> get myPlaylists => api == null ? null : api.playlists.me.all(); 
 
   void login() {
     logedin = true;

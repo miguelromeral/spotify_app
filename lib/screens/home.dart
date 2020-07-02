@@ -8,6 +8,7 @@ import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/custom_widgets/album_picture.dart';
 import 'package:spotify_app/custom_widgets/custom_appbar.dart';
 import 'package:spotify_app/custom_widgets/profile_picture.dart';
+import 'package:spotify_app/custom_widgets/suggestions_list.dart';
 import 'package:spotify_app/screens/list_songs.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
@@ -27,53 +28,14 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.brown[100],
       appBar: CustomAppBar(title: 'Feed',),
       body: Center(
-        child: FutureBuilder<User>(
-          future: state.myUser,
-          initialData: null,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              User user = snapshot.data;
-              return Column(
-                children: [
-                  ProfilePicture(
-                    user: user,
-                    size: 100.0,
-                  ),
-                  Text(user.displayName),
-                  Text(user.email),
-                  Text(user.followers.total.toString()),
-                  Text(user.id),
-                  FutureBuilder<Iterable<TrackSaved>>(
-                    future: state.api.tracks.me.saved.all(),
-                    initialData: null,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<TrackSaved> tracks = snapshot.data.toList();
-                        return ListSongs(
-                          tracks: tracks.map((e) => e.track).toList(),
-                        );
-                        //return Text("Tracks: ${tracks.length}");
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
-          },
-        ),
+        child: SuggestionsList(),
       ),
     );
   }
-
+/*
   Future redirect(Uri authUri) async {
     if (await canLaunch(authUri.toString())) {
       await launch(authUri.toString());
     }
-  }
+  }*/
 }
