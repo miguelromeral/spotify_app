@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
@@ -10,7 +9,6 @@ import 'package:spotify_app/services/material_utilities.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class Home extends StatefulWidget {
   @override

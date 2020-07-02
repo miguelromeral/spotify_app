@@ -27,10 +27,11 @@ dependencies:
   spotify: ^0.3.6
   url_launcher: ^5.4.11
   uni_links: ^0.4.0
+  provider: ^4.0.5
   path_provider: ^1.6.11
-  webview_flutter: ^0.3.22+1
-  flutter_webview_plugin: ^0.3.11
   cached_network_image: ^2.2.0+1
+  firebase_auth: ^0.14.0+5
+  shared_preferences: ^0.5.7+3
 
 
 
