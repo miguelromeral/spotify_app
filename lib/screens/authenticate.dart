@@ -28,6 +28,7 @@ class _AuthenticateState extends State<Authenticate> {
 
   @override
   Widget build(BuildContext context) {
+    automaticLogin(context);
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
@@ -53,9 +54,11 @@ class _AuthenticateState extends State<Authenticate> {
     }
   }
 
-  void automaticLogin(BuildContext context) async {
+  Future automaticLogin(BuildContext context) async {
     var credentials = await _loadCredentials();
-    if (credentials != null && credentials.expiration.isBefore(DateTime.now())) {
+    print("Credentials retrieved: ${credentials?.expiration}");
+    if (credentials != null && credentials.expiration.isAfter(DateTime.now())) {
+      print("automatically logining in");
       final spotify = SpotifyApi(credentials);
       context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
     }
