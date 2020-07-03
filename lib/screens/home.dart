@@ -27,7 +27,6 @@ class _HomeState extends State<Home> {
     state.getFollowers(state.api.me);
 
     return Scaffold(
-      backgroundColor: Colors.brown[100],
       appBar: CustomAppBar(title: 'Feed',),
       body: Center(
         child: SuggestionsList(),

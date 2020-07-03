@@ -32,7 +32,6 @@ class _ShareTrackState extends State<ShareTrack> {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
     return Scaffold(
-      backgroundColor: Colors.brown[100],
       appBar: CustomAppBar(
         title: 'Share Track',
       ),
@@ -68,8 +67,11 @@ class _ShareTrackState extends State<ShareTrack> {
                         state.db.updateUserData(
                             spUser.id, widget.track.id, _description);
 
+
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text('Updated Suggestion!')));
+                            
+                        Navigator.pop(context);
                       }
                     },
                     child: Text('Submit'),

@@ -25,9 +25,9 @@ class _SavedSongsState extends State<SavedSongs> {
 
     return Scaffold(
       backgroundColor: Colors.brown[100],
-      appBar: CustomAppBar(
+      /*appBar: CustomAppBar(
         title: 'My Saved Songs',
-      ),
+      )*/
       body: Center(
         child: FutureBuilder<User>(
           future: state.myUser,
@@ -41,8 +41,9 @@ class _SavedSongsState extends State<SavedSongs> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<TrackSaved> tracks = snapshot.data.toList();
+                    List<Track> list = tracks.map((e) => e.track).toList();
                     return ListSongs(
-                      tracks: tracks.map((e) => e.track).toList(),
+                      tracks: list,
                     );
                     //return Text("Tracks: ${tracks.length}");
                   } else {
