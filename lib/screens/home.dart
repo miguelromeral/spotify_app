@@ -24,6 +24,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
+    state.getFollowers(state.api.me);
+
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: CustomAppBar(title: 'Feed',),
@@ -32,10 +34,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-/*
-  Future redirect(Uri authUri) async {
-    if (await canLaunch(authUri.toString())) {
-      await launch(authUri.toString());
-    }
-  }*/
 }

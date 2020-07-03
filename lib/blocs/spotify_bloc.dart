@@ -29,7 +29,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         user = await event.service.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
-        FirebaseUser result = await _auth.signInWithEmailAndPassword(email, pwd);
+        FirebaseUser result =
+            await _auth.signInWithEmailAndPassword(email, pwd);
         _db = DatabaseService(firebaseUserID: result.uid);
         print("Logged $email Successfully: $result");
       } on PlatformException catch (err) {
@@ -39,10 +40,10 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             dynamic firebaseuser =
                 await _auth.registerWithEmailAndPassword(email, pwd);
             dynamic r2 = await _auth.signInWithEmailAndPassword(email, pwd);
-            if(user != null && firebaseuser is FirebaseUser){
+            /*if (user != null && firebaseuser is FirebaseUser) {
               _db = DatabaseService(firebaseUserID: firebaseuser.uid);
               await _db.updateUserData(user.id, DatabaseService.defaultTrackId);
-            }
+            }*/
             print("Registered $email and loged in successfully.");
           } catch (e) {
             print("Error while registering new user and login in again: $e");
@@ -54,6 +55,12 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       event.service.db = _db;
       event.service.auth = _auth;
       yield event.service;
+    /*} else if (event is ShareTrackEvent) {
+      state.shareTrack(event.track);
+      yield state;
+    } else if (event is ForgetTrackEvent) {
+      state.forgetTrack();
+      yield state;*/
     } else {
       throw Exception('oops');
     }

@@ -15,3 +15,12 @@ class LoginEvent extends SpotifyEventBase {
     service.enabled = true;
   }
 }
+/*
+class ShareTrackEvent extends SpotifyEventBase {
+  
+  Track track;
+
+  ShareTrackEvent({this.track});
+}
+
+class ForgetTrackEvent extends SpotifyEventBase {}*/

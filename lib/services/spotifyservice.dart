@@ -13,6 +13,7 @@ class SpotifyService {
   DatabaseService db;
   bool enabled = false;
   bool logedin = false;
+  Track toShare;
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";
 
@@ -23,9 +24,25 @@ class SpotifyService {
     enabled = true;
   }
 
+  void shareTrack(Track track){
+    toShare = track;
+  }
+
+  void forgetTrack(){
+    toShare = null;
+  }
+
   Future<User> get myUser => api == null ? null : api.me.get();
 
   Future<Iterable<PlaylistSimple>> get myPlaylists => api == null ? null : api.playlists.me.all(); 
+
+  void getFollowers(Me me){
+    var following = me.following(FollowingType.artist);
+    /*for(var f in following){
+      print
+    }*/
+    print("Following: $following");
+  }
 
   void login() {
     logedin = true;

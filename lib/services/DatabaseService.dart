@@ -8,20 +8,26 @@ class DatabaseService {
   final CollectionReference collection =
       Firestore.instance.collection("suggestions");
 
-  Future updateUserData(String spotifyuserid, String trackid) async {
+  Future updateUserData(
+      String spotifyuserid, String trackid, String text) async {
     return await collection.document(spotifyuserid).setData({
       'trackid': trackid,
       'suserid': spotifyuserid,
       'fuserid': firebaseUserID,
+      'text': text,
+      'date': DateTime.now().toString(),
     });
   }
 
   List<Suggestion> _suggestionListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return Suggestion(
-          trackid: doc.data['trackid'] ?? '',
-          suserid: doc.data['suserid'] ?? '',
-          fuserid: doc.data['fuserid'] ?? '');
+        trackid: doc.data['trackid'] ?? '',
+        suserid: doc.data['suserid'] ?? '',
+        fuserid: doc.data['fuserid'] ?? '',
+        text: doc.data['text'] ?? '',
+        date: DateTime.parse(doc.data['date']) ?? '',
+      );
     }).toList();
   }
 

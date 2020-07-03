@@ -22,38 +22,43 @@ class _SuggestionsListState extends State<SuggestionsList> {
     final sugs = Provider.of<List<Suggestion>>(context);
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
-    return Flexible(
-        child: ListView.builder(
-            itemCount: sugs.length,
-            itemBuilder: (context, index) {
-              var item = sugs[index];
-              if (item.trackid == DatabaseService.defaultTrackId) {
-                return Container();
-              } else {
-                return FutureBuilder(
-                    future: state.api.tracks.get(item.trackid),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        Track track = snapshot.data;
-                        return FutureBuilder(
-                            future: state.api.users.get(item.suserid),
-                            builder: (context, snp) {
-                              if (snp.hasData) {
-                                UserPublic user = snp.data;
-                                return FeedItem(
-                                  track: track,
-                                  user: user,
-                                );
-                              } else {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
-                            });
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    });
-              }
-            }));
+    if (sugs != null && sugs.length > 0) {
+      return Flexible(
+          child: ListView.builder(
+              itemCount: sugs.length,
+              itemBuilder: (context, index) {
+                var item = sugs[index];
+                if (item.trackid == DatabaseService.defaultTrackId) {
+                  return Container();
+                } else {
+                  return FutureBuilder(
+                      future: state.api.tracks.get(item.trackid),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          Track track = snapshot.data;
+                          return FutureBuilder(
+                              future: state.api.users.get(item.suserid),
+                              builder: (context, snp) {
+                                if (snp.hasData) {
+                                  UserPublic user = snp.data;
+                                  return FeedItem(
+                                    track: track,
+                                    user: user,
+                                    suggestion: item,
+                                  );
+                                } else {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              });
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      });
+                }
+              }));
+    } else {
+      return Center(child: Text('oops, no feed.'));
+    }
   }
 }

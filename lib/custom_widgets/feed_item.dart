@@ -1,18 +1,22 @@
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/custom_widgets/profile_picture.dart';
 import 'package:spotify_app/models/suggestion.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'album_picture.dart';
 
 class FeedItem extends StatelessWidget {
   Track track;
   UserPublic user;
+  Suggestion suggestion;
 
-  FeedItem({this.track, this.user});
+  FeedItem({this.track, this.user, this.suggestion});
 
   @override
   Widget build(BuildContext context) {
+    String elapsed = timeago.format(suggestion.date, locale: 'en_short');
     return ListTile(
       leading: ProfilePicture(
         user: user,
@@ -23,8 +27,16 @@ class FeedItem extends StatelessWidget {
         size: 50.0,
       ),
       title: Text(user.displayName),
-      subtitle: Text('${track.name}\n${track.artists[0].name}'),
+      subtitle: Text(
+          '${track.name} - ${track.artists[0].name}\n${suggestion.text}\n' +
+              '$elapsed'),
       isThreeLine: true,
+      onLongPress: () async {
+        if (await canLaunch(track.uri)) {
+          print("Opening ${track.uri}");
+          launch(track.uri);
+        }
+      },
     );
 /*
     return Container(
