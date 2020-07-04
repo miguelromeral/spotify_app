@@ -60,7 +60,7 @@ class _FeedItemState extends State<FeedItem> {
           await state.db.likeSuggestion(suggestion);
           bloc.add(UpdateFeed());
 
-          SuggestionLikeNotification().dispatch(context);
+          UpdatedFeedNotification().dispatch(context);
 
           Scaffold.of(context).showSnackBar(
               SnackBar(content: Text('You liked ${track.name}!')));
