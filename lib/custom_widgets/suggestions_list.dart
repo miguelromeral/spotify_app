@@ -7,7 +7,9 @@ import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/custom_widgets/profile_picture.dart';
 import 'package:spotify_app/custom_widgets/feed_item.dart';
 import 'package:spotify_app/models/suggestion.dart';
+import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
 import 'package:spotify_app/services/DatabaseService.dart';
+import 'package:spotify_app/services/spotifyservice.dart';
 
 import 'album_picture.dart';
 
@@ -17,11 +19,48 @@ class SuggestionsList extends StatefulWidget {
 }
 
 class _SuggestionsListState extends State<SuggestionsList> {
+
+  Future<List<Suggestion>> future;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final sugs = Provider.of<List<Suggestion>>(context);
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
+    if(future == null){
+      setState(() {
+        future = state.furueSuggestions;
+      });
+    }
+
+    return NotificationListener<SuggestionLikeNotification>(
+      onNotification: (notification) {
+        print("Notification: $notification");
+        setState(() {
+          future = null;
+        });
+        return true;
+      },
+      child: FutureBuilder(
+        future: future,
+        key: ObjectKey(state),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildTree(snapshot.data, state);
+          } else {
+            return Text("Retreiving Stream...");
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildTree(List<Suggestion> sugs, SpotifyService state) {
     if (sugs != null && sugs.length > 0) {
       return Flexible(
           child: ListView.builder(

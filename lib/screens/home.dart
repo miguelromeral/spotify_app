@@ -24,8 +24,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
-    state.getFollowers(state.api.me);
-
     return Scaffold(
       appBar: CustomAppBar(title: 'Feed',),
       body: Center(

@@ -58,8 +58,7 @@ class _TabsPageState extends State<TabsPage> {
       Uri uri = Uri.parse(intent);
       String type = uri.pathSegments[0];
       String id = uri.pathSegments[1];
-      if (type != "track") 
-        throw Exception("Only tracks available to share");
+      if (type != "track") throw Exception("Only tracks available to share");
 
       Track track = await state.api.tracks.get(id);
       Navigator.push(
@@ -84,29 +83,30 @@ class _TabsPageState extends State<TabsPage> {
           body: Center(child: Text("Retrieving intent...")),
         );
       } else {
-        return StreamProvider<List<Suggestion>>.value(
-          value: DatabaseService().suggestions,
-          child: Scaffold(
-            body: IndexedStack(
-              index: _currentIndex,
-              children: [
-                for (final tabItem in TabNavigationItem.items) tabItem.page,
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) => setState(() => _currentIndex = index),
-              items: [
-                for (final tabItem in TabNavigationItem.items)
-                  BottomNavigationBarItem(
-                    icon: tabItem.icon,
-                    title: tabItem.title,
-                  )
-              ],
-            ),
-          ),
-        );
+        return _fullTree(state);
       }
     });
+  }
+
+  Widget _fullTree(SpotifyService state) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          for (final tabItem in TabNavigationItem.items) tabItem.page,
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (int index) => setState(() => _currentIndex = index),
+        items: [
+          for (final tabItem in TabNavigationItem.items)
+            BottomNavigationBarItem(
+              icon: tabItem.icon,
+              title: tabItem.title,
+            )
+        ],
+      ),
+    );
   }
 }

@@ -29,17 +29,16 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         user = await event.service.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
-        FirebaseUser result =
-            await _auth.signInWithEmailAndPassword(email, pwd);
-        _db = DatabaseService(firebaseUserID: result.uid);
-        print("Logged $email Successfully: $result");
+        _db = await  _login(_auth, email, pwd, user.id);
+        print("Logged $email.");
       } on PlatformException catch (err) {
         print("Error while login: PlatformException: $err");
         if (err.code == "ERROR_USER_NOT_FOUND") {
           try {
             dynamic firebaseuser =
                 await _auth.registerWithEmailAndPassword(email, pwd);
-            dynamic r2 = await _auth.signInWithEmailAndPassword(email, pwd);
+             _db = await _login(_auth, email, pwd, user.id);
+            
             /*if (user != null && firebaseuser is FirebaseUser) {
               _db = DatabaseService(firebaseUserID: firebaseuser.uid);
               await _db.updateUserData(user.id, DatabaseService.defaultTrackId);
@@ -53,17 +52,24 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         print("Error while login: $e");
       }
       event.service.db = _db;
+      event.service.furueSuggestions = _db.getsuggestions();
       event.service.auth = _auth;
       yield event.service;
-    /*} else if (event is ShareTrackEvent) {
-      state.shareTrack(event.track);
+    } else if (event is UpdateFeed) {
+      state.furueSuggestions = state.db.getsuggestions();
       yield state;
-    } else if (event is ForgetTrackEvent) {
+    /*} else if (event is ForgetTrackEvent) {
       state.forgetTrack();
       yield state;*/
     } else {
       throw Exception('oops');
     }
+  }
+
+  Future<DatabaseService> _login(AuthService _auth, String email, String pwd, String suserid) async{
+    var user = await _auth.signInWithEmailAndPassword(email, pwd);
+    DatabaseService _db = DatabaseService(spotifyUserID: suserid, firebaseUserID: user.uid);
+    return _db;
   }
 
   Future _saveCredentials(SpotifyApiCredentials cred) async {

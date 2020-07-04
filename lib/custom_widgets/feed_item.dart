@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
+import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
@@ -9,17 +11,36 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'album_picture.dart';
 
-class FeedItem extends StatelessWidget {
-  Track track;
-  UserPublic user;
+class FeedItem extends StatefulWidget {
+  final Track track;
+  final UserPublic user;
   Suggestion suggestion;
 
   FeedItem({this.track, this.user, this.suggestion});
 
   @override
+  _FeedItemState createState() => _FeedItemState();
+}
+
+class _FeedItemState extends State<FeedItem> {
+
+  bool liked;
+
+  @override
+  void initState() {
+    liked = false;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var state = BlocProvider.of<SpotifyBloc>(context).state;
-    
+    var bloc = BlocProvider.of<SpotifyBloc>(context);
+    var state = bloc.state;
+
+    var track = widget.track;
+    var user = widget.user;
+    var suggestion = widget.suggestion;
+
     String elapsed = timeago.format(suggestion.date, locale: 'en_short');
     return ListTile(
       leading: ProfilePicture(
@@ -37,6 +58,10 @@ class FeedItem extends StatelessWidget {
       isThreeLine: true,
       onTap: () async {
         await state.db.likeSuggestion(suggestion);
+        bloc.add(UpdateFeed());
+
+        SuggestionLikeNotification().dispatch(context);
+
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('You liked ${track.name}!')));
       },
