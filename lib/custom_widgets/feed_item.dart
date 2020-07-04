@@ -23,7 +23,6 @@ class FeedItem extends StatefulWidget {
 }
 
 class _FeedItemState extends State<FeedItem> {
-
   bool liked;
 
   @override
@@ -57,13 +56,18 @@ class _FeedItemState extends State<FeedItem> {
               '$elapsed\nLikes: ${suggestion.likes}'),
       isThreeLine: true,
       onTap: () async {
-        await state.db.likeSuggestion(suggestion);
-        bloc.add(UpdateFeed());
+        if (user.id != suggestion.suserid) {
+          await state.db.likeSuggestion(suggestion);
+          bloc.add(UpdateFeed());
 
-        SuggestionLikeNotification().dispatch(context);
+          SuggestionLikeNotification().dispatch(context);
 
-        Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text('You liked ${track.name}!')));
+          Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text('You liked ${track.name}!')));
+        }else{
+          Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+        }
       },
       onLongPress: () async {
         if (await canLaunch(track.uri)) {

@@ -29,7 +29,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         user = await event.service.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
-        _db = await  _login(_auth, email, pwd, user.id);
+        _db = await _login(_auth, email, pwd, user.id);
         print("Logged $email.");
       } on PlatformException catch (err) {
         print("Error while login: PlatformException: $err");
@@ -37,8 +37,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
           try {
             dynamic firebaseuser =
                 await _auth.registerWithEmailAndPassword(email, pwd);
-             _db = await _login(_auth, email, pwd, user.id);
-            
+            _db = await _login(_auth, email, pwd, user.id);
+            _db.initializeFollowing();
             /*if (user != null && firebaseuser is FirebaseUser) {
               _db = DatabaseService(firebaseUserID: firebaseuser.uid);
               await _db.updateUserData(user.id, DatabaseService.defaultTrackId);
@@ -58,7 +58,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdateFeed) {
       state.furueSuggestions = state.db.getsuggestions();
       yield state;
-    /*} else if (event is ForgetTrackEvent) {
+      /*} else if (event is ForgetTrackEvent) {
       state.forgetTrack();
       yield state;*/
     } else {
@@ -66,9 +66,11 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     }
   }
 
-  Future<DatabaseService> _login(AuthService _auth, String email, String pwd, String suserid) async{
+  Future<DatabaseService> _login(
+      AuthService _auth, String email, String pwd, String suserid) async {
     var user = await _auth.signInWithEmailAndPassword(email, pwd);
-    DatabaseService _db = DatabaseService(spotifyUserID: suserid, firebaseUserID: user.uid);
+    DatabaseService _db =
+        DatabaseService(spotifyUserID: suserid, firebaseUserID: user.uid);
     return _db;
   }
 

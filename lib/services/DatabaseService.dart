@@ -30,6 +30,21 @@ class DatabaseService {
     });
   }
 
+  Future addFollowing(String suserid) async {
+    var fol =  await getFollowing();
+    return await fol.reference.updateData(<String, dynamic>{
+      'users': Following.concatenateUser(fol.users, suserid),
+    });
+  }
+
+  Future initializeFollowing() async {
+    return await cFollowing.document(spotifyUserID).setData({
+      'suserid': spotifyUserID,
+      'fuserid': firebaseUserID,
+      'users': Following.concatenateUser('', spotifyUserID),
+    });
+  }
+
   List<Suggestion> _suggestionListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return Suggestion(
@@ -58,6 +73,7 @@ class DatabaseService {
     try {
       var fol = await getFollowing();
       var list = fol.usersList;
+      list.removeWhere((element) => element.isEmpty || element == "");
       list.add(spotifyUserID);
       return cSuggestions
           .where('suserid', whereIn: list)

@@ -12,7 +12,13 @@ class Following {
 
 
   List<String> get usersList {
-    return users.split(',');
+    return users.split(delimiter);
   }
 
+
+  static String concatenateUser(String previous, String suserid){
+    return '$previous$suserid$delimiter';
+  }
+
+  static String delimiter = ',';
 }
