@@ -16,6 +16,13 @@ class DatabaseService {
       'fuserid': firebaseUserID,
       'text': text,
       'date': DateTime.now().toString(),
+      'likes': 0,
+    });
+  }
+
+  Future likeSuggestion(Suggestion suggestion) async {
+    return await suggestion.reference.updateData(<String, dynamic>{
+      'likes': (suggestion.likes + 1),
     });
   }
 
@@ -27,6 +34,8 @@ class DatabaseService {
         fuserid: doc.data['fuserid'] ?? '',
         text: doc.data['text'] ?? '',
         date: DateTime.parse(doc.data['date']) ?? '',
+        likes: doc.data['likes'] ?? 0,
+        reference: doc.reference,
       );
     }).toList();
   }

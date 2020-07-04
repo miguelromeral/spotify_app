@@ -1,3 +1,5 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
@@ -16,6 +18,8 @@ class FeedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var state = BlocProvider.of<SpotifyBloc>(context).state;
+    
     String elapsed = timeago.format(suggestion.date, locale: 'en_short');
     return ListTile(
       leading: ProfilePicture(
@@ -29,8 +33,13 @@ class FeedItem extends StatelessWidget {
       title: Text(user.displayName),
       subtitle: Text(
           '${track.name} - ${track.artists[0].name}\n${suggestion.text}\n' +
-              '$elapsed'),
+              '$elapsed\nLikes: ${suggestion.likes}'),
       isThreeLine: true,
+      onTap: () async {
+        await state.db.likeSuggestion(suggestion);
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('You liked ${track.name}!')));
+      },
       onLongPress: () async {
         if (await canLaunch(track.uri)) {
           print("Opening ${track.uri}");

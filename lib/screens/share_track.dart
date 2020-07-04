@@ -33,7 +33,7 @@ class _ShareTrackState extends State<ShareTrack> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Share Track',
+        title: 'Share ${widget.track.name}',
       ),
       body: Builder(
         builder: (context) => Container(
@@ -70,7 +70,7 @@ class _ShareTrackState extends State<ShareTrack> {
 
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text('Updated Suggestion!')));
-                            
+
                         Navigator.pop(context);
                       }
                     },
