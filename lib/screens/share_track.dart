@@ -70,7 +70,10 @@ class _ShareTrackState extends State<ShareTrack> {
                             spUser.id, widget.track.id, _description);
 
                         bloc.add(UpdateFeed());
+                        bloc.add(UpdateMySuggestion());
                         UpdatedFeedNotification().dispatch(context);
+
+
 
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text('Updated Suggestion!')));

@@ -8,7 +8,10 @@ import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/custom_widgets/album_picture.dart';
 import 'package:spotify_app/custom_widgets/card_info.dart';
 import 'package:spotify_app/custom_widgets/custom_appbar.dart';
+import 'package:spotify_app/custom_widgets/feed_item.dart';
 import 'package:spotify_app/custom_widgets/profile_picture.dart';
+import 'package:spotify_app/custom_widgets/suggestion_item.dart';
+import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/screens/list_songs.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
@@ -76,6 +79,19 @@ class _ProfileState extends State<Profile> {
                                   return Text('Unknown playlists');
                                 }
                               }),
+                          BlocBuilder<SpotifyBloc, SpotifyService>(
+                            builder: (context, state) {
+                              if (state.mySuggestion != null) {
+                                var sug = state.mySuggestion;
+                                return SuggestionItem(
+                                  suggestion: sug,
+                                );
+                              } else {
+                                BlocProvider.of<SpotifyBloc>(context).add(UpdateMySuggestion());
+                                return Text('Unknown Suggestion');
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),

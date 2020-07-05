@@ -53,7 +53,12 @@ class DatabaseService {
 
   List<Suggestion> _suggestionListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
-      return Suggestion(
+      return _suggestionFromDocument(doc);
+    }).toList();
+  }
+
+  Suggestion _suggestionFromDocument(DocumentSnapshot doc){
+    return Suggestion(
         trackid: doc.data['trackid'] ?? '',
         suserid: doc.data['suserid'] ?? '',
         fuserid: doc.data['fuserid'] ?? '',
@@ -62,7 +67,6 @@ class DatabaseService {
         likes: doc.data['likes'] ?? 0,
         reference: doc.reference,
       );
-    }).toList();
   }
 
   Future<Following> getFollowing() async {
@@ -73,6 +77,15 @@ class DatabaseService {
       users: data['users'],
       reference: data.reference,
     );
+  }
+
+  Future<Suggestion> getMySuggestion() async {
+    try {
+      return cSuggestions.document(spotifyUserID).get().then(_suggestionFromDocument);
+    } catch (err) {
+      print("error while getting suggestion: $err");
+      return null;
+    }
   }
 
   Future<List<Suggestion>> getsuggestions() async {

@@ -19,6 +19,7 @@ class SpotifyService {
   Future furueSuggestions;
   DateTime lastSuggestionUpdate;
   Following following;
+  Suggestion mySuggestion;
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";
 

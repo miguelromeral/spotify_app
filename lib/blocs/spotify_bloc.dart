@@ -67,6 +67,9 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       //state.following = news;
       print("Updated Following!");
       yield newState;
+    } else if (event is UpdateMySuggestion) {
+      state.mySuggestion = await state.db.getMySuggestion();
+      yield state;
     } else {
       throw Exception('oops');
     }

@@ -1,5 +1,6 @@
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/models/following.dart';
+import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,6 +21,8 @@ class LoginEvent extends SpotifyEventBase {
 class UpdateFeed extends SpotifyEventBase {}
 
 class UpdateFollowing extends SpotifyEventBase {}
+
+class UpdateMySuggestion extends SpotifyEventBase {}
 
 /*
 class ShareTrackEvent extends SpotifyEventBase {
