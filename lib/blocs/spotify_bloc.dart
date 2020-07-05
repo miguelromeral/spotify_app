@@ -58,9 +58,13 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdateFeed) {
       state.furueSuggestions = state.db.getsuggestions();
       yield state;
-      /*} else if (event is ForgetTrackEvent) {
-      state.forgetTrack();
-      yield state;*/
+    } else if(event is UpdateFollowing){
+      var news = await state.db.getFollowing();
+      SpotifyService newState = state;
+      newState.following = news;
+      //state.following = news;
+      print("Updated Following!");
+      yield newState;
     } else {
       throw Exception('oops');
     }

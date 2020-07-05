@@ -96,16 +96,28 @@ class _TabsPageState extends State<TabsPage> {
           for (final tabItem in TabNavigationItem.items) tabItem.page,
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) => setState(() => _currentIndex = index),
-        items: [
-          for (final tabItem in TabNavigationItem.items)
-            BottomNavigationBarItem(
-              icon: tabItem.icon,
-              title: tabItem.title,
-            )
-        ],
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+            // sets the background color of the `BottomNavigationBar`
+            canvasColor: Colors.green,
+            // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+            primaryColor: Colors.red,
+            textTheme: Theme.of(context).textTheme.copyWith(
+                caption: new TextStyle(
+                    color: Colors
+                        .yellow))), // sets the inactive color of the `BottomNavigationBar`
+        child: BottomNavigationBar(
+          fixedColor: Colors.black,
+          currentIndex: _currentIndex,
+          onTap: (int index) => setState(() => _currentIndex = index),
+          items: [
+            for (final tabItem in TabNavigationItem.items)
+              BottomNavigationBarItem(
+                icon: tabItem.icon,
+                title: tabItem.title,
+              )
+          ],
+        ),
       ),
     );
   }

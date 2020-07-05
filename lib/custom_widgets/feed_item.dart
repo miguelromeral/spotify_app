@@ -56,10 +56,10 @@ class _FeedItemState extends State<FeedItem> {
               '$elapsed\nLikes: ${suggestion.likes}'),
       isThreeLine: true,
       onTap: () async {
-        if (user.id != suggestion.suserid) {
+        if (state.db.firebaseUserID != suggestion.fuserid) {
           await state.db.likeSuggestion(suggestion);
+          
           bloc.add(UpdateFeed());
-
           UpdatedFeedNotification().dispatch(context);
 
           Scaffold.of(context).showSnackBar(

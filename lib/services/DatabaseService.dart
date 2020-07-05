@@ -73,7 +73,6 @@ class DatabaseService {
     try {
       var fol = await getFollowing();
       var list = fol.usersList;
-      list.removeWhere((element) => element.isEmpty || element == "");
       list.add(spotifyUserID);
       return cSuggestions
           .where('suserid', whereIn: list)
@@ -99,6 +98,23 @@ class DatabaseService {
 
   Stream<List<Suggestion>> get suggestions {
     return cSuggestions.snapshots().map(_suggestionListFromSnapshot);
+  }
+
+  
+  List<Following> _followingListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Following(
+        suserid: doc.data['suserid'] ?? '',
+        fuserid: doc.data['fuserid'] ?? '',
+        users: doc.data['users'] ?? '',
+        reference: doc.reference,
+      );
+    }).toList();
+  }
+
+
+  Stream<List<Following>> get following {
+    return cFollowing.snapshots().map(_followingListFromSnapshot);
   }
 
   static const String defaultTrackId = 'null';

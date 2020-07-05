@@ -9,6 +9,7 @@ import 'package:spotify_app/custom_widgets/album_picture.dart';
 import 'package:spotify_app/custom_widgets/custom_appbar.dart';
 import 'package:spotify_app/custom_widgets/profile_picture.dart';
 import 'package:spotify_app/custom_widgets/suggestions_list.dart';
+import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
 import 'package:spotify_app/screens/list_songs.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
@@ -29,7 +30,8 @@ class _ShareTrackState extends State<ShareTrack> {
 
   @override
   Widget build(BuildContext context) {
-    var state = BlocProvider.of<SpotifyBloc>(context).state;
+    var bloc = BlocProvider.of<SpotifyBloc>(context);
+    var state = bloc.state;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -64,9 +66,11 @@ class _ShareTrackState extends State<ShareTrack> {
                         // you'd often call a server or save the information in a database.
 
                         var spUser = await state.myUser;
-                        state.db.updateUserData(
+                        await state.db.updateUserData(
                             spUser.id, widget.track.id, _description);
 
+                        bloc.add(UpdateFeed());
+                        UpdatedFeedNotification().dispatch(context);
 
                         Scaffold.of(context).showSnackBar(
                             SnackBar(content: Text('Updated Suggestion!')));

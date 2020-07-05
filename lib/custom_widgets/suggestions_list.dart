@@ -53,6 +53,11 @@ class _SuggestionsListState extends State<SuggestionsList> {
                                     user: user,
                                     suggestion: item,
                                   );
+                                } else if (snp.hasError) {
+                                  return Center(
+                                      child: Text(
+                                    snp.error.toString(),
+                                  ));
                                 } else {
                                   return Center(
                                       child: CircularProgressIndicator());

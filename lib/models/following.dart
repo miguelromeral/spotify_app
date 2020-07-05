@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Following {
@@ -6,17 +5,17 @@ class Following {
   final String fuserid;
   final String users;
   final DocumentReference reference;
-  
-  //Suggestion({ this.trackid, this.suserid, this.fuserid });
-  Following({ this.suserid, this.fuserid, this.reference, this.users });
 
+  //Suggestion({ this.trackid, this.suserid, this.fuserid });
+  Following({this.suserid, this.fuserid, this.reference, this.users});
 
   List<String> get usersList {
-    return users.split(delimiter);
+    var list = users.split(delimiter);
+    list.removeWhere((element) => element.isEmpty || element == "");
+    return list;
   }
 
-
-  static String concatenateUser(String previous, String suserid){
+  static String concatenateUser(String previous, String suserid) {
     return '$previous$suserid$delimiter';
   }
 
