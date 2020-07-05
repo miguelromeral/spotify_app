@@ -23,8 +23,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController _textFieldController = TextEditingController();
-
+/*
   bool initDone = false;
+
   DateTime lastUpdate;
   List<Suggestion> list = List();
 
@@ -42,45 +43,52 @@ class _HomeState extends State<Home> {
       initDone = true;
     });
   }
-
+*/
   @override
   Widget build(BuildContext context) {
-    var bloc = BlocProvider.of<SpotifyBloc>(context);
+    /*var bloc = BlocProvider.of<SpotifyBloc>(context);
     var state = bloc.state;
 
-    if (state.lastSuggestionUpdate == null || lastUpdate == state.lastSuggestionUpdate) {
+    if (state.lastSuggestionUpdate == null ||
+        lastUpdate == state.lastSuggestionUpdate) {
       _retrieve(state);
-    }
+    }*/
 
-    if (list != null && list.isNotEmpty) {
-      return NotificationListener<UpdatedFeedNotification>(
-        onNotification: (notification) {
-          print("Notification: $notification");
-          setState(() {
-            _retrieve(state);
-          });
-          return true;
-        },
-        child: Scaffold(
-          appBar: CustomAppBar(
-            title: 'Feed',
+    return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
+      var bloc = BlocProvider.of<SpotifyBloc>(context);
+      if (state.feed != null) {
+        return NotificationListener<UpdatedFeedNotification>(
+          onNotification: (notification) {
+            print("Notification: $notification");
+            setState(() {
+              //_retrieve(state);
+              bloc.add(UpdateFeed());
+            });
+            return true;
+          },
+          child: Scaffold(
+            appBar: CustomAppBar(
+              title: 'Feed',
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async {
+                await _displayDialog(context, bloc);
+                //_retrieve(state);
+                bloc.add(UpdateFeed());
+              },
+              icon: Icon(Icons.add),
+              label: Text("Follow New User"),
+            ),
+            body: Center(
+              child: SuggestionsList(list: state.feed),
+            ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              await _displayDialog(context, bloc);
-              _retrieve(state);
-            },
-            icon: Icon(Icons.add),
-            label: Text("Follow New User"),
-          ),
-          body: Center(
-            child: SuggestionsList(list: list),
-          ),
-        ),
-      );
-    } else {
-      return Text("Retreiving Stream...");
-    }
+        );
+      } else {
+        bloc.add(UpdateFeed());
+        return Text("Retreiving Stream...");
+      }
+    });
   }
 
   _displayDialog(BuildContext context, SpotifyBloc bloc) async {

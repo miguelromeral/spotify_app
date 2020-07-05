@@ -54,13 +54,14 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       event.service.db = _db;
       event.service.furueSuggestions = _db.getsuggestions();
       event.service.auth = _auth;
+      event.service = await _updateFeed(event.service);
+      event.service.saved = await _updateSaved(event.service);
       yield event.service;
     } else if (event is UpdateFeed) {
-      state.furueSuggestions = state.db.getsuggestions();
-      state.lastSuggestionUpdate = DateTime.now();
-      print("Updated Suggestions!");
-      yield state;
-    } else if(event is UpdateFollowing){
+      /*state.furueSuggestions = state.db.getsuggestions();
+      state.lastSuggestionUpdate = DateTime.now();*/
+      yield await _updateFeed(state);
+    } else if (event is UpdateFollowing) {
       var news = await state.db.getFollowing();
       SpotifyService newState = state;
       newState.following = news;
@@ -70,9 +71,24 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdateMySuggestion) {
       state.mySuggestion = await state.db.getMySuggestion();
       yield state;
+    } else if (event is UpdateSaved) {
+      state.saved = await _updateSaved(state);
+      yield state;
     } else {
       throw Exception('oops');
     }
+  }
+
+  Future<SpotifyService> _updateFeed(SpotifyService state) async {
+    state.feed = await state.db.getsuggestions();
+    print("Updated Suggestions!");
+    return state;
+  }
+
+  Future<List<Track>> _updateSaved(SpotifyService state) async {
+    List<Track> list = (await state.api.tracks.me.saved.all()).map((e) => e.track).toList();
+    print("Updated Saved, last: ${list.first.name}!");
+    return list;
   }
 
   Future<DatabaseService> _login(

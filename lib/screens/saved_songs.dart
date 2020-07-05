@@ -8,6 +8,7 @@ import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/custom_widgets/album_picture.dart';
 import 'package:spotify_app/custom_widgets/custom_appbar.dart';
 import 'package:spotify_app/custom_widgets/profile_picture.dart';
+import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
 import 'package:spotify_app/screens/list_songs.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
@@ -19,47 +20,41 @@ class SavedSongs extends StatefulWidget {
 }
 
 class _SavedSongsState extends State<SavedSongs> {
+
+  DateTime lastUpdate;
+
   @override
   Widget build(BuildContext context) {
-    var state = BlocProvider.of<SpotifyBloc>(context).state;
+    return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
+      print("Blocbuilder inside saved_songs.dart");
+      if (state.saved != null) {
+        print("Showing Saved, last: ${state.saved.first.name}");
+        return Scaffold(
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () async {
+              BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
+              //await Future.delayed(Duration(seconds: 5));
+              setState(() {
+                lastUpdate = DateTime.now();
+              });
+            },
+            icon: Icon(Icons.refresh),
+            label: Text("Refresh"),
+          ),
+          body: Center(
+            child: ListSongs(
+              key: Key(state.saved.length.toString()),
+              tracks: state.saved,
+            ),
+          ),
+        );
+      } else {
+        BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
+        return Text("No Saved Songs");
+//                  return CircularProgressIndicator();
 
-    return Scaffold(
-      backgroundColor: Colors.brown[100],
-      /*appBar: CustomAppBar(
-        title: 'My Saved Songs',
-      )*/
-      body: Center(
-        child: FutureBuilder<User>(
-          future: state.myUser,
-          initialData: null,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              User user = snapshot.data;
-              return FutureBuilder<Iterable<TrackSaved>>(
-                future: state.api.tracks.me.saved.all(),
-                initialData: null,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<TrackSaved> tracks = snapshot.data.toList();
-                    List<Track> list = tracks.map((e) => e.track).toList();
-                    return ListSongs(
-                      tracks: list,
-                    );
-                    //return Text("Tracks: ${tracks.length}");
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
-          },
-        ),
-      ),
-    );
+      }
+    });
   }
 
   Future redirect(Uri authUri) async {
