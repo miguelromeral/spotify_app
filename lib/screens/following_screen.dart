@@ -25,11 +25,9 @@ class _FollowingScreenState extends State<FollowingScreen> {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         if (state.following != null) {
-          print("Recreating Stream");
 
           return StreamProvider<List<Following>>.value(
             builder: (context, widget) {
-              print("Inside Stream");
               return Scaffold(
                 appBar: CustomAppBar(
                   title: 'Follow App Users',

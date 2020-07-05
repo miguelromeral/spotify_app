@@ -17,6 +17,7 @@ class SpotifyService {
   bool logedin = false;
   Track toShare;
   Future furueSuggestions;
+  DateTime lastSuggestionUpdate;
   Following following;
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";

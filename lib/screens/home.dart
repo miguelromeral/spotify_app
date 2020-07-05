@@ -25,6 +25,7 @@ class _HomeState extends State<Home> {
   TextEditingController _textFieldController = TextEditingController();
 
   bool initDone = false;
+  DateTime lastUpdate;
   List<Suggestion> list = List();
 
   @override
@@ -36,6 +37,7 @@ class _HomeState extends State<Home> {
   Future _retrieve(SpotifyService state) async {
     final res = await state.db.getsuggestions();
     setState(() {
+      lastUpdate = state.lastSuggestionUpdate;
       list = res;
       initDone = true;
     });
@@ -46,7 +48,7 @@ class _HomeState extends State<Home> {
     var bloc = BlocProvider.of<SpotifyBloc>(context);
     var state = bloc.state;
 
-    if (!initDone) {
+    if (state.lastSuggestionUpdate == null || lastUpdate == state.lastSuggestionUpdate) {
       _retrieve(state);
     }
 

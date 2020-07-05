@@ -58,7 +58,7 @@ class _FollowingItemState extends State<FollowingItem> {
         if (state.db.firebaseUserID != following.fuserid) {
 
           await state.db.addFollowing(user.id);
-
+          bloc.add(UpdateFeed());
           bloc.add(UpdateFollowing());
 
           Scaffold.of(context).showSnackBar(
