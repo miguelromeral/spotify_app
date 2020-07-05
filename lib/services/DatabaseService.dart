@@ -37,6 +37,12 @@ class DatabaseService {
     });
   }
 
+  Future removeFollowing(Following fol, String suserid) async {
+    return await fol.reference.updateData(<String, dynamic>{
+      'users': Following.removeUser(fol.usersList, suserid),
+    });
+  }
+
   Future initializeFollowing() async {
     return await cFollowing.document(spotifyUserID).setData({
       'suserid': spotifyUserID,

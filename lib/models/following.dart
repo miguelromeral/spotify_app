@@ -19,5 +19,14 @@ class Following {
     return '$previous$suserid$delimiter';
   }
 
+  static String removeUser(List<String> users, String suserid) {
+    users.remove(suserid);
+    var text = '';
+    for(var u in users){
+      text = concatenateUser(text, u);
+    }
+    return text;
+  }
+
   static String delimiter = ',';
 }

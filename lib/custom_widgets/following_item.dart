@@ -28,7 +28,8 @@ class FollowingItem extends StatefulWidget {
 class _FollowingItemState extends State<FollowingItem> {
   bool liked;
 
-  bool get currentlyFollowing => widget.myFollowings.usersList.contains(widget.user.id);
+  bool get currentlyFollowing =>
+      widget.myFollowings.usersList.contains(widget.user.id);
 
   @override
   void initState() {
@@ -56,14 +57,19 @@ class _FollowingItemState extends State<FollowingItem> {
           Text('ID: ${user.id}\nFollowing: ${following.usersList.length}'),
       onTap: () async {
         if (state.db.firebaseUserID != following.fuserid) {
+          if (currentlyFollowing) {
+            await state.db.removeFollowing(widget.myFollowings, user.id);
+            Scaffold.of(context).showSnackBar(
+                SnackBar(content: Text('You no longer follow ${user.displayName}!')));
+          } else {
+            await state.db.addFollowing(user.id);
+            Scaffold.of(context).showSnackBar(
+                SnackBar(content: Text('You followed ${user.displayName}!')));
+          }
 
-          await state.db.addFollowing(user.id);
           bloc.add(UpdateFeed());
           bloc.add(UpdateFollowing());
-
-          Scaffold.of(context).showSnackBar(
-              SnackBar(content: Text('You followed ${user.displayName}!')));
-        }else{
+        } else {
           Scaffold.of(context).showSnackBar(
               SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
         }
