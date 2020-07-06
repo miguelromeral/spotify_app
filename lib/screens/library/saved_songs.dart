@@ -2,16 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/album_picture.dart';
-import 'package:spotify_app/custom_widgets/custom_appbar.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
-import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
-import 'package:spotify_app/screens/list_songs.dart';
+import 'package:spotify_app/services/notifications.dart';
+import 'package:spotify_app/screens/library/list_songs.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SavedSongs extends StatefulWidget {
@@ -30,17 +25,17 @@ class _SavedSongsState extends State<SavedSongs> {
     }
 
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      print("Blocbuilder inside saved_songs.dart");
       if (state.saved != null) {
         print("Showing Saved, last: ${state.saved.first.name}");
         return Scaffold(
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
+              /*
               BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
-              //await Future.delayed(Duration(seconds: 5));
               setState(() {
                 lastUpdate = DateTime.now();
-              });
+              });*/
+              _getData();
             },
             icon: Icon(Icons.refresh),
             label: Text("Refresh"),
@@ -59,7 +54,7 @@ class _SavedSongsState extends State<SavedSongs> {
               //child: RefreshIndicator(
               //  onRefresh: _getData,
               child: ListSongs(
-                key: Key(state.saved.length.toString()),
+                key: Key(state.saved.hashCode.toString()),
                 tracks: state.saved,
               ),
               //),
@@ -68,9 +63,9 @@ class _SavedSongsState extends State<SavedSongs> {
         );
       } else {
         BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
-        return Text("No Saved Songs");
-//                  return CircularProgressIndicator();
-
+//        return Text("No Saved Songs");
+        //_getData();
+        return CircularProgressIndicator();
       }
     });
   }

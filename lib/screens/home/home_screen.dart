@@ -1,27 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/album_picture.dart';
-import 'package:spotify_app/custom_widgets/custom_appbar.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
-import 'package:spotify_app/custom_widgets/suggestions_list.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
-import 'package:spotify_app/screens/list_songs.dart';
+import 'package:spotify_app/screens/_shared/custom_appbar.dart';
+import 'package:spotify_app/screens/home/suggestions_list.dart';
+import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:uni_links/uni_links.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class Home extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _textFieldController = TextEditingController();
 /*
   bool initDone = false;
@@ -80,7 +71,7 @@ class _HomeState extends State<Home> {
               label: Text("Follow New User"),
             ),*/
             body: Center(
-              child: SuggestionsList(list: state.feed),
+              child: SuggestionsList(),
             ),
           ),
         );

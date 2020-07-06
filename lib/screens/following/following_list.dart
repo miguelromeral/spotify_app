@@ -1,17 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/following_item.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
-import 'package:spotify_app/custom_widgets/feed_item.dart';
+import 'package:spotify_app/screens/following/following_item.dart';
 import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
-import 'package:spotify_app/services/DatabaseService.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class FollowingList extends StatefulWidget {

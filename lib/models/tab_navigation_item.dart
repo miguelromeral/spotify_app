@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spotify_app/screens/following_screen.dart';
-import 'package:spotify_app/screens/home.dart';
-import 'package:spotify_app/screens/profile.dart';
-import 'package:spotify_app/screens/saved_songs.dart';
+import 'package:spotify_app/screens/following/following_screen.dart';
+import 'package:spotify_app/screens/home/home_screen.dart';
+import 'package:spotify_app/screens/profile/profile.dart';
+import 'package:spotify_app/screens/library/saved_songs.dart';
 
 class TabNavigationItem {
   final Widget page;
@@ -18,7 +18,7 @@ class TabNavigationItem {
 
   static List<TabNavigationItem> get items => [
         TabNavigationItem(
-          page: Home(),
+          page: HomeScreen(),
           icon: Icon(Icons.home),
           title: Text("Home"),
         ),

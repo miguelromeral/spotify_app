@@ -1,15 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
+import 'package:spotify_app/screens/_shared/album_picture.dart';
+import 'package:spotify_app/screens/_shared/profile_picture.dart';
+import 'package:spotify_app/services/notifications.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'album_picture.dart';
 
 class FeedItem extends StatefulWidget {
   final Track track;
@@ -59,7 +58,7 @@ class _FeedItemState extends State<FeedItem> {
         if (state.db.firebaseUserID != suggestion.fuserid) {
           await state.db.likeSuggestion(suggestion);
           
-          bloc.add(UpdateFeed());
+          //bloc.add(UpdateFeed());
           UpdatedFeedNotification().dispatch(context);
 
           Scaffold.of(context).showSnackBar(

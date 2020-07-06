@@ -1,17 +1,12 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/models/tab_navigation_item.dart';
-import 'package:spotify_app/screens/share_track.dart';
-import 'package:spotify_app/services/DatabaseService.dart';
+import 'package:spotify_app/screens/share_track/share_track.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class TabsPage extends StatefulWidget {

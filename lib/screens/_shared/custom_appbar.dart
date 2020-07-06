@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
+import 'package:spotify_app/screens/_shared/profile_picture.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 

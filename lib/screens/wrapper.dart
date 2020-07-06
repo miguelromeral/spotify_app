@@ -6,8 +6,8 @@ import 'package:spotify_app/screens/tabs_page.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:uni_links/uni_links.dart';
 
-import 'authenticate.dart';
-import 'home.dart';
+import 'login/authenticate.dart';
+import 'home/home_screen.dart';
 
 class Wrapper extends StatelessWidget {
   @override

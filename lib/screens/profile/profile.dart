@@ -5,16 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/album_picture.dart';
-import 'package:spotify_app/custom_widgets/card_info.dart';
-import 'package:spotify_app/custom_widgets/custom_appbar.dart';
-import 'package:spotify_app/custom_widgets/feed_item.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
 import 'package:spotify_app/custom_widgets/suggestion_item.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/screens/list_songs.dart';
+import 'package:spotify_app/screens/_shared/card_info.dart';
+import 'package:spotify_app/screens/_shared/custom_appbar.dart';
+import 'package:spotify_app/screens/_shared/profile_picture.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Profile extends StatefulWidget {
@@ -30,7 +25,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: CustomAppBar(
-        title: 'Feed',
+        title: 'My Profile',
       ),
       body: Center(
         child: FutureBuilder<User>(

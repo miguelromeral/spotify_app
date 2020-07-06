@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/custom_appbar.dart';
-import 'package:spotify_app/custom_widgets/following_list.dart';
+import 'package:spotify_app/screens/_shared/custom_appbar.dart';
+import 'package:spotify_app/screens/following/following_list.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 

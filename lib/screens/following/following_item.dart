@@ -1,18 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/following_list.dart';
 import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:spotify_app/screens/_shared/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/custom_widgets/profile_picture.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'album_picture.dart';
 
 class FollowingItem extends StatefulWidget {
   final Following myFollowings;
