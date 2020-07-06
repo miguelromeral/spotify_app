@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/models/suggestion_popup_item.dart';
 import 'package:spotify_app/screens/_shared/album_picture.dart';
 import 'package:spotify_app/screens/_shared/profile_picture.dart';
 import 'package:spotify_app/services/notifications.dart';
@@ -20,16 +21,6 @@ class FeedItem extends StatefulWidget {
 
   @override
   _FeedItemState createState() => _FeedItemState();
-}
-
-enum PopupAction { listen, vote }
-
-class FeedPopupAction {
-  Track track;
-  Suggestion suggestion;
-  PopupAction action;
-
-  FeedPopupAction({this.track, this.suggestion, this.action});
 }
 
 class _FeedItemState extends State<FeedItem> {
@@ -131,22 +122,6 @@ class _FeedItemState extends State<FeedItem> {
                   size: 20.0,
                 ),
               ),
-              /*Container(
-                height: 20.0,
-                width: 50.0,
-                child: ProfilePicture(
-                  user: user,
-                  size: 30.0,
-                ),
-              ),
-              Container(
-                height: 20.0,
-                width: 20.0,
-                child: AlbumPicture(
-                  track: track,
-                  size: 20.0,
-                ),
-              ),*/
             ],
           ),
           trailing: IconButton(

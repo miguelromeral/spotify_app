@@ -9,10 +9,13 @@ import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/services/DatabaseService.dart';
 import 'package:spotify_app/services/auth.dart';
 
+import 'local_database.dart';
+
 class SpotifyService {
   SpotifyApi api;
   AuthService auth;
   DatabaseService db;
+  LocalDB local_db;
   bool enabled = false;
   bool logedin = false;
   Track toShare;

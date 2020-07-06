@@ -9,12 +9,12 @@ import 'package:spotify_app/services/DatabaseService.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
-class SuggestionsList extends StatefulWidget {
+class FeedList extends StatefulWidget {
   @override
-  _SuggestionsListState createState() => _SuggestionsListState();
+  _FeedListState createState() => _FeedListState();
 }
 
-class _SuggestionsListState extends State<SuggestionsList> {
+class _FeedListState extends State<FeedList> {
   SpotifyBloc _bloc;
   DateTime lastUpdate;
 

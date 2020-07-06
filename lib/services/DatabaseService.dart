@@ -12,16 +12,18 @@ class DatabaseService {
   final CollectionReference cFollowing =
       Firestore.instance.collection("following");
 
-  Future updateUserData(
+  Future<Suggestion> updateUserData(
       String spotifyuserid, String trackid, String text) async {
-    return await cSuggestions.document(spotifyuserid).setData({
+        var now = DateTime.now();
+    await cSuggestions.document(spotifyuserid).setData({
       'trackid': trackid,
       'suserid': spotifyuserid,
       'fuserid': firebaseUserID,
       'text': text,
-      'date': DateTime.now().toString(),
+      'date': now.toString(),
       'likes': 0,
     });
+    return Suggestion(fuserid: firebaseUserID, suserid: spotifyUserID, trackid: trackid, text: text, date: now);
   }
 
   Future likeSuggestion(Suggestion suggestion) async {

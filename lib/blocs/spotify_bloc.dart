@@ -7,6 +7,7 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/services/DatabaseService.dart';
 import 'package:spotify_app/services/auth.dart';
+import 'package:spotify_app/services/local_database.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:spotify_app/services/password_generator.dart';
 
@@ -52,6 +53,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         print("Error while login: $e");
       }
       event.service.db = _db;
+      event.service.local_db = LocalDB();
       event.service.furueSuggestions = _db.getsuggestions();
       event.service.auth = _auth;
       event.service = await _updateFeed(event.service);

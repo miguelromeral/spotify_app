@@ -2,39 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/screens/_shared/custom_appbar.dart';
 import 'package:spotify_app/screens/home/feed_list.dart';
+import 'package:spotify_app/screens/list_suggestions.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
-class HomeScreen extends StatefulWidget {
+class MySuggestionsScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _MySuggestionsScreenState createState() => _MySuggestionsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _textFieldController = TextEditingController();
-/*
-  bool initDone = false;
-
-  DateTime lastUpdate;
-  List<Suggestion> list = List();
+class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
+  List<Suggestion> suggestions;
 
   @override
-  void initState() {
-    initDone = false;
-    super.initState();
-  }
-
-  Future _retrieve(SpotifyService state) async {
-    final res = await state.db.getsuggestions();
-    setState(() {
-      lastUpdate = state.lastSuggestionUpdate;
-      list = res;
-      initDone = true;
+  Widget build(BuildContext context) {
+    return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
+      if (state.local_db != null) {
+        return FutureBuilder(
+          future: state.local_db.suggestions(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Suggestion> list = snapshot.data;
+              return ListSuggestions(
+                suggestions: list,
+              );
+              //return Text("My Suggestions: ${list.length}");
+            } else {
+              return Text("Error");
+            }
+          },
+        );
+      } else {
+        return Text("No Local DB");
+      }
     });
   }
-*/
+
+/*  TextEditingController _textFieldController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     /*var bloc = BlocProvider.of<SpotifyBloc>(context);
@@ -71,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               label: Text("Follow New User"),
             ),*/
             body: Center(
-              child: FeedList(),
+              child: SuggestionsList(),
             ),
           ),
         );
@@ -108,5 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           );
         });
-  }
+  }*/
+
 }
