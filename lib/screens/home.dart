@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
             appBar: CustomAppBar(
               title: 'Feed',
             ),
-            floatingActionButton: FloatingActionButton.extended(
+            /*floatingActionButton: FloatingActionButton.extended(
               onPressed: () async {
                 await _displayDialog(context, bloc);
                 //_retrieve(state);
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
               },
               icon: Icon(Icons.add),
               label: Text("Follow New User"),
-            ),
+            ),*/
             body: Center(
               child: SuggestionsList(list: state.feed),
             ),

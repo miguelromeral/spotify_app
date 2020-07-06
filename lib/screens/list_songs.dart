@@ -5,6 +5,7 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/custom_widgets/album_picture.dart';
+import 'package:spotify_app/notifications/SuggestionLikeNotification.dart';
 import 'package:spotify_app/screens/share_track.dart';
 
 class ListSongs extends StatefulWidget {
@@ -23,6 +24,8 @@ class _ListSongsState extends State<ListSongs> {
   String _searchText = "";
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text('Search Example');
+  BuildContext _context;
+  DateTime lastUpdate;
 
   List<Track> filteredTracks = new List();
 
@@ -82,37 +85,54 @@ class _ListSongsState extends State<ListSongs> {
       }
       filteredTracks = tempList;
     }
-    return ListView.builder(
-        itemCount: widget.tracks == null ? 0 : filteredTracks.length,
-        itemBuilder: (_, index) {
-          Track saved = filteredTracks[index];
-          return ListTile(
-            leading: AlbumPicture(
-              track: saved,
-              size: 25.0,
-            ),
-            title: Text(saved.name),
-            subtitle: Text(saved.artists[0].name),
-            //trailing: icon,
-            //isThreeLine: true,
-            // Interactividad:
-            onTap: () async {
-              /*
-                var spUser = await state.myUser;
-                state.db.updateUserData(spUser.id, saved.id);*/
-              //bloc.add(ShareTrackEvent(track: saved));
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ShareTrack(track: saved)),
-              );
-            },
-            //onLongPress: () => _pressCallback,
-            //enabled: false,
-            //selected: true,
-          );
-        });
+    return RefreshIndicator(
+      onRefresh: _getData,
+          child: ListView.builder(
+          itemCount: widget.tracks == null ? 0 : filteredTracks.length,
+          itemBuilder: (_, index) {
+            Track saved = filteredTracks[index];
+            return ListTile(
+              leading: AlbumPicture(
+                track: saved,
+                size: 25.0,
+              ),
+              title: Text(saved.name),
+              subtitle: Text(saved.artists[0].name),
+              //trailing: icon,
+              //isThreeLine: true,
+              // Interactividad:
+              onTap: () async {
+                /*
+                  var spUser = await state.myUser;
+                  state.db.updateUserData(spUser.id, saved.id);*/
+                //bloc.add(ShareTrackEvent(track: saved));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShareTrack(track: saved)),
+                );
+              },
+              //onLongPress: () => _pressCallback,
+              //enabled: false,
+              //selected: true,
+            );
+          }),
+    );
   }
+
+
+  Future<void> _getData() async {
+    print("pulling to refresh in list_songs!");
+    if (_context != null) {
+
+      RefreshListNotification().dispatch(_context);
+      //await Future.delayed(Duration(seconds: 5));
+      setState(() {
+        lastUpdate = DateTime.now();
+      });
+    }
+  }
+
 
   @override
   void initState() {
@@ -124,6 +144,10 @@ class _ListSongsState extends State<ListSongs> {
   Widget build(BuildContext context) {
     var bloc = BlocProvider.of<SpotifyBloc>(context);
     var state = bloc.state;
+    
+    if(_context == null){
+      _context = context;
+    }
 
     return Flexible(
       child: Scaffold(

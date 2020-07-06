@@ -87,7 +87,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
 
   Future<List<Track>> _updateSaved(SpotifyService state) async {
     List<Track> list = (await state.api.tracks.me.saved.all()).map((e) => e.track).toList();
-    print("Updated Saved, last: ${list.first.name}!");
+    print("Updated Saved, last: ${list.first.name} (${list.length})!");
     return list;
   }
 

@@ -20,11 +20,15 @@ class SavedSongs extends StatefulWidget {
 }
 
 class _SavedSongsState extends State<SavedSongs> {
-
+  SpotifyBloc _bloc;
   DateTime lastUpdate;
 
   @override
   Widget build(BuildContext context) {
+    if (_bloc == null) {
+      _bloc = BlocProvider.of<SpotifyBloc>(context);
+    }
+
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       print("Blocbuilder inside saved_songs.dart");
       if (state.saved != null) {
@@ -42,9 +46,23 @@ class _SavedSongsState extends State<SavedSongs> {
             label: Text("Refresh"),
           ),
           body: Center(
-            child: ListSongs(
-              key: Key(state.saved.length.toString()),
-              tracks: state.saved,
+            child: NotificationListener<RefreshListNotification>(
+              onNotification: (notification) {
+                print("Notification: $notification");
+                /*setState(() {
+                  //_retrieve(state);
+                  bloc.add(UpdateFeed());
+                });*/
+                _getData();
+                return true;
+              },
+              //child: RefreshIndicator(
+              //  onRefresh: _getData,
+              child: ListSongs(
+                key: Key(state.saved.length.toString()),
+                tracks: state.saved,
+              ),
+              //),
             ),
           ),
         );
@@ -55,6 +73,18 @@ class _SavedSongsState extends State<SavedSongs> {
 
       }
     });
+  }
+
+  Future<void> _getData() async {
+    print("listened to the notification, updating!");
+    if (_bloc != null) {
+      _bloc.add(UpdateSaved());
+      //BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
+      //await Future.delayed(Duration(seconds: 5));
+      setState(() {
+        lastUpdate = DateTime.now();
+      });
+    }
   }
 
   Future redirect(Uri authUri) async {
