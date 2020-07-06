@@ -35,30 +35,43 @@ class _FeedItemState extends State<FeedItem> {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<FeedPopupAction>(
-      key: _menuKey,
-      onSelected: (FeedPopupAction value) async {
-        switch (value.action) {
-          case PopupAction.listen:
-            if (await canLaunch(value.track.uri)) {
-              print("Opening ${value.track.uri}");
-              launch(value.track.uri);
-            }
-            break;
-          case PopupAction.vote:
-            _vote(context, BlocProvider.of<SpotifyBloc>(context).state,
-                value.suggestion, value.track);
-            break;
-        }
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) {
+        return PopupMenuButton<FeedPopupAction>(
+            key: _menuKey,
+            onSelected: (FeedPopupAction value) async {
+              switch (value.action) {
+                case PopupAction.listen:
+                  if (await canLaunch(value.track.uri)) {
+                    print("Opening ${value.track.uri}");
+                    launch(value.track.uri);
+                  }
+                  break;
+                case PopupAction.vote:
+                  _vote(context, BlocProvider.of<SpotifyBloc>(context).state,
+                      value.suggestion, value.track);
+                  break;
+              }
+            },
+            child: _createTile(widget.track, widget.user, widget.suggestion),
+            itemBuilder: (BuildContext context) => _getActions(widget.track,
+                widget.user, widget.suggestion, state.db.spotifyUserID));
       },
-      child: _createTile(widget.track, widget.user, widget.suggestion),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<FeedPopupAction>>[
-        _popupItem(PopupAction.listen, 'Listen in Spotify', Icons.music_note,
-            widget.track, widget.suggestion),
-        _popupItem(PopupAction.vote, 'Vote!', Icons.thumb_up, widget.track,
-            widget.suggestion),
-      ],
     );
+  }
+
+  List<PopupMenuItem<FeedPopupAction>> _getActions(Track track, UserPublic user,
+      Suggestion suggestion, String mySpotifyUserId) {
+    List<PopupMenuItem<FeedPopupAction>> list = List();
+
+    list.add(_popupItem(PopupAction.listen, 'Listen in Spotify',
+        Icons.music_note, track, suggestion));
+    //print("Action: ${suggestion.suserid} - ${user.id}");
+    if (suggestion.suserid != mySpotifyUserId) {
+      list.add(_popupItem(
+          PopupAction.vote, 'Vote!', Icons.thumb_up, track, suggestion));
+    }
+    return list;
   }
 
   PopupMenuItem<FeedPopupAction> _popupItem(PopupAction value, String text,
@@ -94,36 +107,83 @@ class _FeedItemState extends State<FeedItem> {
     }
   }
 
-  Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {
+  Widget _createLeadingIcon(UserPublic user, Track track) {
+    if (user != null) {
+      return Stack(
+        fit: StackFit.loose,
+        overflow: Overflow.visible,
+        alignment: AlignmentDirectional.bottomEnd,
+        children: <Widget>[
+          Container(
+            width: 50.0,
+            height: 50.0,
+            //color: Colors.red,
+            child: ProfilePicture(
+              user: user,
+              size: 50.0,
+            ),
+          ),
+          Container(
+            width: 30.0,
+            height: 30.0,
+            //color: Colors.yellow,
+            child: AlbumPicture(
+              track: track,
+              size: 20.0,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Stack(
+        fit: StackFit.loose,
+        overflow: Overflow.visible,
+        alignment: AlignmentDirectional.bottomEnd,
+        children: <Widget>[
+          Container(
+            width: 50.0,
+            height: 50.0,
+            //color: Colors.red,
+            child: AlbumPicture(
+              track: track,
+              size: 50.0,
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  Widget _createTitle(Track track, UserPublic user) {
+    if (user != null) {
+      return Text(user.displayName);
+    } else {
+      return Text(track.name);
+    }
+  }
+
+  Widget _createDescription(
+      Suggestion suggestion, Track track, UserPublic user) {
     String elapsed = timeago.format(suggestion.date, locale: 'en_short');
+    if (user != null) {
+      return Text(
+          '${track.name} - ${track.artists[0].name}\n${suggestion.text}\n' +
+              '$elapsed\n${_getLikes(suggestion)}');
+    } else {
+      return Text('${track.artists[0].name}\n${suggestion.text}\n' +
+          '$elapsed\n${_getLikes(suggestion)}');
+    }
+  }
+
+  String _getLikes(Suggestion suggestion){
+    return suggestion.likes == null ? '' : 'Likes: ${suggestion.likes.toString()}';
+  }
+
+  Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         return ListTile(
-          leading: Stack(
-            fit: StackFit.loose,
-            overflow: Overflow.visible,
-            alignment: AlignmentDirectional.bottomEnd,
-            children: <Widget>[
-              Container(
-                width: 50.0,
-                height: 50.0,
-                //color: Colors.red,
-                child: ProfilePicture(
-                  user: user,
-                  size: 50.0,
-                ),
-              ),
-              Container(
-                width: 30.0,
-                height: 30.0,
-                //color: Colors.yellow,
-                child: AlbumPicture(
-                  track: track,
-                  size: 20.0,
-                ),
-              ),
-            ],
-          ),
+          leading: _createLeadingIcon(user, track),
           trailing: IconButton(
             onPressed: () {
               dynamic tmp = _menuKey.currentState;
@@ -131,10 +191,8 @@ class _FeedItemState extends State<FeedItem> {
             },
             icon: Icon(Icons.more_vert),
           ),
-          title: Text(user.displayName),
-          subtitle: Text(
-              '${track.name} - ${track.artists[0].name}\n${suggestion.text}\n' +
-                  '$elapsed\nLikes: ${suggestion.likes}'),
+          title: _createTitle(track, user),
+          subtitle: _createDescription(suggestion, track, user),
           isThreeLine: true,
           onTap: () async {
             //_vote();

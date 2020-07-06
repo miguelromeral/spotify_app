@@ -46,11 +46,13 @@ class LocalDB {
   }
 
   // A method that retrieves all the dogs from the dogs table.
-  Future<List<Suggestion>> suggestions() async {
+  Future<List<Suggestion>> suggestions(String mySpotifyUserId) async {
     // Get a reference to the database.
     final Database db = await database;
     // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('suggestions');
+    String whereString = 'suserid = ?';
+    final List<Map<String, dynamic>> maps = await db
+        .query('suggestions', where: whereString, whereArgs: [mySpotifyUserId]);
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       return Suggestion(

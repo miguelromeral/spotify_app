@@ -22,7 +22,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       if (state.local_db != null) {
         return FutureBuilder(
-          future: state.local_db.suggestions(),
+          future: state.local_db.suggestions(state.db.spotifyUserID),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<Suggestion> list = snapshot.data;
