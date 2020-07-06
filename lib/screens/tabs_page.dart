@@ -6,6 +6,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/tab_navigation_item.dart';
+import 'package:spotify_app/screens/playlists/playlists_screen.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
@@ -100,11 +101,16 @@ class _TabsPageState extends State<TabsPage> {
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
-              onTap: () {
+              title: Text('My Playlists'),
+              onTap: () async {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PlaylistsScreen()),
+                );
                 // Update the state of the app.
                 // ...
-                Navigator.pop(context);
               },
             ),
             ListTile(

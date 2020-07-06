@@ -1,11 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
+import 'package:spotify_app/screens/_shared/album_picture.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/models/suggestion.dart';
-
-import '../screens/shared/album_picture.dart';
 
 class SuggestionItem extends StatefulWidget {
   Suggestion suggestion;

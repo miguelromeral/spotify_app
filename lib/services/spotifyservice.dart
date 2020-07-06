@@ -22,6 +22,7 @@ class SpotifyService {
   Suggestion mySuggestion;
   List<Suggestion> feed;
   List<Track> saved;
+  List<PlaylistSimple> playlists;
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";
 

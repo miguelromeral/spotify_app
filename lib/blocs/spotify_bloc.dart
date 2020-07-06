@@ -56,6 +56,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       event.service.auth = _auth;
       event.service = await _updateFeed(event.service);
       event.service.saved = await _updateSaved(event.service);
+      event.service.playlists = await _updatePlaylists(event.service);
       yield event.service;
     } else if (event is UpdateFeed) {
       /*state.furueSuggestions = state.db.getsuggestions();
@@ -74,6 +75,9 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdateSaved) {
       state.saved = await _updateSaved(state);
       yield state;
+    } else if (event is UpdatePlaylists){
+      state.playlists = await _updatePlaylists(state);
+      yield state;
     } else {
       throw Exception('oops');
     }
@@ -90,6 +94,13 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     print("Updated Saved, last: ${list.first.name} (${list.length})!");
     return list;
   }
+
+  Future<List<PlaylistSimple>> _updatePlaylists(SpotifyService state) async {
+    List<PlaylistSimple> list = (await state.api.playlists.me.all()).toList();
+    print("Updated playlists, (${list.length})!");
+    return list;
+  }
+
 
   Future<DatabaseService> _login(
       AuthService _auth, String email, String pwd, String suserid) async {

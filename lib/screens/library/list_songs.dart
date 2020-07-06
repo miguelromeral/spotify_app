@@ -86,7 +86,7 @@ class _ListSongsState extends State<ListSongs> {
     }
     return RefreshIndicator(
       onRefresh: _getData,
-          child: ListView.builder(
+      child: ListView.builder(
           itemCount: widget.tracks == null ? 0 : filteredTracks.length,
           itemBuilder: (_, index) {
             Track saved = filteredTracks[index];
@@ -119,11 +119,9 @@ class _ListSongsState extends State<ListSongs> {
     );
   }
 
-
   Future<void> _getData() async {
     print("pulling to refresh in list_songs!");
     if (_context != null) {
-
       RefreshListNotification().dispatch(_context);
       //await Future.delayed(Duration(seconds: 5));
       /*setState(() {
@@ -131,7 +129,6 @@ class _ListSongsState extends State<ListSongs> {
       });*/
     }
   }
-
 
   @override
   void initState() {
@@ -143,21 +140,19 @@ class _ListSongsState extends State<ListSongs> {
   Widget build(BuildContext context) {
     var bloc = BlocProvider.of<SpotifyBloc>(context);
     var state = bloc.state;
-    
-    if(_context == null){
+
+    if (_context == null) {
       _context = context;
     }
 
     return Flexible(
       child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: _appBarTitle,
-            leading: new IconButton(
+          appBar: AppBar(centerTitle: true, title: _appBarTitle, actions: [
+            IconButton(
               icon: _searchIcon,
               onPressed: _searchPressed,
             ),
-          ),
+          ]),
           body: _buildList()),
     );
   }

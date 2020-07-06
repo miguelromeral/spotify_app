@@ -26,6 +26,10 @@ class UpdateMySuggestion extends SpotifyEventBase {}
 
 class UpdateSaved extends SpotifyEventBase {}
 
+class UpdatePlaylists extends SpotifyEventBase {}
+
+
+
 /*
 class ShareTrackEvent extends SpotifyEventBase {
   
