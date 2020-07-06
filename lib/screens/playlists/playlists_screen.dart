@@ -23,7 +23,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
   final dio = new Dio(); // for http requests
   String _searchText = "";
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Search Example');
+  Widget _appBarTitle = new Text('My Playlists');
   BuildContext _context;
   DateTime lastUpdate;
 
@@ -56,13 +56,12 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text('Search Example');
+        this._appBarTitle = new Text('My Playlists');
         filteredList = initialList;
         _filter.clear();
       }
     });
   }
-
 
   Widget _buildList() {
     if (!(_searchText.isEmpty)) {
@@ -141,6 +140,20 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                           builder: (context) => ListSongs(
                                 key: Key('${saved.id}_${list.length}'),
                                 tracks: list,
+                                title: saved.name,
+                                refresh: false,
+                                /*refreshCallback: () async {
+                                  print("helloooooooooooo!");
+
+                                  if (_bloc != null) {
+                                    _bloc.add(UpdatePlaylists());
+                                    //BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
+                                    //await Future.delayed(Duration(seconds: 5));
+                                    setState(() {
+                                      lastUpdate = DateTime.now();
+                                    });
+                                  }
+                                },*/
                               )),
                     );
                   } catch (err) {

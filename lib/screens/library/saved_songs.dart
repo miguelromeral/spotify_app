@@ -56,6 +56,8 @@ class _SavedSongsState extends State<SavedSongs> {
               child: ListSongs(
                 key: Key(state.saved.hashCode.toString()),
                 tracks: state.saved,
+                title: 'My Saved Songs',
+                refresh: true,
               ),
               //),
             ),

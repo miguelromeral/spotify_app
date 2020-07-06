@@ -9,8 +9,10 @@ import 'package:spotify_app/screens/share_track/share_track.dart';
 
 class ListSongs extends StatefulWidget {
   List<Track> tracks;
+  String title;
+  bool refresh;
 
-  ListSongs({Key key, this.tracks}) : super(key: key);
+  ListSongs({Key key, this.tracks, this.title, this.refresh}) : super(key: key);
 
   @override
   _ListSongsState createState() => _ListSongsState();
@@ -22,7 +24,7 @@ class _ListSongsState extends State<ListSongs> {
   final dio = new Dio(); // for http requests
   String _searchText = "";
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Search Example');
+  Widget _appBarTitle;// = new Text('${widget.title}');
   BuildContext _context;
   DateTime lastUpdate;
 
@@ -54,7 +56,7 @@ class _ListSongsState extends State<ListSongs> {
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text('Search Example');
+        this._appBarTitle = new Text(widget.title);
         filteredTracks = widget.tracks;
         _filter.clear();
       }
@@ -84,39 +86,48 @@ class _ListSongsState extends State<ListSongs> {
       }
       filteredTracks = tempList;
     }
-    return RefreshIndicator(
-      onRefresh: _getData,
-      child: ListView.builder(
-          itemCount: widget.tracks == null ? 0 : filteredTracks.length,
-          itemBuilder: (_, index) {
-            Track saved = filteredTracks[index];
-            return ListTile(
-              leading: AlbumPicture(
-                track: saved,
-                size: 25.0,
-              ),
-              title: Text(saved.name),
-              subtitle: Text(saved.artists[0].name),
-              //trailing: icon,
-              //isThreeLine: true,
-              // Interactividad:
-              onTap: () async {
-                /*
+
+    if (widget.refresh) {
+      return RefreshIndicator(
+        onRefresh: _getData,
+        child: _listBuilder(),
+      );
+    } else {
+      return _listBuilder();
+    }
+  }
+
+  Widget _listBuilder() {
+    return ListView.builder(
+        itemCount: widget.tracks == null ? 0 : filteredTracks.length,
+        itemBuilder: (_, index) {
+          Track saved = filteredTracks[index];
+          return ListTile(
+            leading: AlbumPicture(
+              track: saved,
+              size: 25.0,
+            ),
+            title: Text(saved.name),
+            subtitle: Text(saved.artists[0].name),
+            //trailing: icon,
+            //isThreeLine: true,
+            // Interactividad:
+            onTap: () async {
+              /*
                   var spUser = await state.myUser;
                   state.db.updateUserData(spUser.id, saved.id);*/
-                //bloc.add(ShareTrackEvent(track: saved));
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ShareTrack(track: saved)),
-                );
-              },
-              //onLongPress: () => _pressCallback,
-              //enabled: false,
-              //selected: true,
-            );
-          }),
-    );
+              //bloc.add(ShareTrackEvent(track: saved));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShareTrack(track: saved)),
+              );
+            },
+            //onLongPress: () => _pressCallback,
+            //enabled: false,
+            //selected: true,
+          );
+        });
   }
 
   Future<void> _getData() async {
@@ -133,6 +144,7 @@ class _ListSongsState extends State<ListSongs> {
   @override
   void initState() {
     filteredTracks = widget.tracks;
+    _appBarTitle = new Text('${widget.title}');
     super.initState();
   }
 
