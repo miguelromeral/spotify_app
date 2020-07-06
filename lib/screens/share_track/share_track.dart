@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/screens/_shared/album_picture.dart';
 import 'package:spotify_app/screens/_shared/custom_appbar.dart';
 import 'package:spotify_app/services/notifications.dart';
 
@@ -26,55 +27,71 @@ class _ShareTrackState extends State<ShareTrack> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Share ${widget.track.name}',
+        title: 'Share Track',
       ),
       body: Builder(
         builder: (context) => Container(
           padding: EdgeInsets.all(20.0),
           child: Center(
-            child: Form(
-                key: _formKey,
-                child: Column(children: <Widget>[
-                  TextFormField(
-                    maxLength: 140,
-                    initialValue: _description,
-                    onChanged: (value) => setState(() {
-                      _description = value;
-                    }),
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      /*if (value.isEmpty) {
-                        return 'Please enter some text';
-                      }*/
-                      return null;
-                    },
+            child: Column(
+              children: [
+                Container(
+                  height: 125.0,
+                  child: AlbumPicture(
+                    size: 50.0,
+                    track: widget.track,
                   ),
-                  RaisedButton(
-                    onPressed: () async {
-                      // Validate returns true if the form is valid, otherwise false.
-                      if (_formKey.currentState.validate()) {
-                        // If the form is valid, display a snackbar. In the real world,
-                        // you'd often call a server or save the information in a database.
+                ),
+                Text(widget.track.name),
+                Text(widget.track.artists.map((e) => e.name).toString().replaceAll('(', '').replaceAll(')', '')),
+                Text(widget.track.album.name),
+                Form(
+                    key: _formKey,
+                    child: Column(children: <Widget>[
+                      TextFormField(
+                        maxLength: 140,
+                        minLines: 1,
+                        maxLines: 5,
+                        initialValue: _description,
+                        onChanged: (value) => setState(() {
+                          _description = value;
+                        }),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          /*if (value.isEmpty) {
+                            return 'Please enter some text';
+                          }*/
+                          return null;
+                        },
+                      ),
+                      RaisedButton(
+                        onPressed: () async {
+                          // Validate returns true if the form is valid, otherwise false.
+                          if (_formKey.currentState.validate()) {
+                            // If the form is valid, display a snackbar. In the real world,
+                            // you'd often call a server or save the information in a database.
 
-                        var spUser = await state.myUser;
-                        await state.db.updateUserData(
-                            spUser.id, widget.track.id, _description);
+                            var spUser = await state.myUser;
+                            await state.db.updateUserData(
+                                spUser.id, widget.track.id, _description);
 
-                        bloc.add(UpdateFeed());
-                        bloc.add(UpdateMySuggestion());
-                        UpdatedFeedNotification().dispatch(context);
+                            bloc.add(UpdateFeed());
+                            bloc.add(UpdateMySuggestion());
+                            UpdatedFeedNotification().dispatch(context);
 
 
 
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text('Updated Suggestion!')));
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text('Updated Suggestion!')));
 
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text('Submit'),
-                  ),
-                ])),
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Text('Submit'),
+                      ),
+                    ])),
+              ],
+            ),
           ),
         ),
       ),
