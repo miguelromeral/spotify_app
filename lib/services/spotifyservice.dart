@@ -9,13 +9,13 @@ import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
 import 'package:spotify_app/services/firestore_db.dart';
-import 'package:spotify_app/services/auth.dart';
+import 'package:spotify_app/services/firebase_auth.dart';
 
 import 'local_database.dart';
 
 class SpotifyService {
   SpotifyApi api;
-  AuthService auth;
+  FirebaseAuthService auth;
   FirestoreService db;
   LocalDB localDB;
   bool logedin = false;

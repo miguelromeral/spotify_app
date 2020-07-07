@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
-import 'package:spotify_app/screens/_shared/tracks/track_item.dart';
+import 'package:spotify_app/_shared/tracks/track_item.dart';
 import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/screens/share_track/share_track.dart';
 
 class ListSongs extends StatefulWidget {
   List<Track> tracks;

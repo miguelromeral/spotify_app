@@ -4,7 +4,7 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/screens/_shared/suggestions/suggestion_item.dart';
+import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
 import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';

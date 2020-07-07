@@ -8,7 +8,7 @@ import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/services/firestore_db.dart';
-import 'package:spotify_app/services/auth.dart';
+import 'package:spotify_app/services/firebase_auth.dart';
 import 'package:spotify_app/services/local_database.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:spotify_app/services/password_generator.dart';
@@ -21,7 +21,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   @override
   Stream<SpotifyService> mapEventToState(SpotifyEventBase event) async* {
     if (event is LoginEvent) {
-      AuthService _auth = AuthService();
+      FirebaseAuthService _auth = FirebaseAuthService();
       FirestoreService _db;
       String email = "";
       String pwd = "";
@@ -82,7 +82,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   }
 
   Future<Following> _updateFollowing(SpotifyService state) async {
-    return await state.db.getFollowing();
+    return await state.db.getMyFollowing();
   }
 
   Future<Suggestion> _updateMySuggestion(SpotifyService state) async {
@@ -107,7 +107,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   }
 
   Future<FirestoreService> _login(
-      AuthService _auth, String email, String pwd, String suserid) async {
+      FirebaseAuthService _auth, String email, String pwd, String suserid) async {
     var user = await _auth.signInWithEmailAndPassword(email, pwd);
     FirestoreService _db =
         FirestoreService(spotifyUserID: suserid, firebaseUserID: user.uid);

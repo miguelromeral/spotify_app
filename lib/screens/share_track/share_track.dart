@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
-import 'package:spotify_app/screens/_shared/custom_appbar.dart';
+import 'package:spotify_app/_shared/tracks/album_picture.dart';
+import 'package:spotify_app/_shared/custom_appbar.dart';
 import 'package:spotify_app/services/notifications.dart';
 
 class ShareTrack extends StatefulWidget {

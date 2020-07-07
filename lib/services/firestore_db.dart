@@ -53,7 +53,8 @@ class FirestoreService {
 
   Future<Suggestion> getMySuggestion() async {
     try {
-      return Suggestion.fromDocumentSnapshot(await cSuggestions.document(spotifyUserID).get());
+      return Suggestion.fromDocumentSnapshot(
+          await cSuggestions.document(spotifyUserID).get());
     } catch (err) {
       print("error while getting suggestion: $err");
       return null;
@@ -62,14 +63,13 @@ class FirestoreService {
 
   Future<List<Suggestion>> getsuggestions() async {
     try {
-      var fol = await getFollowing();
+      var fol = await getMyFollowing();
       var list = fol.usersList;
       list.add(spotifyUserID);
       return cSuggestions
           .where(Suggestion.fsuserid, whereIn: list)
           .getDocuments()
           .then((QuerySnapshot value) {
-
         /*var tmp = _suggestionListFromSnapshot(value);
         tmp.forEach((element) {
           print(element.suserid);
@@ -96,16 +96,34 @@ class FirestoreService {
    * 
    *********************************************/
 
-  Future<Following> getFollowing() async {
-    var data = await cFollowing.document(spotifyUserID).get();
+  Future<Following> getMyFollowing() async {
+    return getFollowingBySpotifyUserID(spotifyUserID);
+  }
+
+  Future<Following> getFollowingBySpotifyUserID(String suserid) async {
+    var data = await cFollowing.document(suserid).get();
     return Following.fromDocumentSnapshot(data);
   }
 
-  Future addFollowing(Following fol, String suserid) async {
-    fol.concatenateUser(suserid);
-    return await fol.reference.updateData(<String, dynamic>{
-      Following.fusers: fol.users,
-    });
+  Future<bool> addFollowing(Following fol, String suserid) async {
+    try {
+      fol.concatenateUser(suserid);
+      Following toFollow = await getFollowingBySpotifyUserID(suserid);
+      if (toFollow != null) {
+        await fol.reference.updateData(<String, dynamic>{
+          Following.fusers: fol.users,
+        });
+        return true;
+      }
+    } catch (e) {
+      print("Error when adding following: $e");
+    }
+    return false;
+  }
+
+  Future<bool> addFollowingByUserId(String suserid) async {
+    Following fol = await getMyFollowing();
+    return await addFollowing(fol, suserid);
   }
 
   Future removeFollowing(Following fol, String suserid) async {

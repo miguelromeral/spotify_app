@@ -5,10 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/custom_widgets/suggestion_item.dart';
-import 'package:spotify_app/screens/_shared/card_info.dart';
-import 'package:spotify_app/screens/_shared/custom_appbar.dart';
-import 'package:spotify_app/screens/_shared/users/profile_picture.dart';
+import 'package:spotify_app/models/suggestion.dart';
+import 'package:spotify_app/_shared/card_info.dart';
+import 'package:spotify_app/_shared/custom_appbar.dart';
+import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
+import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,28 +62,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             title: 'User ID',
                             content: user.id,
                           ),
-                          FutureBuilder<Iterable<PlaylistSimple>>(
-                              future: state.myPlaylists,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  var lists = snapshot.data.toList();
-                                  return CardInfo(
-                                    title: 'Playlists',
-                                    content: lists.length.toString(),
-                                  );
-                                } else {
-                                  return Text('Unknown playlists');
-                                }
-                              }),
                           BlocBuilder<SpotifyBloc, SpotifyService>(
                             builder: (context, state) {
                               return StreamBuilder(
                                 stream: state.mySuggestion,
                                 builder: (context, snp) {
                                   if (snp.hasData) {
-                                    var sug = snp.data;
-                                    return SuggestionItem(
-                                      suggestion: sug,
+                                    Suggestion sug = snp.data;
+                                    return FutureBuilder(
+                                      future: state.api.tracks.get(sug.trackid),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return SuggestionItem(
+                                            suggestion: sug,
+                                            track: snapshot.data,
+                                          );
+                                        } else {
+                                          return Text('Unknown Song');
+                                        }
+                                      },
                                     );
                                   } else {
                                     BlocProvider.of<SpotifyBloc>(context)

@@ -1,16 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/popup_item.dart';
-import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
-import 'package:spotify_app/screens/_shared/users/profile_picture.dart';
+import 'package:spotify_app/_shared/tracks/album_picture.dart';
+import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/models/suggestion.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SuggestionItem extends StatefulWidget {
   final Track track;
@@ -47,6 +45,8 @@ class _SuggestionItemState extends State<SuggestionItem> {
                 case PopupActionType.vote:
                   _vote(context, BlocProvider.of<SpotifyBloc>(context).state,
                       value.suggestion, value.track);
+                  break;
+                default:
                   break;
               }
             },
@@ -152,8 +152,10 @@ class _SuggestionItemState extends State<SuggestionItem> {
     }
   }
 
-  String _getLikes(Suggestion suggestion){
-    return suggestion.likes == null ? '' : 'Likes: ${suggestion.likes.toString()}';
+  String _getLikes(Suggestion suggestion) {
+    return suggestion.likes == null
+        ? ''
+        : 'Likes: ${suggestion.likes.toString()}';
   }
 
   Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/screens/_shared/playlists/playlist_image.dart';
+import 'package:spotify_app/_shared/playlists/playlist_image.dart';
 import 'package:spotify_app/screens/library/list_songs.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
