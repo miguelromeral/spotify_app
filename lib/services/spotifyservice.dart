@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart' as mat;
@@ -23,9 +24,17 @@ class SpotifyService {
   DateTime lastSuggestionUpdate;
   Following following;
   Suggestion mySuggestion;
-  List<Suggestion> feed;
+  //List<Suggestion> feed;
   List<Track> saved;
   List<PlaylistSimple> playlists;
+  //Stream<List<Suggestion>> feedStream;
+
+  StreamController<List<Suggestion>> _streamControllerFeed = new StreamController.broadcast();
+  Stream<List<Suggestion>> get feed => _streamControllerFeed.stream;
+
+  void updateFeed(List<Suggestion> newFeed){
+    _streamControllerFeed.add(newFeed);
+  }
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";
 
@@ -34,6 +43,10 @@ class SpotifyService {
   SpotifyService.withApi(SpotifyApi miapi) {
     api = miapi;
     enabled = true;
+  }
+
+  void dispose(){
+    _streamControllerFeed.close();
   }
 
   void shareTrack(Track track){

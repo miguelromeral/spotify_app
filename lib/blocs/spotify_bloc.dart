@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/services/DatabaseService.dart';
 import 'package:spotify_app/services/auth.dart';
 import 'package:spotify_app/services/local_database.dart';
@@ -56,14 +57,14 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       event.service.local_db = LocalDB();
       event.service.furueSuggestions = _db.getsuggestions();
       event.service.auth = _auth;
-      event.service = await _updateFeed(event.service);
+      event.service.updateFeed(await _updateFeed(event.service));
       event.service.saved = await _updateSaved(event.service);
       event.service.playlists = await _updatePlaylists(event.service);
       yield event.service;
     } else if (event is UpdateFeed) {
-      /*state.furueSuggestions = state.db.getsuggestions();
-      state.lastSuggestionUpdate = DateTime.now();*/
-      yield await _updateFeed(state);
+      var newFeed = await _updateFeed(state);
+      state.updateFeed(newFeed);
+      yield state;
     } else if (event is UpdateFollowing) {
       var news = await state.db.getFollowing();
       SpotifyService newState = state;
@@ -77,7 +78,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdateSaved) {
       state.saved = await _updateSaved(state);
       yield state;
-    } else if (event is UpdatePlaylists){
+    } else if (event is UpdatePlaylists) {
       state.playlists = await _updatePlaylists(state);
       yield state;
     } else {
@@ -85,14 +86,13 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     }
   }
 
-  Future<SpotifyService> _updateFeed(SpotifyService state) async {
-    state.feed = await state.db.getsuggestions();
-    print("Updated Suggestions!");
-    return state;
+  Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
+    return await state.db.getsuggestions();
   }
 
   Future<List<Track>> _updateSaved(SpotifyService state) async {
-    List<Track> list = (await state.api.tracks.me.saved.all()).map((e) => e.track).toList();
+    List<Track> list =
+        (await state.api.tracks.me.saved.all()).map((e) => e.track).toList();
     print("Updated Saved, last: ${list.first.name} (${list.length})!");
     return list;
   }
@@ -102,7 +102,6 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     print("Updated playlists, (${list.length})!");
     return list;
   }
-
 
   Future<DatabaseService> _login(
       AuthService _auth, String email, String pwd, String suserid) async {

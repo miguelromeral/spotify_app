@@ -12,18 +12,18 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class FeedItem extends StatefulWidget {
+class SuggestionItem extends StatefulWidget {
   final Track track;
   final UserPublic user;
   Suggestion suggestion;
 
-  FeedItem({this.track, this.user, this.suggestion});
+  SuggestionItem({this.track, this.user, this.suggestion});
 
   @override
-  _FeedItemState createState() => _FeedItemState();
+  _SuggestionItemState createState() => _SuggestionItemState();
 }
 
-class _FeedItemState extends State<FeedItem> {
+class _SuggestionItemState extends State<SuggestionItem> {
   bool liked;
   final GlobalKey _menuKey = new GlobalKey();
 

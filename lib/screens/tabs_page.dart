@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/tab_navigation_item.dart';
-import 'package:spotify_app/screens/mysuggestions.dart';
+import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
 import 'package:spotify_app/screens/playlists/playlists_screen.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -17,6 +18,8 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPageState extends State<TabsPage> {
+  SpotifyBloc _bloc;
+
   int _currentIndex = 0;
 
   StreamSubscription _intentDataStreamSubscription;
@@ -46,6 +49,9 @@ class _TabsPageState extends State<TabsPage> {
   @override
   void dispose() {
     _intentDataStreamSubscription.cancel();
+    if(_bloc != null){
+      _bloc.state.dispose();
+    }
     super.dispose();
   }
 
@@ -71,8 +77,9 @@ class _TabsPageState extends State<TabsPage> {
 
   @override
   Widget build(BuildContext context) {
-    SpotifyBloc _bloc = BlocProvider.of<SpotifyBloc>(context);
-
+    if(_bloc == null){
+      _bloc = BlocProvider.of<SpotifyBloc>(context);
+    }
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       if (_sharedText != null) {
         openIntent(_sharedText, state);
