@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/suggestion_popup_item.dart';
+import 'package:spotify_app/models/popup_item.dart';
 import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/screens/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/notifications.dart';
@@ -37,17 +37,14 @@ class _SuggestionItemState extends State<SuggestionItem> {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return PopupMenuButton<FeedPopupAction>(
+        return PopupMenuButton<PopupItem>(
             key: _menuKey,
-            onSelected: (FeedPopupAction value) async {
+            onSelected: (PopupItem value) async {
               switch (value.action) {
-                case PopupAction.listen:
-                  if (await canLaunch(value.track.uri)) {
-                    print("Opening ${value.track.uri}");
-                    launch(value.track.uri);
-                  }
+                case PopupActionType.listen:
+                  value.listen();
                   break;
-                case PopupAction.vote:
+                case PopupActionType.vote:
                   _vote(context, BlocProvider.of<SpotifyBloc>(context).state,
                       value.suggestion, value.track);
                   break;
@@ -60,35 +57,15 @@ class _SuggestionItemState extends State<SuggestionItem> {
     );
   }
 
-  List<PopupMenuItem<FeedPopupAction>> _getActions(Track track, UserPublic user,
+  List<PopupMenuItem<PopupItem>> _getActions(Track track, UserPublic user,
       Suggestion suggestion, String mySpotifyUserId) {
-    List<PopupMenuItem<FeedPopupAction>> list = List();
+    List<PopupMenuItem<PopupItem>> list = List();
 
-    list.add(_popupItem(PopupAction.listen, 'Listen in Spotify',
-        Icons.music_note, track, suggestion));
-    //print("Action: ${suggestion.suserid} - ${user.id}");
+    list.add(PopupItem.createListenOption(track));
     if (suggestion.suserid != mySpotifyUserId) {
-      list.add(_popupItem(
-          PopupAction.vote, 'Vote!', Icons.thumb_up, track, suggestion));
+      list.add(PopupItem.createVoteOption(track, suggestion));
     }
     return list;
-  }
-
-  PopupMenuItem<FeedPopupAction> _popupItem(PopupAction value, String text,
-      IconData icon, Track track, Suggestion suggestion) {
-    return PopupMenuItem(
-      value:
-          FeedPopupAction(track: track, action: value, suggestion: suggestion),
-      child: Row(
-        children: <Widget>[
-          Icon(icon),
-          SizedBox(
-            width: 6.0,
-          ),
-          Text(text),
-        ],
-      ),
-    );
   }
 
   Future _vote(BuildContext context, SpotifyService state,
