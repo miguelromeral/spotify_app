@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/services/DatabaseService.dart';
+import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/auth.dart';
 import 'package:spotify_app/services/local_database.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -21,7 +22,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   Stream<SpotifyService> mapEventToState(SpotifyEventBase event) async* {
     if (event is LoginEvent) {
       AuthService _auth = AuthService();
-      DatabaseService _db;
+      FirestoreService _db;
       String email = "";
       String pwd = "";
       User user;
@@ -54,36 +55,38 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         print("Error while login: $e");
       }
       event.service.db = _db;
-      event.service.local_db = LocalDB();
-      event.service.furueSuggestions = _db.getsuggestions();
+      event.service.localDB = LocalDB();
+      //event.service.furueSuggestions = _db.getsuggestions();
       event.service.auth = _auth;
+      event.service.updateFollowing(await _updateFollowing(event.service));
+      event.service.updateMySuggestion(await _updateMySuggestion(event.service));
       event.service.updateFeed(await _updateFeed(event.service));
-      event.service.saved = await _updateSaved(event.service);
-      event.service.playlists = await _updatePlaylists(event.service);
+      event.service.updateSaved(await _updateSaved(event.service));
+      event.service.updatePlaylists(await _updatePlaylists(event.service));
       yield event.service;
     } else if (event is UpdateFeed) {
-      var newFeed = await _updateFeed(state);
-      state.updateFeed(newFeed);
+      state.updateFeed(await _updateFeed(state));
       yield state;
-    } else if (event is UpdateFollowing) {
-      var news = await state.db.getFollowing();
-      SpotifyService newState = state;
-      newState.following = news;
-      //state.following = news;
-      print("Updated Following!");
-      yield newState;
     } else if (event is UpdateMySuggestion) {
-      state.mySuggestion = await state.db.getMySuggestion();
+      state.updateMySuggestion(await _updateMySuggestion(state));
       yield state;
     } else if (event is UpdateSaved) {
-      state.saved = await _updateSaved(state);
+      state.updateSaved(await _updateSaved(state));
       yield state;
     } else if (event is UpdatePlaylists) {
-      state.playlists = await _updatePlaylists(state);
+      state.updatePlaylists(await _updatePlaylists(state));
       yield state;
     } else {
       throw Exception('oops');
     }
+  }
+
+  Future<Following> _updateFollowing(SpotifyService state) async {
+    return await state.db.getFollowing();
+  }
+
+  Future<Suggestion> _updateMySuggestion(SpotifyService state) async {
+    return await state.db.getMySuggestion();
   }
 
   Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
@@ -103,11 +106,11 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     return list;
   }
 
-  Future<DatabaseService> _login(
+  Future<FirestoreService> _login(
       AuthService _auth, String email, String pwd, String suserid) async {
     var user = await _auth.signInWithEmailAndPassword(email, pwd);
-    DatabaseService _db =
-        DatabaseService(spotifyUserID: suserid, firebaseUserID: user.uid);
+    FirestoreService _db =
+        FirestoreService(spotifyUserID: suserid, firebaseUserID: user.uid);
     return _db;
   }
 

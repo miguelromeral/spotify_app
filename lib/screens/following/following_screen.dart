@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/screens/_shared/custom_appbar.dart';
 import 'package:spotify_app/screens/following/following_list.dart';
 import 'package:spotify_app/models/following.dart';
@@ -14,48 +13,26 @@ class FollowingScreen extends StatefulWidget {
 }
 
 class _FollowingScreenState extends State<FollowingScreen> {
-  Future _retrieve(SpotifyBloc bloc) async {
-    bloc.add(UpdateFollowing());
-  }
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BlocProvider.of<SpotifyBloc>(context);
-
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        if (state.following != null) {
-
-          return StreamProvider<List<Following>>.value(
-            builder: (context, widget) {
-              return Scaffold(
-                appBar: CustomAppBar(
-                  title: 'Follow App Users',
-                ),
-                /*floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              await _displayDialog(context, bloc);
-              _retrieve(state);
-            },
-            icon: Icon(Icons.add),
-            label: Text("Follow New User"),
-          ),*/
-                body: Center(
-                  child: FollowingList(),
-                ),
-              );
-            },
-            value: state.db.following,
-          );
-        } else {
-          _retrieve(bloc);
-          return Container(
-            child: Center(
-              child: Text('My Following Not Found'),
-            ),
-          );
-        }
+        return StreamProvider<List<Following>>.value(
+          builder: (context, widget) {
+            return Scaffold(
+              appBar: CustomAppBar(
+                title: 'Follow App Users',
+              ),
+              body: Center(
+                child: FollowingList(),
+              ),
+            );
+          },
+          value: state.db.following,
+        );
       },
     );
   }
+
 }

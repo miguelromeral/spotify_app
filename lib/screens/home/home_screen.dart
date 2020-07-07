@@ -17,25 +17,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        var bloc = BlocProvider.of<SpotifyBloc>(context);
         return Scaffold(
           appBar: CustomAppBar(
             title: 'Feed',
           ),
           body: Center(
-            child: _buildBody(bloc, state),
+            child: FeedList(),
           ),
         );
       },
     );
-  }
-
-  Widget _buildBody(SpotifyBloc bloc, SpotifyService state) {
-    if (state.feed != null) {
-      return FeedList();
-    } else {
-      bloc.add(UpdateFeed());
-      return Text("Retreiving Stream...");
-    }
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/screens/_shared/album_picture.dart';
+import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/screens/_shared/custom_appbar.dart';
 import 'package:spotify_app/services/notifications.dart';
 
@@ -75,7 +75,7 @@ class _ShareTrackState extends State<ShareTrack> {
                             var sug = await state.db.updateUserData(
                                 spUser.id, widget.track.id, _description);
 
-                            await state.local_db.insertSuggestion(sug);
+                            await state.localDB.insertSuggestion(sug);
 
                             bloc.add(UpdateFeed());
                             bloc.add(UpdateMySuggestion());

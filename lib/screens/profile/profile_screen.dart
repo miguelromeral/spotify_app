@@ -8,16 +8,16 @@ import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/custom_widgets/suggestion_item.dart';
 import 'package:spotify_app/screens/_shared/card_info.dart';
 import 'package:spotify_app/screens/_shared/custom_appbar.dart';
-import 'package:spotify_app/screens/_shared/profile_picture.dart';
+import 'package:spotify_app/screens/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Profile extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
@@ -76,15 +76,21 @@ class _ProfileState extends State<Profile> {
                               }),
                           BlocBuilder<SpotifyBloc, SpotifyService>(
                             builder: (context, state) {
-                              if (state.mySuggestion != null) {
-                                var sug = state.mySuggestion;
-                                return SuggestionItem(
-                                  suggestion: sug,
-                                );
-                              } else {
-                                BlocProvider.of<SpotifyBloc>(context).add(UpdateMySuggestion());
-                                return Text('Unknown Suggestion');
-                              }
+                              return StreamBuilder(
+                                stream: state.mySuggestion,
+                                builder: (context, snp) {
+                                  if (snp.hasData) {
+                                    var sug = snp.data;
+                                    return SuggestionItem(
+                                      suggestion: sug,
+                                    );
+                                  } else {
+                                    BlocProvider.of<SpotifyBloc>(context)
+                                        .add(UpdateMySuggestion());
+                                    return Text('Unknown Suggestion');
+                                  }
+                                },
+                              );
                             },
                           ),
                         ],

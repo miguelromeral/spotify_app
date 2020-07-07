@@ -16,9 +16,9 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      if (state.local_db != null) {
+      if (state.localDB != null) {
         return FutureBuilder(
-          future: state.local_db.suggestions(state.db.spotifyUserID),
+          future: state.localDB.suggestions(state.db.spotifyUserID),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<Suggestion> list = snapshot.data;

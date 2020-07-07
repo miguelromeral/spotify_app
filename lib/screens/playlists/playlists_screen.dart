@@ -4,15 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/screens/_shared/album_picture.dart';
-import 'package:spotify_app/screens/_shared/playlist_image.dart';
+import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
+import 'package:spotify_app/screens/_shared/playlists/playlist_image.dart';
+import 'package:spotify_app/screens/_shared/playlists/playlist_item.dart';
 import 'package:spotify_app/screens/library/list_songs.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
+import 'package:spotify_app/services/spotifyservice.dart';
 
 class PlaylistsScreen extends StatefulWidget {
-  //PlaylistsScreen({Key key, this.tracks}) : super(key: key);
-
   @override
   _PlaylistsScreenState createState() => _PlaylistsScreenState();
 }
@@ -25,7 +25,6 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text('My Playlists');
   BuildContext _context;
-  DateTime lastUpdate;
 
   List<PlaylistSimple> initialList = new List();
   List<PlaylistSimple> filteredList = new List();
@@ -77,10 +76,6 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     return NotificationListener<RefreshListNotification>(
       onNotification: (notification) {
         print("Notification: $notification");
-        /*setState(() {
-                  //_retrieve(state);
-                  bloc.add(UpdateFeed());
-                });*/
         _getData();
         return true;
       },
@@ -89,78 +84,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
         child: ListView.builder(
             itemCount: initialList == null ? 0 : filteredList.length,
             itemBuilder: (_, index) {
-              var saved = filteredList[index];
-              /*return ListTile(
-                leading: AlbumPicture(
-                  track: saved,
-                  size: 25.0,
-                ),
-                title: Text(saved.name),
-                subtitle: Text(saved.artists[0].name),
-                //trailing: icon,
-                //isThreeLine: true,
-                // Interactividad:
-                onTap: () async {
-                  /*
-                    var spUser = await state.myUser;
-                    state.db.updateUserData(spUser.id, saved.id);*/
-                  //bloc.add(ShareTrackEvent(track: saved));
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ShareTrack(track: saved)),
-                  );
-                },
-                //onLongPress: () => _pressCallback,
-                //enabled: false,
-                //selected: true,
-              );*/
-              return ListTile(
-                leading: PlaylistImage(
-                  playlist: saved,
-                ),
-                title: Text(saved.name),
-                onTap: () async {
-                  try {
-                    var expand = (await _bloc.state.api.playlists
-                            .getTracksByPlaylistId(saved.id)
-                            .all())
-                        .toList();
-
-                    var list = List<Track>();
-                    for (var t in expand) {
-                      list.add(t);
-                    }
-
-                    // print(expand);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ListSongs(
-                                key: Key('${saved.id}_${list.length}'),
-                                tracks: list,
-                                title: saved.name,
-                                refresh: false,
-                                /*refreshCallback: () async {
-                                  print("helloooooooooooo!");
-
-                                  if (_bloc != null) {
-                                    _bloc.add(UpdatePlaylists());
-                                    //BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
-                                    //await Future.delayed(Duration(seconds: 5));
-                                    setState(() {
-                                      lastUpdate = DateTime.now();
-                                    });
-                                  }
-                                },*/
-                              )),
-                    );
-                  } catch (err) {
-                    print(err);
-                  }
-                },
-              );
+              return PlaylistItem(playlist: filteredList[index], context: context);
             }),
       ),
     );
@@ -169,22 +93,24 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
   Future<void> _getData() async {
     print("pulling to refresh in playslist!");
     if (_context != null && _bloc != null) {
-      //RefreshListNotification().dispatch(_context);
       _bloc.add(UpdatePlaylists());
+      
+
+      _bloc.state.playlists.listen((event) {
+        setState(() {
+          initialList = event;
+          filteredList = initialList;
+        });
+      });
+
       setState(() {
-        initialList = _bloc.state.playlists;
         filteredList = initialList;
       });
-      //await Future.delayed(Duration(seconds: 5));
-      /*setState(() {
-        lastUpdate = DateTime.now();
-      });*/
     }
   }
 
   @override
   void initState() {
-    //_getData();
     super.initState();
   }
 
@@ -213,10 +139,4 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
           body: _buildList()),
     );
   }
-
-  /*
-  @override
-  Widget build(BuildContext context) {
-    return Text("Playlists"); 
-  }*/
 }

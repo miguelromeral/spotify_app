@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/screens/_shared/profile_picture.dart';
+import 'package:spotify_app/screens/_shared/users/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 
@@ -54,13 +54,13 @@ class _FollowingItemState extends State<FollowingItem> {
             Scaffold.of(context).showSnackBar(
                 SnackBar(content: Text('You no longer follow ${user.displayName}!')));
           } else {
-            await state.db.addFollowing(user.id);
+            
+            await state.db.addFollowing(widget.myFollowings, user.id);
             Scaffold.of(context).showSnackBar(
                 SnackBar(content: Text('You followed ${user.displayName}!')));
           }
 
           bloc.add(UpdateFeed());
-          bloc.add(UpdateFollowing());
         } else {
           Scaffold.of(context).showSnackBar(
               SnackBar(content: Text('You Can Not Vote For Your Own Song.')));

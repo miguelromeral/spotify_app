@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/screens/_shared/custom_appbar.dart';
-import 'package:spotify_app/screens/_shared/suggestion_item.dart';
+import 'package:spotify_app/screens/_shared/suggestions/suggestion_item.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class SuggestionsList extends StatefulWidget {

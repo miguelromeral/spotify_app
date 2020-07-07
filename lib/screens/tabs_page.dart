@@ -10,7 +10,10 @@ import 'package:spotify_app/models/tab_navigation_item.dart';
 import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
 import 'package:spotify_app/screens/playlists/playlists_screen.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
+import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
+
+import '_shared/mydrawer.dart';
 
 class TabsPage extends StatefulWidget {
   @override
@@ -31,9 +34,11 @@ class _TabsPageState extends State<TabsPage> {
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String value) {
-      setState(() {
-        _sharedText = value;
-      });
+      if (!value.contains(SpotifyService.redirectUri)) {
+        setState(() {
+          _sharedText = value;
+        });
+      }
     }, onError: (err) {
       print("getLinkStream error: $err");
     });
@@ -49,7 +54,7 @@ class _TabsPageState extends State<TabsPage> {
   @override
   void dispose() {
     _intentDataStreamSubscription.cancel();
-    if(_bloc != null){
+    if (_bloc != null) {
       _bloc.state.dispose();
     }
     super.dispose();
@@ -77,7 +82,7 @@ class _TabsPageState extends State<TabsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(_bloc == null){
+    if (_bloc == null) {
       _bloc = BlocProvider.of<SpotifyBloc>(context);
     }
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
@@ -94,47 +99,7 @@ class _TabsPageState extends State<TabsPage> {
 
   Widget _fullTree(SpotifyService state) {
     return Scaffold(
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text('My Playlists'),
-              onTap: () async {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PlaylistsScreen()),
-                );
-                // Update the state of the app.
-                // ...
-              },
-            ),
-            ListTile(
-              title: Text('My Suggestions'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MySuggestionsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MyDrawer(context: context),
       body: IndexedStack(
         index: _currentIndex,
         children: [

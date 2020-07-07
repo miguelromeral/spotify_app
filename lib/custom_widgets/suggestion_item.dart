@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/screens/_shared/album_picture.dart';
+import 'package:spotify_app/screens/_shared/tracks/album_picture.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';

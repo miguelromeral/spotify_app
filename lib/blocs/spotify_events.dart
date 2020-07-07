@@ -12,15 +12,11 @@ class LoginEvent extends SpotifyEventBase {
 
   LoginEvent(SpotifyApi api){
     service = SpotifyService.withApi(api);
-    
-    service.logedin = true;
-    service.enabled = true;
+    service.login();
   }
 }
 
 class UpdateFeed extends SpotifyEventBase {}
-
-class UpdateFollowing extends SpotifyEventBase {}
 
 class UpdateMySuggestion extends SpotifyEventBase {}
 

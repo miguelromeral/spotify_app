@@ -1,13 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Suggestion {
-  final String trackid;
-  final String suserid;
-  final String fuserid;
-  final String text;
-  final DateTime date;
+  String trackid;
+  static const String ftrackid = 'trackid';
+  String suserid;
+  static const String fsuserid = 'suserid';
+  String fuserid;
+  static const String ffuserid = 'fuserid';
+  String text;
+  static const String ftext = 'text';
+  DateTime date;
+  static const String fdate = 'date';
   int likes;
-  final DocumentReference reference;
+  static const String flikes = 'likes';
+  DocumentReference reference;
 
   //Suggestion({ this.trackid, this.suserid, this.fuserid });
   Suggestion(
@@ -19,13 +25,23 @@ class Suggestion {
       this.likes,
       this.reference});
 
+  Suggestion.fromDocumentSnapshot(DocumentSnapshot doc) {
+    trackid = doc.data[ftrackid] ?? '';
+    suserid = doc.data[fsuserid] ?? '';
+    fuserid = doc.data[ffuserid] ?? '';
+    text = doc.data[ftext] ?? '';
+    date = DateTime.parse(doc.data[fdate]) ?? '';
+    likes = doc.data[flikes] ?? 0;
+    reference = doc.reference;
+  }
+
   Map<String, dynamic> toMap() {
     return {
-      'trackid': trackid,
-      'suserid': suserid,
-      'fuserid': fuserid,
-      'text': text,
-      'date': date.toString(),
+      ftrackid: trackid,
+      fsuserid: suserid,
+      ffuserid: fuserid,
+      ftext: text,
+      fdate: date.toString(),
     };
   }
 }

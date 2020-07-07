@@ -7,7 +7,8 @@ import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/services/DatabaseService.dart';
+import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
+import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/auth.dart';
 
 import 'local_database.dart';
@@ -15,25 +16,45 @@ import 'local_database.dart';
 class SpotifyService {
   SpotifyApi api;
   AuthService auth;
-  DatabaseService db;
-  LocalDB local_db;
-  bool enabled = false;
+  FirestoreService db;
+  LocalDB localDB;
   bool logedin = false;
   Track toShare;
-  Future furueSuggestions;
-  DateTime lastSuggestionUpdate;
-  Following following;
-  Suggestion mySuggestion;
-  //List<Suggestion> feed;
-  List<Track> saved;
-  List<PlaylistSimple> playlists;
-  //Stream<List<Suggestion>> feedStream;
+  //Following following;
 
-  StreamController<List<Suggestion>> _streamControllerFeed = new StreamController.broadcast();
-  Stream<List<Suggestion>> get feed => _streamControllerFeed.stream;
+  StreamController<List<Track>> _scSaved = new StreamController.broadcast();
+  Stream<List<Track>> get saved => _scSaved.stream;
+
+  StreamController<List<Suggestion>> _scFeed = new StreamController.broadcast();
+  Stream<List<Suggestion>> get feed => _scFeed.stream;
+
+  StreamController<Suggestion> _scMySuggestion = new StreamController.broadcast();
+  Stream<Suggestion> get mySuggestion => _scMySuggestion.stream;
+
+  StreamController<List<PlaylistSimple>> _scPlaylists = new StreamController.broadcast();
+  Stream<List<PlaylistSimple>> get playlists => _scPlaylists.stream;
+
+  StreamController<Following> _scFollowing = new StreamController.broadcast();
+  Stream<Following> get following => _scFollowing.stream;
 
   void updateFeed(List<Suggestion> newFeed){
-    _streamControllerFeed.add(newFeed);
+    _scFeed.add(newFeed);
+  }
+
+  void updateSaved(List<Track> newSaved){
+    _scSaved.add(newSaved);
+  }
+
+  void updateMySuggestion(Suggestion newOne){
+    _scMySuggestion.add(newOne);
+  }
+
+  void updateFollowing(Following newone){
+    _scFollowing.add(newone);
+  }
+
+  void updatePlaylists(List<PlaylistSimple> list){
+    _scPlaylists.add(list);
   }
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";
@@ -42,11 +63,13 @@ class SpotifyService {
 
   SpotifyService.withApi(SpotifyApi miapi) {
     api = miapi;
-    enabled = true;
   }
 
   void dispose(){
-    _streamControllerFeed.close();
+    _scFeed.close();
+    _scSaved.close();
+    _scMySuggestion.close();
+    _scPlaylists.close();
   }
 
   void shareTrack(Track track){
