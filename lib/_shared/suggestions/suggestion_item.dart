@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spotify_app/_shared/myicon.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/popup_item.dart';
 import 'package:spotify_app/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/_shared/users/profile_picture.dart';
+import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -40,11 +42,11 @@ class _SuggestionItemState extends State<SuggestionItem> {
             onSelected: (PopupItem value) async {
               switch (value.action) {
                 case PopupActionType.listen:
-                  value.listen();
+                  openTrackSpotify(widget.track);
                   break;
                 case PopupActionType.vote:
-                  _vote(context, BlocProvider.of<SpotifyBloc>(context).state,
-                      value.suggestion, value.track);
+                  vote(context, BlocProvider.of<SpotifyBloc>(context).state,
+                      widget.suggestion, widget.track);
                   break;
                 default:
                   break;
@@ -68,74 +70,56 @@ class _SuggestionItemState extends State<SuggestionItem> {
     return list;
   }
 
-  Future _vote(BuildContext context, SpotifyService state,
-      Suggestion suggestion, Track track) async {
-    if (state.db.firebaseUserID != suggestion.fuserid) {
-      await state.db.likeSuggestion(suggestion);
-
-      //bloc.add(UpdateFeed());
-      UpdatedFeedNotification().dispatch(context);
-
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
-    }
-  }
-
   Widget _createLeadingIcon(UserPublic user, Track track) {
+    var maxsize = albumIconSize;
     if (user != null) {
-      return Stack(
-        fit: StackFit.loose,
-        overflow: Overflow.visible,
-        alignment: AlignmentDirectional.bottomEnd,
-        children: <Widget>[
-          Container(
-            width: 50.0,
-            height: 50.0,
-            //color: Colors.red,
-            child: ProfilePicture(
-              user: user,
-              size: 50.0,
-            ),
-          ),
-          Container(
-            width: 30.0,
-            height: 30.0,
-            //color: Colors.yellow,
-            child: AlbumPicture(
-              track: track,
-              size: 20.0,
-            ),
-          ),
-        ],
+      return Container(
+        width: maxsize,
+        height: maxsize,
+        padding: EdgeInsets.all(8.0),
+        //color: Colors.red,
+        child: ProfilePicture(
+          user: user,
+          size: maxsize,
+        ),
       );
     } else {
-      return Stack(
-        fit: StackFit.loose,
-        overflow: Overflow.visible,
-        alignment: AlignmentDirectional.bottomEnd,
-        children: <Widget>[
-          Container(
-            width: 50.0,
-            height: 50.0,
-            //color: Colors.red,
-            child: AlbumPicture(
-              track: track,
-              size: 50.0,
-            ),
-          ),
-        ],
+      return Container(
+        width: maxsize,
+        height: maxsize,
+        padding: EdgeInsets.all(8.0),
+        //color: Colors.red,
+        child: AlbumPicture(
+          track: track,
+          size: maxsize,
+        ),
       );
     }
   }
 
-  Widget _createTitle(Track track, UserPublic user) {
+  Widget _createTrailingIcon(UserPublic user, Track track) {
+    var maxsize = albumIconSize;
     if (user != null) {
-      return Text(user.displayName);
+      return Container(
+        width: maxsize,
+        height: maxsize,
+        padding: EdgeInsets.all(8.0),
+        //color: Colors.red,
+        child: AlbumPicture(
+          track: track,
+          size: maxsize,
+        ),
+      );
     } else {
-      return Text(track.name);
+      return null;
+    }
+  }
+
+  String _createTitle(Track track, UserPublic user) {
+    if (user != null) {
+      return user.displayName;
+    } else {
+      return track.name;
     }
   }
 
@@ -158,86 +142,148 @@ class _SuggestionItemState extends State<SuggestionItem> {
         : 'Likes: ${suggestion.likes.toString()}';
   }
 
+  Widget _createSubtitle() {
+    if (widget.user != null) {
+      return RichText(
+          text: TextSpan(
+              // set the default style for the children TextSpans
+              style: styleFeedTrack,
+              children: [
+            TextSpan(
+              text: '${widget.track.name}',
+            ),
+            TextSpan(
+                text: ' - ${widget.track.artists[0].name}',
+                style: styleFeedArtist),
+          ]));
+    } else {
+      return Text('${widget.track.artists[0].name}', style: styleFeedTrack);
+    }
+  }
+
   Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return ListTile(
-          leading: _createLeadingIcon(user, track),
-          trailing: IconButton(
-            onPressed: () {
-              dynamic tmp = _menuKey.currentState;
-              tmp.showButtonMenu();
-            },
-            icon: Icon(Icons.more_vert),
+        return Container(
+          key: Key(suggestion.suserid),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                //color: Colors.blue,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        //color: Colors.black,
+                        child: _createLeadingIcon(user, track)),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              //color: Colors.green,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    _createTitle(track, user),
+                                    style: styleFeedTitle,
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Text(
+                                    "(${timeago.format(suggestion.date, locale: 'en_short')})",
+                                    style: styleFeedAgo,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 4.0),
+                            Container(
+                              //color: Colors.yellow[100],
+                              child: _createSubtitle(),
+                            ),
+                            SizedBox(height: 4.0),
+                            Container(
+                              //color: Colors.yellow[200],
+                              child: Text(
+                                suggestion.text,
+                                style: styleFeedContent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: _createTrailingIcon(user, track),
+                    ),
+                  ],
+                ),
+              ),
+              _createBottomBar(state, track, user, suggestion),
+            ],
           ),
-          title: _createTitle(track, user),
-          subtitle: _createDescription(suggestion, track, user),
-          isThreeLine: true,
-          onTap: () async {
-            //_vote();
-          },
-          onLongPress: () async {
-            dynamic tmp = _menuKey.currentState;
-            tmp.showButtonMenu();
-          },
         );
       },
     );
-/*
-    return Container(
-      color: Colors.blue,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 4.0,
-                  vertical: 8.0,
-                ),
-                constraints: BoxConstraints(
-                  maxHeight: 100.0,
-                  maxWidth: 100.0,
-                ),
-                color: Colors.red,
-                child: Center(
-                  child: ProfilePicture(
-                    user: user,
-                    size: 60.0,
-                  ),
-                )),
-          ),
-          Expanded(
-            flex: 4,
-            child: Container(
-              color: Colors.yellow,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(user.displayName),
-                  Text(track.name),
-                  Text(track.artists[0].name),
-                ],
-              ),
+  }
+
+  Widget _createBottomBar(SpotifyService state, Track track, UserPublic user,
+      Suggestion suggestion) {
+    List<Widget> list = List();
+
+    if (suggestion.likes != null) {
+      list.add(Container(
+        child: Row(
+          children: [
+            MyIcon(
+              icon: 'vote.png',
+              size: 30.0,
+              callback: () => vote(context, state, suggestion, track),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: 50.0,
-                  maxWidth: 50.0,
-                ),
-                color: Colors.green,
-                child: AlbumPicture(
-                  track: track,
-                  size: 50.0,
-                )),
-          ),
-        ],
+            Text(suggestion.likes.toString()),
+          ],
+        ),
+      ));
+      list.add(SizedBox(
+        width: 8.0,
+      ));
+    }
+
+    list.add(Container(
+      padding: EdgeInsets.all(8.0),
+      child: MyIcon(
+          icon: 'spotify.png',
+          size: 30.0,
+          callback: () => openTrackSpotify(track)),
+    ));
+    list.add(SizedBox(
+      width: 8.0,
+    ));
+    list.add(Container(
+      padding: EdgeInsets.all(8.0),
+      child: MyIcon(
+        icon: 'menu.png',
+        size: 20.0,
+        callback: () {
+          dynamic tmp = _menuKey.currentState;
+          tmp.showButtonMenu();
+        },
       ),
-    );*/
+    ));
+
+    return Container(
+      //color: Colors.blue[300],
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: list,
+      ),
+    );
   }
 }

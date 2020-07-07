@@ -47,7 +47,7 @@ class FirestoreService {
 
   Future likeSuggestion(Suggestion suggestion) async {
     return await suggestion.reference.updateData(<String, dynamic>{
-      'likes': (suggestion.likes + 1),
+      Suggestion.flikes: suggestion.likes + 1,
     });
   }
 

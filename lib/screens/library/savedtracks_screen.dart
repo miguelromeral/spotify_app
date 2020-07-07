@@ -29,13 +29,14 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
           if (snp.hasData) {
             var liked = snp.data;
             return Scaffold(
-              floatingActionButton: FloatingActionButton.extended(
+              /*floatingActionButton: FloatingActionButton.extended(
+                key: GlobalKey(),
                 onPressed: () async {
                   _getData();
                 },
                 icon: Icon(Icons.refresh),
                 label: Text("Refresh"),
-              ),
+              ),*/
               body: Center(
                 child: NotificationListener<RefreshListNotification>(
                   onNotification: (notification) {

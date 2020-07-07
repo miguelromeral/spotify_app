@@ -34,8 +34,6 @@ class MyDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => PlaylistsScreen()),
               );
-              // Update the state of the app.
-              // ...
             },
           ),
           ListTile(

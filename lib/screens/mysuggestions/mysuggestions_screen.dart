@@ -11,28 +11,23 @@ class MySuggestionsScreen extends StatefulWidget {
 }
 
 class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
-  List<Suggestion> suggestions;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      if (state.localDB != null) {
-        return FutureBuilder(
-          future: state.localDB.suggestions(state.db.spotifyUserID),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Suggestion> list = snapshot.data;
-              return SuggestionsList(
-                suggestions: list,
-              );
-            } else {
-              return Text("Error");
-            }
-          },
-        );
-      } else {
-        return Text("No Local DB");
-      }
+      return FutureBuilder(
+        future: state.getSuggestionsBySpotifyUserID(state.db.spotifyUserID),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Suggestion> list = snapshot.data;
+            return SuggestionsList(
+              suggestions: list,
+            );
+          } else {
+            return Text("Error");
+          }
+        },
+      );
     });
   }
 }

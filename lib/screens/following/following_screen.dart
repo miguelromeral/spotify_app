@@ -30,6 +30,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                 child: FollowingList(),
               ),
               floatingActionButton: FloatingActionButton.extended(
+                key: GlobalKey(),
                 onPressed: () async {
                   var bloc = BlocProvider.of<SpotifyBloc>(context);
                   await _displayDialog(context, bloc);

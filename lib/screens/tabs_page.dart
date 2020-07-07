@@ -9,6 +9,7 @@ import 'package:spotify_app/_shared/mydrawer.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/tab_navigation_item.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
+import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class TabsPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class TabsPage extends StatefulWidget {
 
 class _TabsPageState extends State<TabsPage> {
   SpotifyBloc _bloc;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int _currentIndex = 0;
 
@@ -94,35 +96,41 @@ class _TabsPageState extends State<TabsPage> {
   }
 
   Widget _fullTree(SpotifyService state) {
-    return Scaffold(
-      drawer: MyDrawer(context: context),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          for (final tabItem in TabNavigationItem.items) tabItem.page,
-        ],
-      ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-            // sets the background color of the `BottomNavigationBar`
-            canvasColor: Colors.green,
-            // sets the active color of the `BottomNavigationBar` if `Brightness` is light
-            primaryColor: Colors.red,
-            textTheme: Theme.of(context).textTheme.copyWith(
-                caption: new TextStyle(
-                    color: Colors
-                        .yellow))), // sets the inactive color of the `BottomNavigationBar`
-        child: BottomNavigationBar(
-          fixedColor: Colors.black,
-          currentIndex: _currentIndex,
-          onTap: (int index) => setState(() => _currentIndex = index),
-          items: [
-            for (final tabItem in TabNavigationItem.items)
-              BottomNavigationBarItem(
-                icon: tabItem.icon,
-                title: tabItem.title,
-              )
+    return NotificationListener<OpenDrawerNotification>(
+      onNotification: (notification) {
+        _scaffoldKey.currentState.openDrawer();
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        drawer: MyDrawer(context: context),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            for (final tabItem in TabNavigationItem.items) tabItem.page,
           ],
+        ),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+              // sets the background color of the `BottomNavigationBar`
+              canvasColor: Colors.green,
+              // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+              primaryColor: Colors.red,
+              textTheme: Theme.of(context).textTheme.copyWith(
+                  caption: new TextStyle(
+                      color: Colors
+                          .yellow))), // sets the inactive color of the `BottomNavigationBar`
+          child: BottomNavigationBar(
+            fixedColor: Colors.black,
+            currentIndex: _currentIndex,
+            onTap: (int index) => setState(() => _currentIndex = index),
+            items: [
+              for (final tabItem in TabNavigationItem.items)
+                BottomNavigationBarItem(
+                  icon: tabItem.icon,
+                  title: tabItem.title,
+                )
+            ],
+          ),
         ),
       ),
     );

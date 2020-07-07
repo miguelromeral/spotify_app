@@ -17,7 +17,7 @@ class SpotifyService {
   SpotifyApi api;
   FirebaseAuthService auth;
   FirestoreService db;
-  LocalDB localDB;
+  LocalDB _localDB;
   bool logedin = false;
   Track toShare;
   //Following following;
@@ -65,6 +65,15 @@ class SpotifyService {
     api = miapi;
   }
 
+  bool isInit = false;
+
+  void init(){
+    if(!isInit){
+      _localDB = LocalDB();
+      isInit = true;
+    }
+  }
+
   void dispose(){
     _scFeed.close();
     _scSaved.close();
@@ -110,4 +119,20 @@ class SpotifyService {
       return null;
     }
   }
+
+
+  /******************************************
+   * 
+   * LOCAL DB
+   * 
+   ***************************************/
+
+   Future insertSuggestion(Suggestion sug) async {
+     await _localDB.insertSuggestion(sug);
+   }
+   
+
+   Future<List<Suggestion>> getSuggestionsBySpotifyUserID(String suserid) async {
+     return await _localDB.suggestions(suserid);
+   }
 }

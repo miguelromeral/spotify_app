@@ -55,8 +55,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         print("Error while login: $e");
       }
       event.service.db = _db;
-      event.service.localDB = LocalDB();
-      //event.service.furueSuggestions = _db.getsuggestions();
+      event.service.init();
       event.service.auth = _auth;
       event.service.updateFollowing(await _updateFollowing(event.service));
       event.service.updateMySuggestion(await _updateMySuggestion(event.service));

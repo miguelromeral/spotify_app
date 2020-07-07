@@ -50,7 +50,10 @@ class _FeedListState extends State<FeedList> {
       child: Flexible(
           child: RefreshIndicator(
         onRefresh: _getData,
-        child: ListView.builder(
+        child: ListView.separated(
+            separatorBuilder: (context, index) => Divider(
+                  color: Colors.black,
+                ),
             itemCount: sugs.length,
             itemBuilder: (context, index) =>
                 _createListElement(sugs[index], state)),

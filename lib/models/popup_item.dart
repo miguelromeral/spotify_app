@@ -45,15 +45,6 @@ class PopupItem {
     );
   }
 
-  Future listen() async {
-    if (action == PopupActionType.listen) {
-      if (await canLaunch(track.uri)) {
-        print("Opening ${track.uri}");
-        launch(track.uri);
-      }
-    }
-  }
-
   Future updateSuggestion(BuildContext context) async {
     if (action == PopupActionType.tosuggestion) {
       Navigator.push(

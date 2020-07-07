@@ -4,6 +4,7 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/popup_item.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
+import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,7 +34,7 @@ class _TrackItemState extends State<TrackItem> {
             onSelected: (PopupItem value) async {
               switch (value.action) {
                 case PopupActionType.listen:
-                  value.listen();
+                  openTrackSpotify(widget.track);
                   break;
                 case PopupActionType.tosuggestion:
                   value.updateSuggestion(context);
