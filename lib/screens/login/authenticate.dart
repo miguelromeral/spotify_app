@@ -15,47 +15,69 @@ class Authenticate extends StatefulWidget {
   _AuthenticateState createState() => _AuthenticateState();
 }
 
-class _AuthenticateState extends State<Authenticate> {
-  StreamSubscription _sub;
+enum _loginState { loadingSaved, waitingUser, loading }
 
+class _AuthenticateState extends State<Authenticate> {
   bool _remember = false;
+  _loginState _state = _loginState.loadingSaved;
 
   @override
   void initState() {
+    setState(() {
+      _state = _loginState.loadingSaved;
+    });
     super.initState();
+  }
+
+  Widget _buildBody(BuildContext context) {
+    switch (_state) {
+      case _loginState.loadingSaved:
+        automaticLogin(context);
+        return Center(child: Text("Loading Saved Credentials..."));
+        break;
+      case _loginState.waitingUser:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RaisedButton(
+                  child: Text('Log In'),
+                  onPressed: () async {
+                    login(context);
+                  }),
+              Text("Remember Credentials (1 hour)"),
+              Checkbox(
+                value: _remember,
+                onChanged: (bool value) {
+                  setState(() {
+                    _remember = value;
+                  });
+                },
+              ),
+            ],
+          ),
+        );
+        break;
+      case _loginState.loading:
+        return Center(child: Text("Loading..."));
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    automaticLogin(context);
     return Scaffold(
-      backgroundColor: Colors.brown[100],
       appBar: AppBar(
         title: Text('Hello!'),
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RaisedButton(
-                    child: Text('Log In'),
-                    onPressed: () async {
-                      login(context);
-                    }),
-                Text("Remember Credentials (1 hour)"),
-                Checkbox(
-                  value: _remember,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _remember = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-          );
+          if (state != null)
+            return _buildBody(context);
+          else
+            setState(() {
+              _state = _loginState.waitingUser;
+            });
         },
       ),
     );
@@ -66,21 +88,21 @@ class _AuthenticateState extends State<Authenticate> {
     print("Credentials retrieved: ${credentials?.expiration}");
     if (credentials != null && credentials.expiration.isAfter(DateTime.now())) {
       print("automatically logining in");
-      final spotify = SpotifyApi(credentials);
-      context.bloc<SpotifyBloc>().add(LoginEvent(spotify, true));
+      context
+          .bloc<SpotifyBloc>()
+          .add(LoginEvent(SpotifyApi(credentials), true));
+      setState(() {
+        _state = _loginState.loading;
+      });
+    } else {
+      setState(() {
+        _state = _loginState.waitingUser;
+      });
     }
     print("End logging automatically.");
   }
 
   void login(BuildContext context) async {
-    print("Getting credentials");
-
-/*    var credentials = await _loadCredentials();
-    if (credentials != null && credentials.expiration.isBefore(DateTime.now())) {
-      final spotify = SpotifyApi(credentials);
-      context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
-    } else {
-  */
     var credentials = await SpotifyService.readCredentialsFile();
     final grant = SpotifyApi.authorizationCodeGrant(credentials);
     final scopes = ['user-read-email', 'user-library-read'];
@@ -90,7 +112,7 @@ class _AuthenticateState extends State<Authenticate> {
       scopes: scopes, // scopes are optional
     );
 
-    Navigator.push(
+    var res = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WebViewContainer(
@@ -98,25 +120,15 @@ class _AuthenticateState extends State<Authenticate> {
                   grant,
                   _remember,
                 )));
-
-    /*await redirect(authUri);
-
-    _sub = getUriLinksStream().listen((Uri uri) {
-      print("listeniing: $uri");
-      if (uri.toString().startsWith(SpotifyService.redirectUri)) {
-        //responseUri = link;
-
-        final spotify = SpotifyApi.fromAuthCodeGrant(grant, uri.toString());
-        context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
-
-        _sub.cancel();
-      }
-    }, onError: (err) {
-      // Handle exception by warning the user their action did not succeed
-      print("Error while listening: $err");
-    });*/
-    // }
-    print("End Clicking");
+    if (res == true) {
+      setState(() {
+        _state = _loginState.loading;
+      });
+    } else {
+      setState(() {
+        _state = _loginState.waitingUser;
+      });
+    }
   }
 
   Future<SpotifyApiCredentials> _loadCredentials() async {
@@ -144,12 +156,6 @@ class _AuthenticateState extends State<Authenticate> {
     } catch (e) {
       print("Error while loading credentials");
       return null;
-    }
-  }
-
-  Future redirect(Uri authUri) async {
-    if (await canLaunch(authUri.toString())) {
-      await launch(authUri.toString());
     }
   }
 }

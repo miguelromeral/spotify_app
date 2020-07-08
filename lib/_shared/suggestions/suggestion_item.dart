@@ -243,7 +243,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
           children: [
             MyIcon(
               icon: 'vote.png',
-              size: 30.0,
+              size: 20.0,
               callback: () => vote(context, state, suggestion, track),
             ),
             Text(suggestion.likes.toString()),
@@ -259,7 +259,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       padding: EdgeInsets.all(8.0),
       child: MyIcon(
           icon: 'spotify.png',
-          size: 30.0,
+          size: 20.0,
           callback: () => openTrackSpotify(track)),
     ));
     list.add(SizedBox(

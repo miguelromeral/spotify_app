@@ -28,7 +28,9 @@ class _FeedListState extends State<FeedList> {
         stream: state.feed,
         builder: (context, snp) {
           if (snp.hasData) {
-            return _createList(snp.data, state);
+            List<Suggestion> list = snp.data;
+            list.sort((a, b) => b.date.compareTo(a.date));
+            return _createList(list, state);
           } else if (snp.hasError) {
             return Center(child: Text('Error while retreiving feed :('));
           } else {

@@ -17,6 +17,6 @@ class MyIcon extends StatelessWidget {
         child: Container(
             width: size,
             height: size,
-            child: Image(image: AssetImage(iconPath))));
+            child: Image(color: Colors.white, image: AssetImage(iconPath))));
   }
 }

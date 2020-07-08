@@ -39,7 +39,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
                     BlocProvider.of<SpotifyBloc>(context)
                         .add(LoginEvent(spotify, widget.remember));
                     //super.dispose();
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   } catch (e) {
                     print("Error while redirecting: $e");
                   }

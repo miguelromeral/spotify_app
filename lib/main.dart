@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/screens/login/authenticate.dart';
+import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/screens/wrapper.dart';
 import 'package:spotify_app/services/firebase_auth.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         create: (context) => SpotifyBloc(),
         child: MaterialApp(
           home: Wrapper(),
+          theme: kShrineTheme,
         ),
       ),
     );
