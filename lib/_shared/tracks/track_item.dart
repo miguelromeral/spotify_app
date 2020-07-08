@@ -29,22 +29,7 @@ class _TrackItemState extends State<TrackItem> {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return PopupMenuButton<PopupItem>(
-            key: _menuKey,
-            onSelected: (PopupItem value) async {
-              switch (value.action) {
-                case PopupActionType.listen:
-                  openTrackSpotify(widget.track);
-                  break;
-                case PopupActionType.tosuggestion:
-                  value.updateSuggestion(context);
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: _createItem(context),
-            itemBuilder: (BuildContext context) => _getActions());
+        return _createItem(context);
       },
     );
   }
@@ -58,28 +43,105 @@ class _TrackItemState extends State<TrackItem> {
     return list;
   }
 
-  ListTile _createItem(BuildContext context) {
-    return ListTile(
-      leading: AlbumPicture(
-        track: widget.track,
-        size: 25.0,
+  Widget _createItem(BuildContext context) {
+    return Container(
+      //color: Colors.red,
+      child: Row(
+        children: [
+          Container(
+            height: 75.0,
+            padding: EdgeInsets.all(8.0),
+            child: Hero(
+              tag: widget.track.hashCode.toString(),
+              child: AlbumPicture(
+                track: widget.track,
+                size: 25.0,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+                padding: EdgeInsets.all(8.0),
+                //color: Colors.yellow,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${widget.track.name}",
+                      style: styleFeedTitle,
+                    ),
+                    SizedBox(height: 4.0),
+                    Text(
+                      "${widget.track.artists[0].name}",
+                      style: styleFeedTrack,
+                    ),
+                    SizedBox(height: 4.0),
+                    Text(
+                      "${widget.track.album.name}",
+                      style: styleFeedArtist,
+                    ),
+                  ],
+                )),
+          ),
+          Container(
+              child: PopupMenuButton<PopupItem>(
+                  key: _menuKey,
+                  onSelected: (PopupItem value) async {
+                    switch (value.action) {
+                      case PopupActionType.listen:
+                        openTrackSpotify(widget.track);
+                        break;
+                      case PopupActionType.tosuggestion:
+                        value.updateSuggestion(context);
+                        break;
+                      default:
+                        break;
+                    }
+                  },
+                  child: IconButton(
+                    onPressed: () {
+                      dynamic tmp = _menuKey.currentState;
+                      tmp.showButtonMenu();
+                    },
+                    icon: Icon(Icons.more_vert),
+                  ),
+                  itemBuilder: (BuildContext context) => _getActions())),
+        ],
       ),
-      title: Text(widget.track.name),
-      subtitle: Text(widget.track.artists[0].name),
-      trailing: IconButton(
-        onPressed: () {
-          dynamic tmp = _menuKey.currentState;
-          tmp.showButtonMenu();
-        },
-        icon: Icon(Icons.more_vert),
-      ),
-      //trailing: icon,
-      //isThreeLine: true,
-      // Interactividad:
-      //onTap: () async {},
-      //onLongPress: () => _pressCallback,
-      //enabled: false,
-      //selected: true,
     );
+
+    /*return Row(
+      children: [
+        Hero(
+          tag: 'imageHero',
+          child: AlbumPicture(
+            track: widget.track,
+            size: 25.0,
+          ),
+        ),
+        ListTile(
+          leading: AlbumPicture(
+            track: widget.track,
+            size: 25.0,
+          ),
+          title: Text(widget.track.name),
+          subtitle: Text(widget.track.artists[0].name),
+          trailing: IconButton(
+            onPressed: () {
+              dynamic tmp = _menuKey.currentState;
+              tmp.showButtonMenu();
+            },
+            icon: Icon(Icons.more_vert),
+          ),
+          //trailing: icon,
+          //isThreeLine: true,
+          // Interactividad:
+          //onTap: () async {},
+          //onLongPress: () => _pressCallback,
+          //enabled: false,
+          //selected: true,
+        ),
+      ],
+    );*/
   }
 }

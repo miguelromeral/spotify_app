@@ -37,13 +37,20 @@ class _ShareTrackState extends State<ShareTrack> {
               children: [
                 Container(
                   height: 125.0,
-                  child: AlbumPicture(
-                    size: 50.0,
-                    track: widget.track,
+                  child: Hero(
+                    tag: widget.track.hashCode.toString(),
+                    child: AlbumPicture(
+                      track: widget.track,
+                      size: 25.0,
+                    ),
                   ),
                 ),
                 Text(widget.track.name),
-                Text(widget.track.artists.map((e) => e.name).toString().replaceAll('(', '').replaceAll(')', '')),
+                Text(widget.track.artists
+                    .map((e) => e.name)
+                    .toString()
+                    .replaceAll('(', '')
+                    .replaceAll(')', '')),
                 Text(widget.track.album.name),
                 Form(
                     key: _formKey,
@@ -80,8 +87,6 @@ class _ShareTrackState extends State<ShareTrack> {
                             bloc.add(UpdateFeed());
                             bloc.add(UpdateMySuggestion());
                             UpdatedFeedNotification().dispatch(context);
-
-
 
                             Scaffold.of(context).showSnackBar(
                                 SnackBar(content: Text('Updated Suggestion!')));

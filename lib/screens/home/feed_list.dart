@@ -5,6 +5,7 @@ import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
+import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -54,7 +55,7 @@ class _FeedListState extends State<FeedList> {
         onRefresh: _getData,
         child: ListView.separated(
             separatorBuilder: (context, index) => Divider(
-                  color: Colors.black,
+                  color: colorSeprator,
                 ),
             itemCount: sugs.length,
             itemBuilder: (context, index) =>

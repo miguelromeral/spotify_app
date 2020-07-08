@@ -34,16 +34,16 @@ final TextStyle styleFeedTitle = TextStyle(
 );
 
 final TextStyle styleFeedAgo = TextStyle(
-  color: Colors.black38,
+  color: Colors.white38,
   fontStyle: FontStyle.italic,
 );
 
 final TextStyle styleFeedTrack = TextStyle(
-  color: Colors.green[900],
+  color: Colors.green[600],
 );
 
 final TextStyle styleFeedArtist = TextStyle(
-  color: Colors.green[600],
+  color: Colors.green[900],
 );
 
 final TextStyle styleFeedContent = TextStyle(

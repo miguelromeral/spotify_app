@@ -10,6 +10,16 @@ const kShrineSurfaceWhite = const Color(0xFFFFFBFA);
 const kShrineBackgroundWhite = Colors.white;
 
 Color colorAccent = Colors.green[500];
+Color colorPrimary = Colors.green[900];
+Color colorBackground = Colors.black;
+Color colorSemiBackground = Colors.black38;
+Color colorIcon = Colors.white54;
+
+Color colorSeprator = Colors.white70;
+
+Color _hexToColor(String code) {
+  return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+}
 
 final ThemeData kShrineTheme = _buildShrineTheme();
 
@@ -20,13 +30,13 @@ ThemeData _buildShrineTheme() {
   //return base;
   return base.copyWith(
     brightness: Brightness.dark,
-    primaryColor: Colors.green[900],
+    primaryColor: colorPrimary,
     accentColor: colorAccent,
-    scaffoldBackgroundColor: Colors.black,
+    scaffoldBackgroundColor: colorBackground,
     buttonTheme: base.buttonTheme.copyWith(
-      buttonColor: Colors.pink,
+      buttonColor: colorAccent,
       colorScheme: base.colorScheme.copyWith(
-        secondary: Colors.yellow,
+        secondary: colorPrimary,
       ),
     ),
     buttonBarTheme: base.buttonBarTheme.copyWith(

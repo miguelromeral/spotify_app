@@ -30,7 +30,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         var cred = await event.service.api.getCredentials();
         if (event.saveCredentials) {
           _saveCredentials(cred);
-        }else{
+        } else {
           _clearCredentials();
         }
         user = await event.service.api.me.get();
@@ -62,12 +62,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       event.service.db = _db;
       event.service.init();
       event.service.auth = _auth;
-      event.service.updateFollowing(await _updateFollowing(event.service));
-      event.service
-          .updateMySuggestion(await _updateMySuggestion(event.service));
-      event.service.updateFeed(await _updateFeed(event.service));
-      event.service.updateSaved(await _updateSaved(event.service));
-      event.service.updatePlaylists(await _updatePlaylists(event.service));
+      _load(event.service);
       yield event.service;
     } else if (event is UpdateFeed) {
       state.updateFeed(await _updateFeed(state));
@@ -81,7 +76,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdatePlaylists) {
       state.updatePlaylists(await _updatePlaylists(state));
       yield state;
-    } else if (event is LogoutEvent){
+    } else if (event is LogoutEvent) {
       _clearCredentials();
       //state.dispose();
       //state.logout();
@@ -90,6 +85,14 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else {
       throw Exception('oops');
     }
+  }
+
+  Future _load(SpotifyService service) async {
+    service.updateFollowing(await _updateFollowing(service));
+    service.updateMySuggestion(await _updateMySuggestion(service));
+    service.updateFeed(await _updateFeed(service));
+    service.updateSaved(await _updateSaved(service));
+    service.updatePlaylists(await _updatePlaylists(service));
   }
 
   Future<Following> _updateFollowing(SpotifyService state) async {

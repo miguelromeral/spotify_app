@@ -36,10 +36,10 @@ class _WebViewContainerState extends State<WebViewContainer> {
                     final spotify =
                         SpotifyApi.fromAuthCodeGrant(widget.grant, navReq.url);
 
-                    BlocProvider.of<SpotifyBloc>(context)
-                        .add(LoginEvent(spotify, widget.remember));
-                    //super.dispose();
-                    Navigator.pop(context, true);
+                 //   BlocProvider.of<SpotifyBloc>(context).add(LoginEvent(spotify, widget.remember));
+                    
+
+                    Navigator.pop(context, spotify);
                   } catch (e) {
                     print("Error while redirecting: $e");
                   }

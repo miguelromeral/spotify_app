@@ -9,6 +9,7 @@ import 'package:spotify_app/_shared/mydrawer.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/models/tab_navigation_item.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
+import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
@@ -109,31 +110,30 @@ class _TabsPageState extends State<TabsPage> {
             for (final tabItem in TabNavigationItem.items) tabItem.page,
           ],
         ),
-        bottomNavigationBar:
-            /*Theme(
+        bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
               // sets the background color of the `BottomNavigationBar`
-              canvasColor: Colors.green,
+              canvasColor: colorSemiBackground,
               // sets the active color of the `BottomNavigationBar` if `Brightness` is light
               primaryColor: Colors.red,
               textTheme: Theme.of(context).textTheme.copyWith(
                   caption: new TextStyle(
                       color: Colors
                           .yellow))), // sets the inactive color of the `BottomNavigationBar`
-          child:*/
-            BottomNavigationBar(
-          fixedColor: Colors.black,
-          currentIndex: _currentIndex,
-          onTap: (int index) => setState(() => _currentIndex = index),
-          items: [
-            for (final tabItem in TabNavigationItem.items)
-              BottomNavigationBarItem(
-                icon: tabItem.icon,
-                title: tabItem.title,
-              )
-          ],
+          child: BottomNavigationBar(
+            fixedColor: colorAccent,
+            unselectedItemColor: colorPrimary,
+            currentIndex: _currentIndex,
+            onTap: (int index) => setState(() => _currentIndex = index),
+            items: [
+              for (final tabItem in TabNavigationItem.items)
+                BottomNavigationBarItem(
+                  icon: tabItem.icon,
+                  title: tabItem.title,
+                )
+            ],
+          ),
         ),
-        //),
       ),
     );
   }

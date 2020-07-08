@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/_shared/tracks/track_item.dart';
+import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/notifications.dart';
 
 class ListSongs extends StatefulWidget {
@@ -27,6 +28,9 @@ class _ListSongsState extends State<ListSongs> {
   BuildContext _context;
   DateTime lastUpdate;
 
+  Order _order;
+
+  List<Track> initialList = new List();
   List<Track> filteredTracks = new List();
 
   _ListSongsState() {
@@ -34,7 +38,7 @@ class _ListSongsState extends State<ListSongs> {
       if (_filter.text.isEmpty) {
         setState(() {
           _searchText = "";
-          filteredTracks = widget.tracks;
+          filteredTracks = initialList;
         });
       } else {
         setState(() {
@@ -56,7 +60,7 @@ class _ListSongsState extends State<ListSongs> {
       } else {
         this._searchIcon = new Icon(Icons.search);
         this._appBarTitle = new Text(widget.title);
-        filteredTracks = widget.tracks;
+        filteredTracks = initialList;
         _filter.clear();
       }
     });
@@ -97,8 +101,12 @@ class _ListSongsState extends State<ListSongs> {
   }
 
   Widget _listBuilder() {
-    return ListView.builder(
-        itemCount: widget.tracks == null ? 0 : filteredTracks.length,
+    return ListView.separated(
+        key: GlobalKey(),
+        separatorBuilder: (context, index) => Divider(
+              color: colorSeprator,
+            ),
+        itemCount: filteredTracks == null ? 0 : filteredTracks.length,
         itemBuilder: (_, index) {
           return TrackItem(track: filteredTracks[index]);
         });
@@ -117,9 +125,26 @@ class _ListSongsState extends State<ListSongs> {
 
   @override
   void initState() {
+    initialList = widget.tracks;
     filteredTracks = widget.tracks;
     _appBarTitle = new Text('${widget.title}');
+    _order = Order.byDefault;
     super.initState();
+  }
+
+  void choiceAction(String choice) {
+    setState(() {
+      if (choice == Constants.TrackName) {
+        _order = _order == Order.name ? Order.nameReverse : Order.name;
+      } else if (choice == Constants.Artist) {
+        _order = _order == Order.artist ? Order.artistReverse : Order.artist;
+      } else if (choice == Constants.Album) {
+        _order = _order == Order.album ? Order.albumReverse : Order.album;
+      }/* else {
+        _order = Order.byDefault;
+      }*/
+      initialList = _setOrder(initialList);
+    });
   }
 
   @override
@@ -138,8 +163,75 @@ class _ListSongsState extends State<ListSongs> {
               icon: _searchIcon,
               onPressed: _searchPressed,
             ),
+            PopupMenuButton<String>(
+              onSelected: choiceAction,
+              child: Icon(Icons.sort),
+              itemBuilder: (BuildContext context) {
+                return Constants.choices.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
           ]),
           body: _buildList()),
     );
   }
+
+  List<Track> _setOrder(List<Track> list) {
+    switch (_order) {
+      case Order.name:
+        list.sort((a, b) => _orderName(a, b));
+        break;
+      case Order.nameReverse:
+        list.sort((a, b) => _orderName(b, a));
+        break;
+      case Order.artist:
+        list.sort((a, b) => _orderArtistName(a, b));
+        break;
+      case Order.artistReverse:
+        list.sort((a, b) => _orderArtistName(b, a));
+        break;
+      case Order.album:
+        list.sort((a, b) => _orderAlbumName(a, b));
+        break;
+      case Order.albumReverse:
+        list.sort((a, b) => _orderAlbumName(b, a));
+        break;
+      default:
+        return widget.tracks;
+    }
+    return list;
+  }
+}
+
+int _orderName(Track a, Track b) => a.name.compareTo(b.name);
+int _orderArtistName(Track a, Track b) =>
+    a.artists[0].name.compareTo(b.artists[0].name);
+int _orderAlbumName(Track a, Track b) => a.album.name.compareTo(b.album.name);
+
+enum Order {
+  name,
+  nameReverse,
+  artist,
+  artistReverse,
+  album,
+  albumReverse,
+  byDefault,
+}
+
+class Constants {
+  static const String TrackName = 'By Track Name';
+  static const String Artist = 'By Artist';
+  static const String Album = 'By Album';
+ // static const String ByDefault = 'By Default';
+
+  static const List<String> choices = <String>[
+    TrackName,
+    Artist,
+    Album,
+ //   ByDefault,
+  ];
 }

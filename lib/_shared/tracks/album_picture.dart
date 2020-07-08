@@ -44,12 +44,10 @@ class _AlbumPictureState extends State<AlbumPicture>
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: CachedNetworkImage(
-        placeholder: (context, url) => //CircularProgressIndicator(),
-        
-        SpinKitCubeGrid(
+        placeholder: (context, url) => SpinKitCubeGrid(
           color: colorAccent,
-          size: 50.0,
-        ), 
+          size: widget.size,
+        ),
         imageUrl: widget.track.album.images[0].url,
       ),
     );

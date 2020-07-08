@@ -5,7 +5,6 @@ import 'package:spotify_app/models/popup_item.dart';
 import 'package:spotify_app/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/gui.dart';
-import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ import 'package:spotify_app/models/suggestion.dart';
 class SuggestionItem extends StatefulWidget {
   final Track track;
   final UserPublic user;
-  Suggestion suggestion;
+  final Suggestion suggestion;
 
   SuggestionItem({this.track, this.user, this.suggestion});
 
@@ -37,24 +36,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return PopupMenuButton<PopupItem>(
-            key: _menuKey,
-            onSelected: (PopupItem value) async {
-              switch (value.action) {
-                case PopupActionType.listen:
-                  openTrackSpotify(widget.track);
-                  break;
-                case PopupActionType.vote:
-                  vote(context, BlocProvider.of<SpotifyBloc>(context).state,
-                      widget.suggestion, widget.track);
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: _createTile(widget.track, widget.user, widget.suggestion),
-            itemBuilder: (BuildContext context) => _getActions(widget.track,
-                widget.user, widget.suggestion, state.db.spotifyUserID));
+        return _createTile(widget.track, widget.user, widget.suggestion);
       },
     );
   }
@@ -123,25 +105,6 @@ class _SuggestionItemState extends State<SuggestionItem> {
     }
   }
 
-  Widget _createDescription(
-      Suggestion suggestion, Track track, UserPublic user) {
-    String elapsed = timeago.format(suggestion.date, locale: 'en_short');
-    if (user != null) {
-      return Text(
-          '${track.name} - ${track.artists[0].name}\n${suggestion.text}\n' +
-              '$elapsed\n${_getLikes(suggestion)}');
-    } else {
-      return Text('${track.artists[0].name}\n${suggestion.text}\n' +
-          '$elapsed\n${_getLikes(suggestion)}');
-    }
-  }
-
-  String _getLikes(Suggestion suggestion) {
-    return suggestion.likes == null
-        ? ''
-        : 'Likes: ${suggestion.likes.toString()}';
-  }
-
   Widget _createSubtitle() {
     if (widget.user != null) {
       return RichText(
@@ -176,10 +139,14 @@ class _SuggestionItemState extends State<SuggestionItem> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                        //color: Colors.black,
-                        child: _createLeadingIcon(user, track)),
                     Expanded(
+                      flex: 0,
+                      child: Container(
+                          //color: Colors.black,
+                          child: _createLeadingIcon(user, track)),
+                    ),
+                    Expanded(
+                      flex: 1,
                       child: Container(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
@@ -218,9 +185,12 @@ class _SuggestionItemState extends State<SuggestionItem> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: _createTrailingIcon(user, track),
+                    Expanded(
+                      flex: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: _createTrailingIcon(user, track),
+                      ),
                     ),
                   ],
                 ),
@@ -242,9 +212,12 @@ class _SuggestionItemState extends State<SuggestionItem> {
         child: Row(
           children: [
             MyIcon(
-              icon: 'vote.png',
+              icon: 'vote',
               size: 20.0,
               callback: () => vote(context, state, suggestion, track),
+            ),
+            SizedBox(
+              width: 4.0,
             ),
             Text(suggestion.likes.toString()),
           ],
@@ -258,24 +231,39 @@ class _SuggestionItemState extends State<SuggestionItem> {
     list.add(Container(
       padding: EdgeInsets.all(8.0),
       child: MyIcon(
-          icon: 'spotify.png',
-          size: 20.0,
-          callback: () => openTrackSpotify(track)),
+          icon: 'spotify', size: 20.0, callback: () => openTrackSpotify(track)),
     ));
     list.add(SizedBox(
       width: 8.0,
     ));
-    list.add(Container(
-      padding: EdgeInsets.all(8.0),
-      child: MyIcon(
-        icon: 'menu.png',
-        size: 20.0,
-        callback: () {
-          dynamic tmp = _menuKey.currentState;
-          tmp.showButtonMenu();
+    list.add(PopupMenuButton<PopupItem>(
+        key: _menuKey,
+        onSelected: (PopupItem value) async {
+          switch (value.action) {
+            case PopupActionType.listen:
+              openTrackSpotify(widget.track);
+              break;
+            case PopupActionType.vote:
+              vote(context, BlocProvider.of<SpotifyBloc>(context).state,
+                  widget.suggestion, widget.track);
+              break;
+            default:
+              break;
+          }
         },
-      ),
-    ));
+        child: Container(
+          padding: EdgeInsets.all(8.0),
+          child: MyIcon(
+            icon: 'menu',
+            size: 20.0,
+            callback: () {
+              dynamic tmp = _menuKey.currentState;
+              tmp.showButtonMenu();
+            },
+          ),
+        ),
+        itemBuilder: (BuildContext context) => _getActions(widget.track,
+            widget.user, widget.suggestion, state.db.spotifyUserID)));
 
     return Container(
       //color: Colors.blue[300],

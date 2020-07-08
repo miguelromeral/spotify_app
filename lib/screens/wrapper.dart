@@ -9,16 +9,28 @@ import 'package:uni_links/uni_links.dart';
 import 'login/authenticate.dart';
 import 'home/home_screen.dart';
 
-class Wrapper extends StatelessWidget {
+class Wrapper extends StatefulWidget {
+  @override
+  _WrapperState createState() => _WrapperState();
+}
+
+class _WrapperState extends State<Wrapper> {
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        if(state.logedin){
-          return TabsPage();
-        }else {
-          return Authenticate();
+        Widget layout = Authenticate();
+        if (state.logedin) {
+          layout = TabsPage();
         }
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 700),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return ScaleTransition(child: child, scale: animation);
+          },
+          child: layout,
+        );
       },
     );
   }
