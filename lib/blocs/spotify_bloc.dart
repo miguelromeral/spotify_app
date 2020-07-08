@@ -28,7 +28,11 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       User user;
       try {
         var cred = await event.service.api.getCredentials();
-        _saveCredentials(cred);
+        if (event.saveCredentials) {
+          _saveCredentials(cred);
+        }else{
+          _clearCredentials();
+        }
         user = await event.service.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
@@ -58,7 +62,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       event.service.init();
       event.service.auth = _auth;
       event.service.updateFollowing(await _updateFollowing(event.service));
-      event.service.updateMySuggestion(await _updateMySuggestion(event.service));
+      event.service
+          .updateMySuggestion(await _updateMySuggestion(event.service));
       event.service.updateFeed(await _updateFeed(event.service));
       event.service.updateSaved(await _updateSaved(event.service));
       event.service.updatePlaylists(await _updatePlaylists(event.service));
@@ -75,6 +80,12 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is UpdatePlaylists) {
       state.updatePlaylists(await _updatePlaylists(state));
       yield state;
+    } else if (event is LogoutEvent){
+      _clearCredentials();
+      //state.dispose();
+      //state.logout();
+      SpotifyService newone = SpotifyService();
+      yield newone;
     } else {
       throw Exception('oops');
     }
@@ -105,8 +116,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     return list;
   }
 
-  Future<FirestoreService> _login(
-      FirebaseAuthService _auth, String email, String pwd, String suserid) async {
+  Future<FirestoreService> _login(FirebaseAuthService _auth, String email,
+      String pwd, String suserid) async {
     var user = await _auth.signInWithEmailAndPassword(email, pwd);
     FirestoreService _db =
         FirestoreService(spotifyUserID: suserid, firebaseUserID: user.uid);
@@ -121,5 +132,15 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     prefs.setString("refreshToken", cred.refreshToken);
     prefs.setStringList("scopes", cred.scopes);
     prefs.setString("expiration", cred.expiration.toString());
+  }
+
+  Future _clearCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("accessToken", '');
+    prefs.setString("clientId", '');
+    prefs.setString("clientSecret", '');
+    prefs.setString("refreshToken", '');
+    prefs.setStringList("scopes", List());
+    prefs.setString("expiration", '');
   }
 }

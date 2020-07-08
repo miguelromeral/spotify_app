@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/screens/login/webview_container.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Authenticate extends StatefulWidget {
@@ -17,6 +17,8 @@ class Authenticate extends StatefulWidget {
 
 class _AuthenticateState extends State<Authenticate> {
   StreamSubscription _sub;
+
+  bool _remember = false;
 
   @override
   void initState() {
@@ -34,21 +36,29 @@ class _AuthenticateState extends State<Authenticate> {
       body: BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) {
           return Center(
-            child: RaisedButton(
-                child: Text('Log In'),
-                onPressed: () async {
-                  login(context);
-                }),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                    child: Text('Log In'),
+                    onPressed: () async {
+                      login(context);
+                    }),
+                Text("Remember Credentials (1 hour)"),
+                Checkbox(
+                  value: _remember,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _remember = value;
+                    });
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
     );
-  }
-
-  Future redirect(Uri authUri) async {
-    if (await canLaunch(authUri.toString())) {
-      await launch(authUri.toString());
-    }
   }
 
   Future automaticLogin(BuildContext context) async {
@@ -57,7 +67,7 @@ class _AuthenticateState extends State<Authenticate> {
     if (credentials != null && credentials.expiration.isAfter(DateTime.now())) {
       print("automatically logining in");
       final spotify = SpotifyApi(credentials);
-      context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
+      context.bloc<SpotifyBloc>().add(LoginEvent(spotify, true));
     }
     print("End logging automatically.");
   }
@@ -70,32 +80,42 @@ class _AuthenticateState extends State<Authenticate> {
       final spotify = SpotifyApi(credentials);
       context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
     } else {
-  */ var    credentials = await SpotifyService.readCredentialsFile();
-      final grant = SpotifyApi.authorizationCodeGrant(credentials);
-      final scopes = ['user-read-email', 'user-library-read'];
+  */
+    var credentials = await SpotifyService.readCredentialsFile();
+    final grant = SpotifyApi.authorizationCodeGrant(credentials);
+    final scopes = ['user-read-email', 'user-library-read'];
 
-      final authUri = grant.getAuthorizationUrl(
-        Uri.parse(SpotifyService.redirectUri),
-        scopes: scopes, // scopes are optional
-      );
+    final authUri = grant.getAuthorizationUrl(
+      Uri.parse(SpotifyService.redirectUri),
+      scopes: scopes, // scopes are optional
+    );
 
-      await redirect(authUri);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WebViewContainer(
+                  authUri.toString(),
+                  grant,
+                  _remember,
+                )));
 
-      _sub = getUriLinksStream().listen((Uri uri) {
-        print("listeniing: $uri");
-        if (uri.toString().startsWith(SpotifyService.redirectUri)) {
-          //responseUri = link;
+    /*await redirect(authUri);
 
-          final spotify = SpotifyApi.fromAuthCodeGrant(grant, uri.toString());
-          context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
+    _sub = getUriLinksStream().listen((Uri uri) {
+      print("listeniing: $uri");
+      if (uri.toString().startsWith(SpotifyService.redirectUri)) {
+        //responseUri = link;
 
-          _sub.cancel();
-        }
-      }, onError: (err) {
-        // Handle exception by warning the user their action did not succeed
-        print("Error while listening: $err");
-      });
-   // }
+        final spotify = SpotifyApi.fromAuthCodeGrant(grant, uri.toString());
+        context.bloc<SpotifyBloc>().add(LoginEvent(spotify));
+
+        _sub.cancel();
+      }
+    }, onError: (err) {
+      // Handle exception by warning the user their action did not succeed
+      print("Error while listening: $err");
+    });*/
+    // }
     print("End Clicking");
   }
 
@@ -124,6 +144,12 @@ class _AuthenticateState extends State<Authenticate> {
     } catch (e) {
       print("Error while loading credentials");
       return null;
+    }
+  }
+
+  Future redirect(Uri authUri) async {
+    if (await canLaunch(authUri.toString())) {
+      await launch(authUri.toString());
     }
   }
 }

@@ -28,32 +28,34 @@ class SpotifyService {
   StreamController<List<Suggestion>> _scFeed = new StreamController.broadcast();
   Stream<List<Suggestion>> get feed => _scFeed.stream;
 
-  StreamController<Suggestion> _scMySuggestion = new StreamController.broadcast();
+  StreamController<Suggestion> _scMySuggestion =
+      new StreamController.broadcast();
   Stream<Suggestion> get mySuggestion => _scMySuggestion.stream;
 
-  StreamController<List<PlaylistSimple>> _scPlaylists = new StreamController.broadcast();
+  StreamController<List<PlaylistSimple>> _scPlaylists =
+      new StreamController.broadcast();
   Stream<List<PlaylistSimple>> get playlists => _scPlaylists.stream;
 
   StreamController<Following> _scFollowing = new StreamController.broadcast();
   Stream<Following> get following => _scFollowing.stream;
 
-  void updateFeed(List<Suggestion> newFeed){
+  void updateFeed(List<Suggestion> newFeed) {
     _scFeed.add(newFeed);
   }
 
-  void updateSaved(List<Track> newSaved){
+  void updateSaved(List<Track> newSaved) {
     _scSaved.add(newSaved);
   }
 
-  void updateMySuggestion(Suggestion newOne){
+  void updateMySuggestion(Suggestion newOne) {
     _scMySuggestion.add(newOne);
   }
 
-  void updateFollowing(Following newone){
+  void updateFollowing(Following newone) {
     _scFollowing.add(newone);
   }
 
-  void updatePlaylists(List<PlaylistSimple> list){
+  void updatePlaylists(List<PlaylistSimple> list) {
     _scPlaylists.add(list);
   }
 
@@ -67,33 +69,34 @@ class SpotifyService {
 
   bool isInit = false;
 
-  void init(){
-    if(!isInit){
+  void init() {
+    if (!isInit) {
       _localDB = LocalDB();
       isInit = true;
     }
   }
 
-  void dispose(){
+  void dispose() {
     _scFeed.close();
     _scSaved.close();
     _scMySuggestion.close();
     _scPlaylists.close();
   }
 
-  void shareTrack(Track track){
+  void shareTrack(Track track) {
     toShare = track;
   }
 
-  void forgetTrack(){
+  void forgetTrack() {
     toShare = null;
   }
 
   Future<User> get myUser => api == null ? null : api.me.get();
 
-  Future<Iterable<PlaylistSimple>> get myPlaylists => api == null ? null : api.playlists.me.all(); 
+  Future<Iterable<PlaylistSimple>> get myPlaylists =>
+      api == null ? null : api.playlists.me.all();
 
-  void getFollowers(Me me){
+  void getFollowers(Me me) {
     var following = me.following(FollowingType.artist);
     /*for(var f in following){
       print
@@ -107,6 +110,11 @@ class SpotifyService {
 
   void logout() {
     logedin = false;
+    api = null;
+    auth = null;
+    db = null;
+    _localDB = null;
+    toShare = null;
   }
 
   static Future<SpotifyApiCredentials> readCredentialsFile() async {
@@ -120,19 +128,17 @@ class SpotifyService {
     }
   }
 
-
   /******************************************
    * 
    * LOCAL DB
    * 
    ***************************************/
 
-   Future insertSuggestion(Suggestion sug) async {
-     await _localDB.insertSuggestion(sug);
-   }
-   
+  Future insertSuggestion(Suggestion sug) async {
+    await _localDB.insertSuggestion(sug);
+  }
 
-   Future<List<Suggestion>> getSuggestionsBySpotifyUserID(String suserid) async {
-     return await _localDB.suggestions(suserid);
-   }
+  Future<List<Suggestion>> getSuggestionsBySpotifyUserID(String suserid) async {
+    return await _localDB.suggestions(suserid);
+  }
 }

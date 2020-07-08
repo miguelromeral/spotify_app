@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spotify_app/blocs/spotify_bloc.dart';
+import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
 import 'package:spotify_app/screens/playlists/playlists_screen.dart';
 
@@ -44,6 +47,13 @@ class MyDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => MySuggestionsScreen()),
               );
+            },
+          ),
+          ListTile(
+            title: Text('Logout'),
+            onTap: () {
+              Navigator.pop(context);
+              BlocProvider.of<SpotifyBloc>(context).add(LogoutEvent());
             },
           ),
         ],

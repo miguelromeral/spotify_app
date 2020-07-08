@@ -8,11 +8,13 @@ class SpotifyEventBase {}
 
 class LoginEvent extends SpotifyEventBase {
   
+  bool saveCredentials;
   SpotifyService service;
 
-  LoginEvent(SpotifyApi api){
+  LoginEvent(SpotifyApi api, bool remember){
     service = SpotifyService.withApi(api);
     service.login();
+    saveCredentials = remember;
   }
 }
 
@@ -24,7 +26,7 @@ class UpdateSaved extends SpotifyEventBase {}
 
 class UpdatePlaylists extends SpotifyEventBase {}
 
-
+class LogoutEvent extends SpotifyEventBase {}
 
 /*
 class ShareTrackEvent extends SpotifyEventBase {
