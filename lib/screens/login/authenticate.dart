@@ -76,7 +76,7 @@ class _AuthenticateState extends State<Authenticate> {
                   SizedBox(
                     width: 2.0,
                   ),
-                  Text("Remember Credentials (1 hour)"),
+                  Text("Remember Credentials"),
                 ],
               ),
             ],
@@ -147,10 +147,14 @@ class _AuthenticateState extends State<Authenticate> {
     });
     var credentials = await _loadCredentials();
     print("Credentials retrieved: ${credentials?.expiration}");
-    if (credentials != null && credentials.expiration.isAfter(DateTime.now())) {
+    //if (credentials != null && credentials.expiration.isAfter(DateTime.now())) {
+    if (credentials != null) {
       print("automatically logining in");
       //context.bloc<SpotifyBloc>().add(LoginEvent(SpotifyApi(credentials), true));
       setState(() {
+        //var tmp = DateTime.now();
+        //var tmp2 = tmp.subtract(Duration(minutes: 5));
+        //credentials.expiration = tmp2;
         _api = SpotifyApi(credentials);
         _state = _loginState.loading;
       });

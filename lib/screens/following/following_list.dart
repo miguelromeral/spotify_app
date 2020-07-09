@@ -5,6 +5,7 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/screens/following/following_item.dart';
 import 'package:spotify_app/models/following.dart';
+import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class FollowingList extends StatefulWidget {
@@ -28,7 +29,10 @@ class _FollowingListState extends State<FollowingList> {
             (element) => element.fuserid == state.db.firebaseUserID);
 
         return Flexible(
-            child: ListView.builder(
+            child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                      color: colorSeprator,
+                    ),
                 itemCount: fol.length,
                 itemBuilder: (context, index) {
                   var item = fol[index];
@@ -40,6 +44,8 @@ class _FollowingListState extends State<FollowingList> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           UserPublic user = snapshot.data;
+                          item.followedBy = state.db.getFollowers(item, fol);
+
                           return FollowingItem(
                             myFollowings: myFollowings,
                             user: user,

@@ -13,6 +13,7 @@ Color colorAccent = Colors.green[500];
 Color colorPrimary = Colors.green[900];
 Color colorBackground = Colors.black;
 Color colorSemiBackground = Colors.black38;
+Color colorThirdBackground = Colors.grey[900];
 Color colorIcon = Colors.white54;
 
 Color colorSeprator = Colors.white70;
@@ -46,11 +47,5 @@ ThemeData _buildShrineTheme() {
       backgroundColor: Colors.red,
       elevation: 300,
     ),
-
-    /*
-    
-    cardColor: kShrineBackgroundWhite,
-    textSelectionColor: kShrinePink100,
-    errorColor: kShrineErrorRed,*/
   );
 }

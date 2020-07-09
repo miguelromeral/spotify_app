@@ -31,13 +31,14 @@ class _WebViewContainerState extends State<WebViewContainer> {
               initialUrl: _url,
               javascriptMode: JavascriptMode.unrestricted,
               navigationDelegate: (navReq) {
+                print("Nav Req: ${navReq.url}");
+
                 if (navReq.url.startsWith(SpotifyService.redirectUri)) {
                   try {
                     final spotify =
                         SpotifyApi.fromAuthCodeGrant(widget.grant, navReq.url);
 
-                 //   BlocProvider.of<SpotifyBloc>(context).add(LoginEvent(spotify, widget.remember));
-                    
+                    //   BlocProvider.of<SpotifyBloc>(context).add(LoginEvent(spotify, widget.remember));
 
                     Navigator.pop(context, spotify);
                   } catch (e) {

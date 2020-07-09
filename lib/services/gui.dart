@@ -22,9 +22,13 @@ Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
 }
 
 Future openTrackSpotify(Track track) async {
-  if (await canLaunch(track.uri)) {
-    print("Opening ${track.uri}");
-    launch(track.uri);
+  openUrl(track.uri);
+}
+
+Future openUrl(String uri) async {
+  if (await canLaunch(uri)) {
+    print("Opening $uri");
+    launch(uri);
   }
 }
 
@@ -49,5 +53,10 @@ final TextStyle styleFeedArtist = TextStyle(
 final TextStyle styleFeedContent = TextStyle(
   fontSize: 16.0,
 );
+
+final TextStyle styleCardHeader =
+    TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic);
+final TextStyle styleCardContent =
+    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
 
 const double albumIconSize = 70.0;

@@ -148,4 +148,15 @@ class FirestoreService {
   Stream<List<Following>> get following {
     return cFollowing.snapshots().map(_followingListFromSnapshot);
   }
+
+  int getFollowers(Following me, List<Following> all){
+    int total = 0;
+    for(var f in all){
+      //if(f.users.contains(me.suserid)){
+      if(f.suserid != me.suserid && f.users.contains(me.suserid)){
+        total++;
+      }
+    }
+    return total;
+  }
 }

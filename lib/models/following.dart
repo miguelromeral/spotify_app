@@ -10,6 +10,7 @@ class Following {
   String users;
   static const String fusers = 'users';
   DocumentReference reference;
+  int followedBy = 0;
 
   //Suggestion({ this.trackid, this.suserid, this.fuserid });
   Following({this.suserid, this.fuserid, this.reference, this.users});
@@ -40,6 +41,8 @@ class Following {
     list.removeWhere((element) => element.isEmpty || element == "");
     return list;
   }
+
+  int get followingCount => usersList.length - 1;
 
   String concatenateUser(String suserid) {
     users = '$users$suserid$delimiter';
