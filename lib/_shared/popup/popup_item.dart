@@ -4,9 +4,11 @@ import 'package:spotify_app/_shared/myicon.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
 import 'package:spotify_app/services/gui.dart';
+import 'package:spotify_app/services/notifications.dart';
+import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-enum PopupActionType { listen, vote, tosuggestion, openuser, followuser }
+enum PopupActionType { listen, vote, tosuggestion, openuser }
 
 class PopupItem {
   Track track;
@@ -21,13 +23,15 @@ class PopupItem {
         null, null, user);
   }
 
-  static PopupMenuItem<PopupItem> createFollowUserOption(UserPublic user, bool currentlyFollowing) {
+/*
+  static PopupMenuItem<PopupItem> createFollowUserOption(
+      UserPublic user, bool currentlyFollowing) {
     String title = currentlyFollowing ? 'Unfollow' : 'Follow User';
     String icon = currentlyFollowing ? 'heart_filled' : 'heart_empty';
-    return createOption(PopupActionType.followuser, title, icon,
-        null, null, user);
+    return createOption(
+        PopupActionType.followuser, title, icon, null, null, user);
   }
-
+*/
   static PopupMenuItem<PopupItem> createSuggestionOption(Track track) {
     return createOption(PopupActionType.tosuggestion, 'Update Suggestion',
         'add', track, null, null);
@@ -84,4 +88,25 @@ class PopupItem {
       openUrl(user.uri);
     }
   }
+
+  Future openTrack() async {
+    if (action == PopupActionType.listen) {
+      openUrl(track.uri);
+    }
+  }
+/*
+  Future vote(BuildContext context, SpotifyService state) async {
+    if (state.db.firebaseUserID != suggestion.fuserid) {
+      await state.db.likeSuggestion(suggestion);
+
+      //bloc.add(UpdateFeed());
+      UpdatedFeedNotification().dispatch(context);
+
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+    }
+  }*/
 }

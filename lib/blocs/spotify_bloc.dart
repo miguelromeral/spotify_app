@@ -57,7 +57,9 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         }
       } catch (e) {
         print("Error while login: $e");
+        _clearCredentials();
         yield null;
+        return;
       }
       event.service.db = _db;
       event.service.init();

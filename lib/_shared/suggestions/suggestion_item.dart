@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/_shared/myicon.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/models/popup_item.dart';
+import 'package:spotify_app/_shared/popup/popup_item.dart';
 import 'package:spotify_app/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/gui.dart';
@@ -10,6 +10,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/models/suggestion.dart';
+
+import '../custom_listtile.dart';
 
 class SuggestionItem extends StatefulWidget {
   final Track track;
@@ -127,99 +129,70 @@ class _SuggestionItemState extends State<SuggestionItem> {
   Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return Container(
+        return CustomListTile(
           key: Key(suggestion.suserid),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                //color: Colors.blue,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 0,
-                      child: Container(
-                          //color: Colors.black,
-                          child: _createLeadingIcon(user, track)),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              //color: Colors.green,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    _createTitle(track, user),
-                                    style: styleFeedTitle,
-                                  ),
-                                  SizedBox(width: 8.0),
-                                  Text(
-                                    "(${timeago.format(suggestion.date, locale: 'en_short')})",
-                                    style: styleFeedAgo,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 4.0),
-                            Container(
-                              //color: Colors.yellow[100],
-                              child: _createSubtitle(),
-                            ),
-                            SizedBox(height: 4.0),
-                            Container(
-                              //color: Colors.yellow[200],
-                              child: Text(
-                                suggestion.text,
-                                style: styleFeedContent,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: _createTrailingIcon(user, track),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _createBottomBar(state, track, user, suggestion),
-            ],
-          ),
+          leadingIcon: _createLeadingIcon(user, track),
+          trailingIcon: _createTrailingIcon(user, track),
+          content: _content(),
+          bottomIcons: _createBottomBar(state),
+          menuItems: _getActions(widget.track, widget.user, widget.suggestion,
+              state.db.spotifyUserID),
         );
       },
     );
   }
 
-  Widget _createBottomBar(SpotifyService state, Track track, UserPublic user,
-      Suggestion suggestion) {
+  List<Widget> _content() {
+    return [
+      Container(
+        //color: Colors.green,
+        child: Row(
+          children: [
+            Text(
+              _createTitle(widget.track, widget.user),
+              style: styleFeedTitle,
+            ),
+            SizedBox(width: 8.0),
+            Text(
+              "(${timeago.format(widget.suggestion.date, locale: 'en_short')})",
+              style: styleFeedAgo,
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: 4.0),
+      Container(
+        //color: Colors.yellow[100],
+        child: _createSubtitle(),
+      ),
+      SizedBox(height: 4.0),
+      Container(
+        //color: Colors.yellow[200],
+        child: Text(
+          widget.suggestion.text,
+          style: styleFeedContent,
+        ),
+      )
+    ];
+  }
+
+  List<Widget> _createBottomBar(SpotifyService state) {
     List<Widget> list = List();
 
-    if (suggestion.likes != null) {
+    if (widget.suggestion.likes != null) {
       list.add(Container(
         child: Row(
           children: [
             MyIcon(
               icon: 'vote',
               size: 20.0,
-              callback: () => vote(context, state, suggestion, track),
+              callback: () =>
+                  vote(context, state, widget.suggestion, widget.track),
             ),
             SizedBox(
               width: 4.0,
             ),
-            Text(suggestion.likes.toString()),
+            Text(widget.suggestion.likes.toString()),
           ],
         ),
       ));
@@ -231,12 +204,14 @@ class _SuggestionItemState extends State<SuggestionItem> {
     list.add(Container(
       padding: EdgeInsets.all(8.0),
       child: MyIcon(
-          icon: 'spotify', size: 20.0, callback: () => openTrackSpotify(track)),
+          icon: 'spotify',
+          size: 20.0,
+          callback: () => openTrackSpotify(widget.track)),
     ));
     list.add(SizedBox(
       width: 8.0,
     ));
-    list.add(PopupMenuButton<PopupItem>(
+    /*  list.add(PopupMenuButton<PopupItem>(
         key: _menuKey,
         onSelected: (PopupItem value) async {
           switch (value.action) {
@@ -264,14 +239,15 @@ class _SuggestionItemState extends State<SuggestionItem> {
         ),
         itemBuilder: (BuildContext context) => _getActions(widget.track,
             widget.user, widget.suggestion, state.db.spotifyUserID)));
-
-    return Container(
+*/
+    return list;
+/*    return Container(
       //color: Colors.blue[300],
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: list,
       ),
-    );
+    );*/
   }
 }

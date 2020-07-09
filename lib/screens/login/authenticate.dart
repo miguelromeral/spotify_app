@@ -21,12 +21,22 @@ enum _loginState { loadingSaved, waitingUser, loading }
 class _AuthenticateState extends State<Authenticate> {
   bool _remember = false;
   SpotifyApi _api;
-  _loginState _state = _loginState.loadingSaved;
+  //  TODO: ARREGLAR QUE SI EL TOKEN SE REVOCA, SE VUELVA A ESTA PANTALLA DE FORMA SEGURA
+  //_loginState _state = _loginState.loadingSaved;
+  _loginState _state = _loginState.waitingUser;
 
   @override
   void initState() {
-    automaticLogin();
+    //automaticLogin();
     super.initState();
+  }
+
+  Future checkBloc(SpotifyService state) async {
+    if(state == null){
+      setState(() {
+        _state = _loginState.waitingUser;
+      });
+    }
   }
 
   Widget _buildBody(BuildContext context) {

@@ -2,9 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:spotify_app/blocs/spotify_bloc.dart';
+import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
@@ -89,6 +93,26 @@ class SpotifyService {
 
   void forgetTrack() {
     toShare = null;
+  }
+
+  Future followUnfollow(BuildContext context, Following following, Following myFollowings,
+      bool currentlyFollowing, UserPublic user) async {
+    if (db.firebaseUserID != following.fuserid) {
+      if (currentlyFollowing) {
+        await db.removeFollowing(myFollowings, user.id);
+        Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('You no longer follow ${user.displayName}!')));
+      } else {
+        await db.addFollowing(myFollowings, user.id);
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text('You followed ${user.displayName}!')));
+      }
+
+      BlocProvider.of<SpotifyBloc>(context).add(UpdateFeed());
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+    }
   }
 
   Future<User> get myUser => api == null ? null : api.me.get();
