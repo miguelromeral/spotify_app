@@ -1,13 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/_shared/custom_listtile.dart';
 import 'package:spotify_app/_shared/myicon.dart';
+import 'package:spotify_app/_shared/popup/popup_item_open_user.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/popup/popup_item.dart';
+import 'package:spotify_app/_shared/popup/popup_item_base.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
@@ -146,11 +147,12 @@ class _FollowingItemState extends State<FollowingItem> {
     }
   }
 
-  List<PopupMenuItem<PopupItem>> _getActions(SpotifyService state, UserPublic user) {
-    List<PopupMenuItem<PopupItem>> list = List();
+  List<PopupMenuItem<PopupItemBase>> _getActions(
+      SpotifyService state, UserPublic user) {
+    List<PopupMenuItem<PopupItemBase>> list = List();
 
 //    list.add(PopupItem.createFollowUserOption(user, currentlyFollowing, _followUnfollowCallback(state)));
-    list.add(PopupItem.createOpenUserOption(user));
+    list.add(PopupItemOpenUser(user: user).create());
     return list;
   }
 }

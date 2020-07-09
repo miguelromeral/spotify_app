@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_app/_shared/custom_listtile.dart';
+import 'package:spotify_app/_shared/popup/popup_item_open_track.dart';
+import 'package:spotify_app/_shared/popup/popup_item_update_suggestion.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/popup/popup_item.dart';
+import 'package:spotify_app/_shared/popup/popup_item_base.dart';
 import 'package:spotify_app/screens/share_track/share_track.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -34,16 +37,58 @@ class _TrackItemState extends State<TrackItem> {
     );
   }
 
-  List<PopupMenuItem<PopupItem>> _getActions() {
-    List<PopupMenuItem<PopupItem>> list = List();
-
-    list.add(PopupItem.createListenOption(widget.track));
-    list.add(PopupItem.createSuggestionOption(widget.track));
-
-    return list;
+  List<PopupMenuItem<PopupItemBase>> _getActions() {
+    return [
+      PopupItemOpenTrack(track: widget.track).create(),
+      PopupItemUpdateSuggestion(track: widget.track).create(),
+    ];
   }
 
   Widget _createItem(BuildContext context) {
+    return CustomListTile(
+      key: Key(widget.track.id),
+      leadingIcon: _leadingIcon(),
+      //trailingIcon: _createTrailingIcon(user, track),
+      content: _content(),
+      //bottomIcons: _createBottomBar(state),
+      menuItems: _getActions(),
+    );
+  }
+
+  List<Widget> _content() {
+    return [
+      Text(
+        "${widget.track.name}",
+        style: styleFeedTitle,
+      ),
+      SizedBox(height: 4.0),
+      Text(
+        "${widget.track.artists[0].name}",
+        style: styleFeedTrack,
+      ),
+      SizedBox(height: 4.0),
+      Text(
+        "${widget.track.album.name}",
+        style: styleFeedArtist,
+      )
+    ];
+  }
+
+  Widget _leadingIcon() {
+    return Container(
+      height: 60.0,
+      padding: EdgeInsets.all(8.0),
+      child: Hero(
+        tag: widget.track.hashCode.toString(),
+        child: AlbumPicture(
+          track: widget.track,
+          size: 25.0,
+        ),
+      ),
+    );
+  }
+
+  Widget _createItem2(BuildContext context) {
     return Container(
       //color: Colors.red,
       child: Row(
@@ -51,13 +96,7 @@ class _TrackItemState extends State<TrackItem> {
           Container(
             height: 75.0,
             padding: EdgeInsets.all(8.0),
-            child: Hero(
-              tag: widget.track.hashCode.toString(),
-              child: AlbumPicture(
-                track: widget.track,
-                size: 25.0,
-              ),
-            ),
+            child: Text('dd'),
           ),
           Expanded(
             child: Container(
@@ -65,29 +104,15 @@ class _TrackItemState extends State<TrackItem> {
                 //color: Colors.yellow,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${widget.track.name}",
-                      style: styleFeedTitle,
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      "${widget.track.artists[0].name}",
-                      style: styleFeedTrack,
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      "${widget.track.album.name}",
-                      style: styleFeedArtist,
-                    ),
-                  ],
+                  children: [],
                 )),
           ),
           Container(
-              child: PopupMenuButton<PopupItem>(
+              child: PopupMenuButton<PopupItemBase>(
                   key: _menuKey,
-                  onSelected: (PopupItem value) async {
-                    switch (value.action) {
+                  onSelected: (PopupItemBase value) async {
+                    value.execute(context);
+                    /*switch (value.action) {
                       case PopupActionType.listen:
                         openTrackSpotify(widget.track);
                         break;
@@ -96,7 +121,7 @@ class _TrackItemState extends State<TrackItem> {
                         break;
                       default:
                         break;
-                    }
+                    }*/
                   },
                   child: IconButton(
                     onPressed: () {

@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/_shared/myicon.dart';
+import 'package:spotify_app/_shared/popup/popup_item_open_track.dart';
+import 'package:spotify_app/_shared/popup/popup_item_vote.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/popup/popup_item.dart';
+import 'package:spotify_app/_shared/popup/popup_item_base.dart';
 import 'package:spotify_app/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/gui.dart';
@@ -43,13 +45,14 @@ class _SuggestionItemState extends State<SuggestionItem> {
     );
   }
 
-  List<PopupMenuItem<PopupItem>> _getActions(Track track, UserPublic user,
-      Suggestion suggestion, String mySpotifyUserId) {
-    List<PopupMenuItem<PopupItem>> list = List();
+  List<PopupMenuItem<PopupItemBase>> _getActions(Track track, UserPublic user,
+      Suggestion suggestion, String mySpotifyUserId, SpotifyService state) {
+    List<PopupMenuItem<PopupItemBase>> list = List();
 
-    list.add(PopupItem.createListenOption(track));
+    list.add(PopupItemOpenTrack(track: track).create());
     if (suggestion.suserid != mySpotifyUserId) {
-      list.add(PopupItem.createVoteOption(track, suggestion));
+      list.add(PopupItemVote(track: track, suggestion: suggestion, state: state)
+          .create());
     }
     return list;
   }
@@ -136,7 +139,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
           content: _content(),
           bottomIcons: _createBottomBar(state),
           menuItems: _getActions(widget.track, widget.user, widget.suggestion,
-              state.db.spotifyUserID),
+              state.db.spotifyUserID, state),
         );
       },
     );
@@ -211,43 +214,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
     list.add(SizedBox(
       width: 8.0,
     ));
-    /*  list.add(PopupMenuButton<PopupItem>(
-        key: _menuKey,
-        onSelected: (PopupItem value) async {
-          switch (value.action) {
-            case PopupActionType.listen:
-              openTrackSpotify(widget.track);
-              break;
-            case PopupActionType.vote:
-              vote(context, BlocProvider.of<SpotifyBloc>(context).state,
-                  widget.suggestion, widget.track);
-              break;
-            default:
-              break;
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.all(8.0),
-          child: MyIcon(
-            icon: 'menu',
-            size: 20.0,
-            callback: () {
-              dynamic tmp = _menuKey.currentState;
-              tmp.showButtonMenu();
-            },
-          ),
-        ),
-        itemBuilder: (BuildContext context) => _getActions(widget.track,
-            widget.user, widget.suggestion, state.db.spotifyUserID)));
-*/
+
     return list;
-/*    return Container(
-      //color: Colors.blue[300],
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: list,
-      ),
-    );*/
   }
 }

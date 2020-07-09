@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/_shared/myicon.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/popup/popup_item.dart';
+import 'package:spotify_app/_shared/popup/popup_item_base.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
@@ -12,7 +12,7 @@ class CustomListTile extends StatefulWidget {
   final Widget trailingIcon;
   final List<Widget> content;
   final List<Widget> bottomIcons;
-  final List<PopupMenuItem<PopupItem>> menuItems;
+  final List<PopupMenuItem<PopupItemBase>> menuItems;
 
   CustomListTile(
       {@required this.key,
@@ -67,7 +67,7 @@ class _CustomListTileState extends State<CustomListTile> {
                       flex: 0,
                       child: Container(
                         padding: EdgeInsets.all(16.0),
-                        child: widget.trailingIcon,
+                        child: _createTrailingIcon(context, state),
                       ),
                     ),
                   ],
@@ -79,6 +79,18 @@ class _CustomListTileState extends State<CustomListTile> {
         );
       },
     );
+  }
+
+  Widget _createTrailingIcon(BuildContext context, SpotifyService state){
+    if(widget.trailingIcon == null && widget.bottomIcons == null){
+      if(widget.menuItems == null){
+        return Container();
+      }else{
+        return _createMenu(state);
+      }
+    }else{
+      return widget.trailingIcon;
+    }
   }
 
   Widget _createBottomBar(BuildContext context, SpotifyService state) {
@@ -100,25 +112,10 @@ class _CustomListTileState extends State<CustomListTile> {
   }
 
   Widget _createMenu(SpotifyService state) {
-    return PopupMenuButton<PopupItem>(
+    return PopupMenuButton<PopupItemBase>(
         key: _menuKey,
-        onSelected: (PopupItem value) {
-          switch (value.action) {
-            case PopupActionType.vote:
-              vote(context, state, value.suggestion, value.track);
-              break;
-            case PopupActionType.listen:
-              value.openTrack();
-              break;
-            case PopupActionType.tosuggestion:
-              value.updateSuggestion(context);
-              break;
-            case PopupActionType.openuser:
-              value.openUser();
-              break;
-            default:
-              break;
-          }
+        onSelected: (PopupItemBase value) {
+          value.execute(context);
         },
         child: Container(
           padding: EdgeInsets.all(8.0),
