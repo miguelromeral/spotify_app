@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spotify_app/_shared/loading_screen.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/services/notifications.dart';
@@ -47,7 +48,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
             );
           } else {
             BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
-            return CircularProgressIndicator();
+            return LoadingScreen();
           }
         },
       );

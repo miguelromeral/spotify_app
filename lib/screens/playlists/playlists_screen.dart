@@ -2,10 +2,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_app/_shared/custom_listtile.dart';
+import 'package:spotify_app/_shared/playlists/playlist_image.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/_shared/playlists/playlist_item.dart';
+import 'package:spotify_app/screens/library/list_songs.dart';
+import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/notifications.dart';
+import 'package:spotify_app/services/spotifyservice.dart';
+
+import '../styles.dart';
 
 class PlaylistsScreen extends StatefulWidget {
   @override
@@ -68,20 +74,76 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
       }
       filteredList = tempList;
     }
-    return NotificationListener<RefreshListNotification>(
-      onNotification: (notification) {
-        print("Notification: $notification");
-        _getData();
-        return true;
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) {
+        return NotificationListener<RefreshListNotification>(
+          onNotification: (notification) {
+            print("Notification: $notification");
+            _getData();
+            return true;
+          },
+          child: RefreshIndicator(
+            onRefresh: _getData,
+            child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                      color: colorSeprator,
+                    ),
+                itemCount: initialList == null ? 0 : filteredList.length,
+                itemBuilder: (_, index) {
+                  PlaylistSimple pl = filteredList[index];
+                  return GestureDetector(
+                    onLongPress: () async {
+                      openUrl(pl.uri);
+                    },
+                    onTap: () async {
+                      try {
+                        var expand = (await state.api.playlists
+                                .getTracksByPlaylistId(pl.id)
+                                .all())
+                            .toList();
+
+                        var list = List<Track>();
+                        for (var t in expand) {
+                          list.add(t);
+                        }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ListSongs(
+                                    key: Key('${pl.id}_${list.length}'),
+                                    tracks: list,
+                                    title: pl.name,
+                                    refresh: false,
+                                  )),
+                        );
+                      } catch (err) {
+                        print(err);
+                      }
+                    },
+                    child: Container(
+                      color: colorBackground,
+                      child: CustomListTile(
+                        key: Key(pl.id),
+                        leadingIcon: Container(
+                          width: albumIconSize,
+                          height: albumIconSize,
+                          child: PlaylistImage(
+                            playlist: pl,
+                          ),
+                        ),
+                        content: [
+                          Text(pl.name, style: styleFeedTitle),
+                          Text('ID: ${pl.id}', style: styleFeedTrack),
+                        ],
+                      ),
+                    ),
+                  );
+                  //return PlaylistItem(playlist: filteredList[index], context: context);
+                }),
+          ),
+        );
       },
-      child: RefreshIndicator(
-        onRefresh: _getData,
-        child: ListView.builder(
-            itemCount: initialList == null ? 0 : filteredList.length,
-            itemBuilder: (_, index) {
-              return PlaylistItem(playlist: filteredList[index], context: context);
-            }),
-      ),
     );
   }
 
@@ -89,7 +151,6 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     print("pulling to refresh in playslist!");
     if (_context != null && _bloc != null) {
       _bloc.add(UpdatePlaylists());
-      
 
       _bloc.state.playlists.listen((event) {
         setState(() {

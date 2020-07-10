@@ -34,6 +34,9 @@ class _WebViewContainerState extends State<WebViewContainer> {
                 print("Nav Req: ${navReq.url}");
 
                 if (navReq.url.startsWith(SpotifyService.redirectUri)) {
+                  /*if (navReq.url.toString().contains("?error=access_denied")) {
+                    Navigator.pop(context, null);
+                  }*/
                   try {
                     final spotify =
                         SpotifyApi.fromAuthCodeGrant(widget.grant, navReq.url);

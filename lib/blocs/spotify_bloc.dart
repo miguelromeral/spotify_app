@@ -28,11 +28,11 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       User user;
       try {
         var cred = await event.service.api.getCredentials();
-        if (event.saveCredentials) {
+        //if (event.saveCredentials) {
           _saveCredentials(cred);
-        } else {
-          _clearCredentials();
-        }
+        //} else {
+        //  _clearCredentials();
+        //}
         user = await event.service.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);

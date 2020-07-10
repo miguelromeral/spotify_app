@@ -26,13 +26,16 @@ class TrackItem extends StatefulWidget {
 }
 
 class _TrackItemState extends State<TrackItem> {
-  final GlobalKey _menuKey = new GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return _createItem(context);
+        return CustomListTile(
+          key: Key(widget.track.id),
+          leadingIcon: _leadingIcon(),
+          content: _content(),
+          menuItems: _getActions(),
+        );
       },
     );
   }
@@ -42,17 +45,6 @@ class _TrackItemState extends State<TrackItem> {
       PopupItemOpenTrack(track: widget.track).create(),
       PopupItemUpdateSuggestion(track: widget.track).create(),
     ];
-  }
-
-  Widget _createItem(BuildContext context) {
-    return CustomListTile(
-      key: Key(widget.track.id),
-      leadingIcon: _leadingIcon(),
-      //trailingIcon: _createTrailingIcon(user, track),
-      content: _content(),
-      //bottomIcons: _createBottomBar(state),
-      menuItems: _getActions(),
-    );
   }
 
   List<Widget> _content() {
@@ -86,87 +78,5 @@ class _TrackItemState extends State<TrackItem> {
         ),
       ),
     );
-  }
-
-  Widget _createItem2(BuildContext context) {
-    return Container(
-      //color: Colors.red,
-      child: Row(
-        children: [
-          Container(
-            height: 75.0,
-            padding: EdgeInsets.all(8.0),
-            child: Text('dd'),
-          ),
-          Expanded(
-            child: Container(
-                padding: EdgeInsets.all(8.0),
-                //color: Colors.yellow,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [],
-                )),
-          ),
-          Container(
-              child: PopupMenuButton<PopupItemBase>(
-                  key: _menuKey,
-                  onSelected: (PopupItemBase value) async {
-                    value.execute(context);
-                    /*switch (value.action) {
-                      case PopupActionType.listen:
-                        openTrackSpotify(widget.track);
-                        break;
-                      case PopupActionType.tosuggestion:
-                        value.updateSuggestion(context);
-                        break;
-                      default:
-                        break;
-                    }*/
-                  },
-                  child: IconButton(
-                    onPressed: () {
-                      dynamic tmp = _menuKey.currentState;
-                      tmp.showButtonMenu();
-                    },
-                    icon: Icon(Icons.more_vert),
-                  ),
-                  itemBuilder: (BuildContext context) => _getActions())),
-        ],
-      ),
-    );
-
-    /*return Row(
-      children: [
-        Hero(
-          tag: 'imageHero',
-          child: AlbumPicture(
-            track: widget.track,
-            size: 25.0,
-          ),
-        ),
-        ListTile(
-          leading: AlbumPicture(
-            track: widget.track,
-            size: 25.0,
-          ),
-          title: Text(widget.track.name),
-          subtitle: Text(widget.track.artists[0].name),
-          trailing: IconButton(
-            onPressed: () {
-              dynamic tmp = _menuKey.currentState;
-              tmp.showButtonMenu();
-            },
-            icon: Icon(Icons.more_vert),
-          ),
-          //trailing: icon,
-          //isThreeLine: true,
-          // Interactividad:
-          //onTap: () async {},
-          //onLongPress: () => _pressCallback,
-          //enabled: false,
-          //selected: true,
-        ),
-      ],
-    );*/
   }
 }

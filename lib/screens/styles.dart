@@ -40,6 +40,9 @@ ThemeData _buildShrineTheme() {
         secondary: colorPrimary,
       ),
     ),
+    snackBarTheme: base.snackBarTheme.copyWith(
+      backgroundColor: colorAccent,
+    ),
     buttonBarTheme: base.buttonBarTheme.copyWith(
       buttonTextTheme: ButtonTextTheme.accent,
     ),

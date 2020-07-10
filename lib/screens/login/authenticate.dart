@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_app/_shared/loading_screen.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/screens/login/webview_container.dart';
@@ -23,7 +24,7 @@ class _AuthenticateState extends State<Authenticate> {
   SpotifyApi _api;
   //  TODO: ARREGLAR QUE SI EL TOKEN SE REVOCA, SE VUELVA A ESTA PANTALLA DE FORMA SEGURA
   _loginState _state = _loginState.loadingSaved;
-  
+
   @override
   void initState() {
     automaticLogin();
@@ -31,7 +32,7 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
   Future checkBloc(SpotifyService state) async {
-    if(state == null){
+    if (state == null) {
       setState(() {
         _state = _loginState.waitingUser;
       });
@@ -40,27 +41,6 @@ class _AuthenticateState extends State<Authenticate> {
 
   Widget _buildBody(BuildContext context) {
     switch (_state) {
-      case _loginState.loadingSaved:
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FadingText(
-                'Loading...',
-                style: _styleLoading,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text("We're retrieving your latest login."),
-              SizedBox(
-                height: 8.0,
-              ),
-              Text("This may take a few seconds."),
-            ],
-          ),
-        );
-        break;
       case _loginState.waitingUser:
         return Center(
           child: Column(
@@ -92,37 +72,25 @@ class _AuthenticateState extends State<Authenticate> {
           ),
         );
         break;
+      case _loginState.loadingSaved:
+        return LoadingScreen();
+        break;
       case _loginState.loading:
         if (_api != null) {
           context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
         }
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FadingText(
-                'Loading...',
-                style: _styleLoading,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text("Please, wait until you've been loged in."),
-              SizedBox(
-                height: 8.0,
-              ),
-              Text("This may take a few seconds."),
-            ],
-          ),
+        return LoadingScreen(
+          below: [
+            Text("Please, wait until you've been loged in."),
+            SizedBox(
+              height: 8.0,
+            ),
+            Text("This may take a few seconds."),
+          ],
         );
         break;
     }
   }
-
-  final TextStyle _styleLoading = TextStyle(
-    fontSize: 18.0,
-    fontWeight: FontWeight.bold,
-  );
 
   @override
   void dispose() {
@@ -161,9 +129,6 @@ class _AuthenticateState extends State<Authenticate> {
       print("automatically logining in");
       //context.bloc<SpotifyBloc>().add(LoginEvent(SpotifyApi(credentials), true));
       setState(() {
-        //var tmp = DateTime.now();
-        //var tmp2 = tmp.subtract(Duration(minutes: 5));
-        //credentials.expiration = tmp2;
         _api = SpotifyApi(credentials);
         _state = _loginState.loading;
       });
@@ -185,7 +150,7 @@ class _AuthenticateState extends State<Authenticate> {
       scopes: scopes, // scopes are optional
     );
 
-    var res = await Navigator.push(
+    SpotifyApi res = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WebViewContainer(
