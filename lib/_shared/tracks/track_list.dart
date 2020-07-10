@@ -7,18 +7,18 @@ import 'package:spotify_app/_shared/tracks/track_item.dart';
 import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/notifications.dart';
 
-class ListSongs extends StatefulWidget {
+class TrackList extends StatefulWidget {
   List<Track> tracks;
   String title;
   bool refresh;
 
-  ListSongs({Key key, this.tracks, this.title, this.refresh}) : super(key: key);
+  TrackList({Key key, this.tracks, this.title, this.refresh}) : super(key: key);
 
   @override
-  _ListSongsState createState() => _ListSongsState();
+  _TrackListState createState() => _TrackListState();
 }
 
-class _ListSongsState extends State<ListSongs> {
+class _TrackListState extends State<TrackList> {
   // controls the text label we use as a search bar
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio(); // for http requests
@@ -33,7 +33,7 @@ class _ListSongsState extends State<ListSongs> {
   List<Track> initialList = new List();
   List<Track> filteredTracks = new List();
 
-  _ListSongsState() {
+  _TrackListState() {
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
         setState(() {

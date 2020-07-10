@@ -15,8 +15,10 @@ Color colorBackground = Colors.black;
 Color colorSemiBackground = Colors.black38;
 Color colorThirdBackground = Colors.grey[900];
 Color colorIcon = Colors.white54;
-
 Color colorSeprator = Colors.white70;
+
+Color colorError = Colors.red.shade200;
+Color colorErrorDetail = Colors.red.shade400;
 
 Color _hexToColor(String code) {
   return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);

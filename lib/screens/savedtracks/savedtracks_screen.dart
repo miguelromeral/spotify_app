@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify_app/_shared/loading_screen.dart';
+import 'package:spotify_app/_shared/screens/loading_screen.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/screens/library/list_songs.dart';
+import 'package:spotify_app/_shared/tracks/track_list.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class SavedTracksScreen extends StatefulWidget {
@@ -36,7 +36,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
                     _getData();
                     return true;
                   },
-                  child: ListSongs(
+                  child: TrackList(
                     key: Key(liked.length.toString()),
                     tracks: liked,
                     title: 'My Saved Songs',

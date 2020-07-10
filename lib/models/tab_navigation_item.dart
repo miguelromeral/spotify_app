@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:spotify_app/screens/following/following_screen.dart';
 import 'package:spotify_app/screens/home/home_screen.dart';
 import 'package:spotify_app/screens/profile/profile_screen.dart';
-import 'package:spotify_app/screens/library/savedtracks_screen.dart';
+import 'package:spotify_app/screens/savedtracks/savedtracks_screen.dart';
 
 class TabNavigationItem {
   final Widget page;

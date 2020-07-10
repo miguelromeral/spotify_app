@@ -17,8 +17,7 @@ class LoadingScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FadingText(
-            'Loading...',
+          FadingText(_getTitle(),
             style: _styleLoading,
           ),
           SizedBox(
