@@ -12,7 +12,6 @@ import 'package:spotify_app/_shared/card_info.dart';
 import 'package:spotify_app/_shared/custom_appbar.dart';
 import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
 import 'package:spotify_app/_shared/users/profile_picture.dart';
-import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,8 +24,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    var state = BlocProvider.of<SpotifyBloc>(context).state;
-
     return Scaffold(
       appBar: CustomAppBar(
         title: 'My Profile',

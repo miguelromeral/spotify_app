@@ -20,15 +20,16 @@ Color colorSeprator = Colors.white70;
 Color colorError = Colors.red.shade200;
 Color colorErrorDetail = Colors.red.shade400;
 
+/*
 Color _hexToColor(String code) {
   return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-}
+}*/
 
-final ThemeData kShrineTheme = _buildShrineTheme();
+final ThemeData appTheme = _buildAppTheme();
 
 //const backgroundColor = const Colors;
 
-ThemeData _buildShrineTheme() {
+ThemeData _buildAppTheme() {
   final ThemeData base = ThemeData.dark();
   //return base;
   return base.copyWith(

@@ -2,15 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_app/_shared/screens/error_screen.dart';
 import 'package:spotify_app/_shared/screens/loading_screen.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/screens/login/webview_container.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -20,7 +19,6 @@ class Authenticate extends StatefulWidget {
 enum _loginState { loadingSaved, waitingUser, loading }
 
 class _AuthenticateState extends State<Authenticate> {
-  bool _remember = false;
   SpotifyApi _api;
   //  TODO: ARREGLAR QUE SI EL TOKEN SE REVOCA, SE VUELVA A ESTA PANTALLA DE FORMA SEGURA
   _loginState _state = _loginState.loadingSaved;
@@ -40,56 +38,45 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
   Widget _buildBody(BuildContext context) {
-    switch (_state) {
-      case _loginState.waitingUser:
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RaisedButton(
-                  child: Text('Log In'),
-                  onPressed: () async {
-                    login(context);
-                  }),
-              Row(
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) {
+        switch (_state) {
+          case _loginState.waitingUser:
+            return Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Checkbox(
-                    value: _remember,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _remember = value;
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    width: 2.0,
-                  ),
-                  Text("Remember Credentials"),
+                  RaisedButton(
+                      child: Text('Log In'),
+                      onPressed: () async {
+                        login(context);
+                      }),
                 ],
               ),
-            ],
-          ),
-        );
-        break;
-      case _loginState.loadingSaved:
-        return LoadingScreen();
-        break;
-      case _loginState.loading:
-        if (_api != null) {
-          context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
+            );
+          case _loginState.loadingSaved:
+            return LoadingScreen();
+          case _loginState.loading:
+            if (_api != null) {
+              context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
+            }
+            return LoadingScreen(
+              below: [
+                Text("Please, wait until you've been loged in."),
+                SizedBox(
+                  height: 8.0,
+                ),
+                Text("This may take a few seconds."),
+              ],
+            );
+          default:
+            return ErrorScreen(
+              title: 'Error while Login.',
+              stringBelow: ['Please, try again later.'],
+            );
         }
-        return LoadingScreen(
-          below: [
-            Text("Please, wait until you've been loged in."),
-            SizedBox(
-              height: 8.0,
-            ),
-            Text("This may take a few seconds."),
-          ],
-        );
-        break;
-    }
+      },
+    );
   }
 
   @override
@@ -102,7 +89,7 @@ class _AuthenticateState extends State<Authenticate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hello!'),
+        title: Text('Login to FriendHits!'),
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) {
@@ -137,7 +124,6 @@ class _AuthenticateState extends State<Authenticate> {
         _state = _loginState.waitingUser;
       });
     }
-    print("End logging automatically.");
   }
 
   void login(BuildContext context) async {
@@ -156,7 +142,6 @@ class _AuthenticateState extends State<Authenticate> {
             builder: (context) => WebViewContainer(
                   authUri.toString(),
                   grant,
-                  _remember,
                 )));
     if (res != null) {
       setState(() {

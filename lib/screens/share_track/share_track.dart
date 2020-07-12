@@ -6,9 +6,11 @@ import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/_shared/tracks/album_picture.dart';
 import 'package:spotify_app/_shared/custom_appbar.dart';
 import 'package:spotify_app/services/notifications.dart';
+import 'package:spotify_app/services/spotifyservice.dart';
 
 class ShareTrack extends StatefulWidget {
-  Track track;
+  final Track track;
+
   ShareTrack({this.track});
 
   @override
@@ -22,15 +24,12 @@ class _ShareTrackState extends State<ShareTrack> {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BlocProvider.of<SpotifyBloc>(context);
-    var state = bloc.state;
-
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Share Track',
       ),
-      body: Builder(
-        builder: (context) => Container(
+      body: BlocBuilder<SpotifyBloc, SpotifyService>(
+        builder: (context, state) => Container(
           padding: EdgeInsets.all(20.0),
           child: Center(
             child: Column(
@@ -84,6 +83,7 @@ class _ShareTrackState extends State<ShareTrack> {
 
                             await state.insertSuggestion(sug);
 
+                            var bloc = BlocProvider.of<SpotifyBloc>(context);
                             bloc.add(UpdateFeed());
                             bloc.add(UpdateMySuggestion());
                             UpdatedFeedNotification().dispatch(context);

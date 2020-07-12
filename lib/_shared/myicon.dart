@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:spotify_app/screens/styles.dart';
 
 class MyIcon extends StatefulWidget {
-  String icon;
-  double size;
-  Function callback;
+  final String icon;
+  final double size;
+  final Function callback;
+  
   MyIcon({this.size, @required this.icon, this.callback});
 
   @override

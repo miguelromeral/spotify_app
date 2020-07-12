@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewContainer extends StatefulWidget {
   final url;
   final grant;
-  final remember;
-  WebViewContainer(this.url, this.grant, this.remember);
+  WebViewContainer(this.url, this.grant);
   @override
   createState() => _WebViewContainerState(this.url);
 }
@@ -34,9 +30,9 @@ class _WebViewContainerState extends State<WebViewContainer> {
                 print("Nav Req: ${navReq.url}");
 
                 if (navReq.url.startsWith(SpotifyService.redirectUri)) {
-                  /*if (navReq.url.toString().contains("?error=access_denied")) {
+                  if (navReq.url.toString().contains("?error=access_denied")) {
                     Navigator.pop(context, null);
-                  }*/
+                  }
                   try {
                     final spotify =
                         SpotifyApi.fromAuthCodeGrant(widget.grant, navReq.url);

@@ -14,11 +14,11 @@ class FirestoreService {
 
   static const String defaultTrackId = 'null';
 
-  /*********************************************
-   * 
-   * SUGGESTIONS
-   * 
-   *********************************************/
+  /// *******************************************
+  /// 
+  /// SUGGESTIONS
+  /// 
+  ///********************************************
 
   List<Suggestion> _suggestionListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
@@ -90,11 +90,11 @@ class FirestoreService {
     return cSuggestions.snapshots().map(_suggestionListFromSnapshot);
   }
 
-  /*********************************************
-   * 
-   * FOLLOWING
-   * 
-   *********************************************/
+  /// *******************************************
+  /// 
+  /// FOLLOWING
+  /// 
+  ///********************************************
 
   Future<Following> getMyFollowing() async {
     return getFollowingBySpotifyUserID(spotifyUserID);

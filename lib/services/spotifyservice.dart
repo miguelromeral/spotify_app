@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart' as mat;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
 import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/firebase_auth.dart';
 
@@ -152,11 +148,11 @@ class SpotifyService {
     }
   }
 
-  /******************************************
-   * 
-   * LOCAL DB
-   * 
-   ***************************************/
+  /// ****************************************
+  /// 
+  /// LOCAL DB
+  /// 
+  ///**************************************
 
   Future insertSuggestion(Suggestion sug) async {
     await _localDB.insertSuggestion(sug);

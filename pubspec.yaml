@@ -41,6 +41,7 @@ dependencies:
   webview_flutter: ^0.3.22+1
   flutter_spinkit: "^4.1.2"
   progress_indicators: ^0.1.5
+  draggable_scrollbar: ^0.0.4
 
 
 

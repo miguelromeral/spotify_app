@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/myicon.dart';
 import 'package:spotify_app/_shared/popup/popup_item_base.dart';
 import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/screens/share_track/share_track.dart';
-import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PopupItemVote extends PopupItemBase {
   Suggestion suggestion;

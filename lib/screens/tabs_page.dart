@@ -100,6 +100,7 @@ class _TabsPageState extends State<TabsPage> {
     return NotificationListener<OpenDrawerNotification>(
       onNotification: (notification) {
         _scaffoldKey.currentState.openDrawer();
+        return true;
       },
       child: Scaffold(
         key: _scaffoldKey,

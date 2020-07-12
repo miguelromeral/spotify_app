@@ -28,7 +28,6 @@ class SuggestionItem extends StatefulWidget {
 
 class _SuggestionItemState extends State<SuggestionItem> {
   bool liked;
-  final GlobalKey _menuKey = new GlobalKey();
 
   @override
   void initState() {

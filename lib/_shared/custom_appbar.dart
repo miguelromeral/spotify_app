@@ -6,7 +6,7 @@ import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/notifications.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  String title;
+  final String title;
 
   CustomAppBar({this.title}) : preferredSize = Size.fromHeight(60.0);
 

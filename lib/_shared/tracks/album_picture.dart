@@ -5,8 +5,8 @@ import 'package:spotify/spotify.dart';
 import 'package:spotify_app/screens/styles.dart';
 
 class AlbumPicture extends StatefulWidget {
-  Track track;
-  double size;
+  final Track track;
+  final double size;
 
   AlbumPicture({this.track, this.size});
 
@@ -16,29 +16,6 @@ class AlbumPicture extends StatefulWidget {
 
 class _AlbumPictureState extends State<AlbumPicture>
     with SingleTickerProviderStateMixin {
-  Animation<double> animation;
-  AnimationController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    animation = Tween<double>(begin: 0, end: 300).animate(controller)
-      // Los dos puntos hacen referencia a la anterior variable asignada, en este caso "animation"
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-      });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -46,7 +23,8 @@ class _AlbumPictureState extends State<AlbumPicture>
       child: CachedNetworkImage(
         placeholder: (context, url) => SpinKitCubeGrid(
           color: colorAccent,
-          size: widget.size,
+          duration: Duration(seconds: 1),
+          size: widget.size - 20,
         ),
         imageUrl: widget.track.album.images[0].url,
       ),

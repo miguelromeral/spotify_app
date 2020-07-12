@@ -1,16 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/_shared/tracks/track_item.dart';
 import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/notifications.dart';
 
 class TrackList extends StatefulWidget {
-  List<Track> tracks;
-  String title;
-  bool refresh;
+  final List<Track> tracks;
+  final String title;
+  final bool refresh;
 
   TrackList({Key key, this.tracks, this.title, this.refresh}) : super(key: key);
 
@@ -21,6 +20,8 @@ class TrackList extends StatefulWidget {
 class _TrackListState extends State<TrackList> {
   // controls the text label we use as a search bar
   final TextEditingController _filter = new TextEditingController();
+  final ScrollController _controller = ScrollController();
+
   final dio = new Dio(); // for http requests
   String _searchText = "";
   Icon _searchIcon = new Icon(Icons.search);
@@ -67,7 +68,7 @@ class _TrackListState extends State<TrackList> {
   }
 
   Widget _buildList() {
-    if (!(_searchText.isEmpty)) {
+    if (_searchText.isNotEmpty) {
       String text = _searchText.toLowerCase();
       List<Track> tempList = new List();
       for (Track t in filteredTracks) {
@@ -101,25 +102,64 @@ class _TrackListState extends State<TrackList> {
   }
 
   Widget _listBuilder() {
-    return ListView.separated(
-        key: GlobalKey(),
-        separatorBuilder: (context, index) => Divider(
-              color: colorSeprator,
-            ),
-        itemCount: filteredTracks == null ? 0 : filteredTracks.length,
-        itemBuilder: (_, index) {
-          return TrackItem(track: filteredTracks[index]);
-        });
+    return DraggableScrollbar.arrows(
+      backgroundColor: colorAccent,
+      labelTextBuilder: (offset) {
+        final int currentItem = _controller.hasClients
+            ? (_controller.offset /
+                    _controller.position.maxScrollExtent *
+                    (filteredTracks == null ? 0 : filteredTracks.length))
+                .floor()
+            : -1;
+
+        return Text(
+          _getScrollThumbText(currentItem),
+          style: TextStyle(color: Colors.black),
+        );
+/*
+        return Text(
+          "$currentItem/${filteredTracks.length}",
+          style: TextStyle(color: Colors.black),
+        );*/
+      },
+      labelConstraints: BoxConstraints.tightFor(width: 80.0, height: 30.0),
+      controller: _controller,
+      child: ListView.separated(
+          controller: _controller,
+          key: GlobalKey(),
+          separatorBuilder: (context, index) => Divider(
+                color: colorSeprator,
+              ),
+          itemCount: filteredTracks == null ? 0 : filteredTracks.length,
+          itemBuilder: (_, index) {
+            return TrackItem(track: filteredTracks[index]);
+          }),
+    );
+  }
+
+  String _getScrollThumbText(int currentItem) {
+    if (currentItem != -1 && currentItem < filteredTracks.length) {
+      return _getTrackNameShort(currentItem);
+    } else if (currentItem == filteredTracks.length) {
+      return _getTrackNameShort(currentItem - 1);
+    } else {
+      return "";
+    }
+  }
+
+  String _getTrackNameShort(int currentItem) {
+    var item = filteredTracks[currentItem];
+    var text = (item.name.length < 10
+        ? item.name
+        : "${item.name.substring(0, 10)}...");
+    return text;
   }
 
   Future<void> _getData() async {
     print("pulling to refresh in list_songs!");
     if (_context != null) {
       RefreshListNotification().dispatch(_context);
-      //await Future.delayed(Duration(seconds: 5));
-      /*setState(() {
-        lastUpdate = DateTime.now();
-      });*/
+      await Future.delayed(Duration(seconds: 2));
     }
   }
 
@@ -140,7 +180,8 @@ class _TrackListState extends State<TrackList> {
         _order = _order == Order.artist ? Order.artistReverse : Order.artist;
       } else if (choice == Constants.Album) {
         _order = _order == Order.album ? Order.albumReverse : Order.album;
-      }/* else {
+      }
+      /* else {
         _order = Order.byDefault;
       }*/
       initialList = _setOrder(initialList);
@@ -149,9 +190,6 @@ class _TrackListState extends State<TrackList> {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BlocProvider.of<SpotifyBloc>(context);
-    var state = bloc.state;
-
     if (_context == null) {
       _context = context;
     }
@@ -226,12 +264,12 @@ class Constants {
   static const String TrackName = 'By Track Name';
   static const String Artist = 'By Artist';
   static const String Album = 'By Album';
- // static const String ByDefault = 'By Default';
+  // static const String ByDefault = 'By Default';
 
   static const List<String> choices = <String>[
     TrackName,
     Artist,
     Album,
- //   ByDefault,
+    //   ByDefault,
   ];
 }

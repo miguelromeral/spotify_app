@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:spotify/spotify.dart';
 import 'package:spotify_app/screens/styles.dart';
-import 'package:spotify_app/services/gui.dart';
 
 class ProfilePicture extends StatelessWidget {
-  UserPublic user;
-  double size;
+  final UserPublic user;
+  final double size;
 
-  ProfilePicture({this.user, this.size});
+  ProfilePicture({@required this.user, this.size});
 
   @override
   Widget build(BuildContext context) {

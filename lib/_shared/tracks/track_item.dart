@@ -6,10 +6,8 @@ import 'package:spotify_app/_shared/popup/popup_item_open_track.dart';
 import 'package:spotify_app/_shared/popup/popup_item_update_suggestion.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/_shared/popup/popup_item_base.dart';
-import 'package:spotify_app/screens/share_track/share_track.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'album_picture.dart';
 

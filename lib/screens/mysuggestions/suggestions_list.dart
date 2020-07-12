@@ -7,7 +7,7 @@ import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class SuggestionsList extends StatefulWidget {
-  List<Suggestion> suggestions;
+  final List<Suggestion> suggestions;
 
   SuggestionsList({Key key, this.suggestions}) : super(key: key);
 

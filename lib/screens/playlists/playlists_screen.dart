@@ -64,7 +64,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
   }
 
   Widget _buildList() {
-    if (!(_searchText.isEmpty)) {
+    if (_searchText.isNotEmpty) {
       String text = _searchText.toLowerCase();
       List<PlaylistSimple> tempList = new List();
       for (var t in filteredList) {

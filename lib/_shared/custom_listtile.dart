@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/_shared/myicon.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/_shared/popup/popup_item_base.dart';
-import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class CustomListTile extends StatefulWidget {
@@ -49,7 +48,7 @@ class _CustomListTileState extends State<CustomListTile> {
                     Expanded(
                       flex: 0,
                       child: Container(
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(4.0),
                         //color: Colors.black,
                         child: widget.leadingIcon,
                       ),
@@ -57,7 +56,7 @@ class _CustomListTileState extends State<CustomListTile> {
                     Expanded(
                       flex: 1,
                       child: Container(
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(4.0),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: widget.content),
@@ -66,7 +65,7 @@ class _CustomListTileState extends State<CustomListTile> {
                     Expanded(
                       flex: 0,
                       child: Container(
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(8.0),
                         child: _createTrailingIcon(context, state),
                       ),
                     ),

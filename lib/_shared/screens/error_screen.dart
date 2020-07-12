@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:spotify_app/_shared/custom_listtile.dart';
 import 'package:spotify_app/screens/styles.dart';
 
@@ -22,6 +21,7 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (collapsed) {
       return CustomListTile(
+        key: GlobalKey(),
         leadingIcon: Text(
           '🥺',
           style: _styleErrorIconCollapsed,

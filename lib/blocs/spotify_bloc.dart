@@ -1,5 +1,3 @@
-// Al Bloc extenderá del tipo de evento y la clase del estado que guardará
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +7,6 @@ import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
 import 'package:spotify_app/services/firestore_db.dart';
 import 'package:spotify_app/services/firebase_auth.dart';
-import 'package:spotify_app/services/local_database.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 import 'package:spotify_app/services/password_generator.dart';
 
@@ -55,10 +52,14 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             print("Error while registering new user and login in again: $e");
           }
         }
+      /*} on Authori catch (ae) {
+        if(ae.error == 'invalid_grant'){
+
+        }
+        yield SpotifyService();*/
       } catch (e) {
         print("Error while login: $e");
-        _clearCredentials();
-        yield null;
+        yield SpotifyService();
         return;
       }
       event.service.db = _db;

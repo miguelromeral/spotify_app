@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 
 class PlaylistImage extends StatelessWidget {
-  PlaylistSimple playlist;
-  double size;
+  final PlaylistSimple playlist;
+  final double size;
 
   PlaylistImage({this.playlist, this.size});
 

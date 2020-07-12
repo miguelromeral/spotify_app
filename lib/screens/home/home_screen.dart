@@ -135,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getData() async {
     if (_bloc != null) {
       _bloc.add(UpdateFeed());
+      await Future.delayed(Duration(seconds: 2));
     }
   }
 }
