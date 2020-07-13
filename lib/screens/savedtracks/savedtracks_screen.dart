@@ -35,9 +35,6 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
         builder: (context, snp) {
           if (snp.hasData) {
             List<Track> liked = snp.data;
-            //tlb = TrackListBloc(liked.map((e) => e.name).toList());
-            //tlb = TrackListBloc();
-            print("Recreating Test()");
             return NotificationListener<RefreshListNotification>(
               onNotification: (notification) {
                 _getData();

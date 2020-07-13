@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
-import 'package:spotify_app/screens/playlists/playlists_screen.dart';
+import 'package:spotify_app/screens/playlists/my_playlists_screen.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({
@@ -35,7 +35,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PlaylistsScreen()),
+                MaterialPageRoute(builder: (context) => MyPlaylistsScreen()),
               );
             },
           ),
