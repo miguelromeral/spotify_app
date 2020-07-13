@@ -7,7 +7,8 @@ import 'package:spotify_app/_shared/playlists/playlist_image.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/_shared/tracks/track_list.dart';
-import 'package:spotify_app/screens/savedtracks/test.dart';
+import 'package:spotify_app/_shared/tracks/track_list_screen.dart';
+import 'package:spotify_app/screens/playlists/playlist_tracks_screen.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -98,7 +99,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                     },
                     onTap: () async {
                       try {
-                        var expand = (await state.api.playlists
+                        /* var expand = (await state.api.playlists
                                 .getTracksByPlaylistId(pl.id)
                                 .all())
                             .toList();
@@ -106,15 +107,21 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                         var list = List<Track>();
                         for (var t in expand) {
                           list.add(t);
-                        }
+                        }*/
 
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Test(
+                            builder: (context) => PlaylistTrackScreen(
+                                api: state.api, playlist: pl),
+
+                            /* Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TrackListScreen(
                                 //key: Key('${pl.id}_${list.length}'),
                                 list: list,
-                                title: pl.name),
+                                title: pl.name),*/
 
                             /*TrackList(
                                     key: Key('${pl.id}_${list.length}'),

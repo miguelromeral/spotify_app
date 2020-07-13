@@ -15,13 +15,23 @@ import 'package:rxdart/subjects.dart';
 
 class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     implements Searcher<Track> {
-  List<Track> initialList; // = ['one','two','three','four'];
+  List<Track> initialList;
+  List<Track> originalList = new List();
   final _filteredData = BehaviorSubject<List<Track>>();
   Order _order = Order.byDefault;
 
   TrackListBloc(List<Track> list) {
     initialList = list;
+    //originalList = list;
+    copyList(list);
     _filteredData.add(initialList);
+  }
+
+  Future copyList(List<Track> list) async {
+    originalList.clear();
+    for(var t in list){
+      originalList.add(t);
+    }
   }
 
   Stream<List<Track>> get filteredData => _filteredData.stream;
@@ -45,35 +55,16 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
       _filteredData.add(initialList);*/
       await _choiceAction(Order.name);
       yield initialList;
-    }else if(event is OrderTrackArtist) {
+    } else if (event is OrderTrackArtist) {
       await _choiceAction(Order.artist);
       yield initialList;
-    }else if(event is OrderTrackAlbum){
+    } else if (event is OrderTrackAlbum) {
       await _choiceAction(Order.album);
       yield initialList;
+    } else if (event is OrderTrackDefault) {
+      await _choiceAction(Order.byDefault);
+      yield initialList;
     }
-
-    /* else if (event is UpdateFeed) {
-      state.updateFeed(await _updateFeed(state));
-      yield state;
-    } else if (event is UpdateMySuggestion) {
-      state.updateMySuggestion(await _updateMySuggestion(state));
-      yield state;
-    } else if (event is UpdateSaved) {
-      state.updateSaved(await _updateSaved(state));
-      yield state;
-    } else if (event is UpdatePlaylists) {
-      state.updatePlaylists(await _updatePlaylists(state));
-      yield state;
-    } else if (event is LogoutEvent) {
-      _clearCredentials();
-      //state.dispose();
-      //state.logout();
-      SpotifyService newone = SpotifyService();
-      yield newone;
-    } else {
-      throw Exception('oops');
-    }*/
   }
 
   Future _choiceAction(Order choice) async {
@@ -83,10 +74,9 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
       _order = _order == Order.artist ? Order.artistReverse : Order.artist;
     } else if (choice == Order.album) {
       _order = _order == Order.album ? Order.albumReverse : Order.album;
+    } else {
+      _order = Order.byDefault;
     }
-    /* else {
-        _order = Order.byDefault;
-      }*/
     //list = _setOrder(list);
 
     initialList = _setOrder(initialList);
@@ -114,7 +104,7 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
         list.sort((a, b) => _orderAlbumName(b, a));
         break;
       default:
-        return initialList;
+        return originalList;
     }
     return list;
   }
@@ -126,7 +116,6 @@ int _orderArtistName(Track a, Track b) =>
     a.artists[0].name.toLowerCase().compareTo(b.artists[0].name.toLowerCase());
 int _orderAlbumName(Track a, Track b) =>
     a.album.name.toLowerCase().compareTo(b.album.name.toLowerCase());
-
 
 enum Order {
   name,
@@ -142,12 +131,12 @@ class ConstantsOrderOptions {
   static const String TrackName = 'By Track Name';
   static const String Artist = 'By Artist';
   static const String Album = 'By Album';
-  // static const String ByDefault = 'By Default';
+  static const String ByDefault = 'By Default';
 
   static const List<String> choices = <String>[
     TrackName,
     Artist,
     Album,
-    //   ByDefault,
+    ByDefault,
   ];
 }

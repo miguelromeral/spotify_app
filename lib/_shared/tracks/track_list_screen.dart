@@ -9,17 +9,17 @@ import 'package:spotify_app/blocs/track_list_bloc.dart';
 import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/notifications.dart';
 
-class Test extends StatefulWidget {
+class TrackListScreen extends StatefulWidget {
   final String title;
   final List<Track> list;
 
-  Test({this.list, this.title});
+  TrackListScreen({this.list, this.title});
 
   @override
-  _TestState createState() => _TestState();
+  _TrackListScreenState createState() => _TrackListScreenState();
 }
 
-class _TestState extends State<Test> {
+class _TrackListScreenState extends State<TrackListScreen> {
   TrackListBloc tlb;
 
   @override
@@ -48,7 +48,7 @@ class _TestState extends State<Test> {
             onSelected: choiceAction,
             child: Icon(Icons.sort),
             itemBuilder: (BuildContext context) {
-              return Constants.choices.map((String choice) {
+              return ConstantsOrderOptions.choices.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -83,6 +83,8 @@ class _TestState extends State<Test> {
       tlb.add(OrderTrackArtist());
     } else if (choice == ConstantsOrderOptions.Album) {
       tlb.add(OrderTrackAlbum());
+    } else if (choice == ConstantsOrderOptions.ByDefault) {
+      tlb.add(OrderTrackDefault());
     }
   }
 }
