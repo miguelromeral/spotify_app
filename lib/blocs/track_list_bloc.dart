@@ -29,7 +29,7 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
 
   Future copyList(List<Track> list) async {
     originalList.clear();
-    for(var t in list){
+    for (var t in list) {
       originalList.add(t);
     }
   }
@@ -74,8 +74,8 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
       _order = _order == Order.artist ? Order.artistReverse : Order.artist;
     } else if (choice == Order.album) {
       _order = _order == Order.album ? Order.albumReverse : Order.album;
-    } else {
-      _order = Order.byDefault;
+    } else if (choice == Order.byDefault){
+      _order = _order == Order.byDefault ? Order.byDefaultReverse : Order.byDefault;
     }
     //list = _setOrder(list);
 
@@ -103,8 +103,10 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
       case Order.albumReverse:
         list.sort((a, b) => _orderAlbumName(b, a));
         break;
-      default:
+      case Order.byDefault:
         return originalList;
+      case Order.byDefaultReverse:
+        return originalList.reversed.toList();
     }
     return list;
   }
@@ -125,6 +127,7 @@ enum Order {
   album,
   albumReverse,
   byDefault,
+  byDefaultReverse,
 }
 
 class ConstantsOrderOptions {

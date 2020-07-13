@@ -99,36 +99,11 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                     },
                     onTap: () async {
                       try {
-                        /* var expand = (await state.api.playlists
-                                .getTracksByPlaylistId(pl.id)
-                                .all())
-                            .toList();
-
-                        var list = List<Track>();
-                        for (var t in expand) {
-                          list.add(t);
-                        }*/
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => PlaylistTrackScreen(
                                 api: state.api, playlist: pl),
-
-                            /* Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TrackListScreen(
-                                //key: Key('${pl.id}_${list.length}'),
-                                list: list,
-                                title: pl.name),*/
-
-                            /*TrackList(
-                                    key: Key('${pl.id}_${list.length}'),
-                                    tracks: list,
-                                    title: pl.name,
-                                    refresh: false,
-                                  )*/
                           ),
                         );
                       } catch (err) {

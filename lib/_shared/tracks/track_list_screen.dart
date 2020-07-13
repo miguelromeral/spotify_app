@@ -10,10 +10,11 @@ import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/notifications.dart';
 
 class TrackListScreen extends StatefulWidget {
+  final Key key;
   final String title;
   final List<Track> list;
 
-  TrackListScreen({this.list, this.title});
+  TrackListScreen({this.key, this.list, this.title});
 
   @override
   _TrackListScreenState createState() => _TrackListScreenState();

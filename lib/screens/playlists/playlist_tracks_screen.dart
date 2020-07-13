@@ -37,11 +37,6 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
     setState(() {
       tracks = expand;
     });
-/*
-    var list = List<Track>();
-    for (var t in expand) {
-      list.add(t);
-    }*/
   }
 
   @override
@@ -66,6 +61,7 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
           return true;
         },
         child: TrackListScreen(
+          key: Key(tracks.length.toString()),
           list: tracks,
           title: widget.playlist.name,
         ),
