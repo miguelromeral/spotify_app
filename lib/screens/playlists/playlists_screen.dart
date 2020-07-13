@@ -7,6 +7,7 @@ import 'package:spotify_app/_shared/playlists/playlist_image.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/_shared/tracks/track_list.dart';
+import 'package:spotify_app/screens/savedtracks/test.dart';
 import 'package:spotify_app/services/gui.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -110,12 +111,18 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => TrackList(
+                            builder: (context) => Test(
+                                //key: Key('${pl.id}_${list.length}'),
+                                list: list,
+                                title: pl.name),
+
+                            /*TrackList(
                                     key: Key('${pl.id}_${list.length}'),
                                     tracks: list,
                                     title: pl.name,
                                     refresh: false,
-                                  )),
+                                  )*/
+                          ),
                         );
                       } catch (err) {
                         print(err);

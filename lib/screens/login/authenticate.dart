@@ -16,10 +16,11 @@ class Authenticate extends StatefulWidget {
   _AuthenticateState createState() => _AuthenticateState();
 }
 
-enum _loginState { loadingSaved, waitingUser, loading }
+enum _loginState { loadingSaved, waitingUser, tokenRevoked, loading }
 
 class _AuthenticateState extends State<Authenticate> {
   SpotifyApi _api;
+  bool errorInLogin = false;
   //  TODO: ARREGLAR QUE SI EL TOKEN SE REVOCA, SE VUELVA A ESTA PANTALLA DE FORMA SEGURA
   _loginState _state = _loginState.loadingSaved;
 
@@ -37,46 +38,10 @@ class _AuthenticateState extends State<Authenticate> {
     }
   }
 
-  Widget _buildBody(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) {
-        switch (_state) {
-          case _loginState.waitingUser:
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  RaisedButton(
-                      child: Text('Log In'),
-                      onPressed: () async {
-                        login(context);
-                      }),
-                ],
-              ),
-            );
-          case _loginState.loadingSaved:
-            return LoadingScreen();
-          case _loginState.loading:
-            if (_api != null) {
-              context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
-            }
-            return LoadingScreen(
-              below: [
-                Text("Please, wait until you've been loged in."),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Text("This may take a few seconds."),
-              ],
-            );
-          default:
-            return ErrorScreen(
-              title: 'Error while Login.',
-              stringBelow: ['Please, try again later.'],
-            );
-        }
-      },
-    );
+  Future _answerLoginError() async {
+    setState(() {
+      _state = _loginState.waitingUser;
+    });
   }
 
   @override
@@ -85,21 +50,68 @@ class _AuthenticateState extends State<Authenticate> {
     super.dispose();
   }
 
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  Future<void> _showSnackBar(var text, context) async {
+    _scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text(text)));
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Login to FriendHits!'),
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) {
-          /*if (state != null)
-            return _buildBody(context);
-          else
-            setState(() {
-              _state = _loginState.waitingUser;
-            });*/
-          return _buildBody(context);
+          errorInLogin = state.errorInLogin;
+          switch (_state) {
+            case _loginState.waitingUser:
+            case _loginState.tokenRevoked:
+              if (_state == _loginState.tokenRevoked) {
+                //print("Snackbar");
+                /*var sb = SnackBar(
+                    content: Text(
+                        ));
+                _scaffoldKey.currentState.showSnackBar(sb);*/
+                _showSnackBar('Your session has expired. Please, log in manually.', context);
+                //Scaffold.of(context).showSnackBar(sb);
+              }
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RaisedButton(
+                        child: Text('Log In'),
+                        onPressed: () async {
+                          login(context);
+                        }),
+                  ],
+                ),
+              );
+            case _loginState.loadingSaved:
+              return LoadingScreen();
+            case _loginState.loading:
+              if (_api != null) {
+                context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
+              }
+              return LoadingScreen(
+                below: [
+                  Text("Please, wait until you've been loged in."),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text("This may take a few seconds."),
+                ],
+              );
+            default:
+              return ErrorScreen(
+                title: 'Error while Login.',
+                stringBelow: ['Please, try again later.'],
+              );
+          }
         },
       ),
     );
@@ -119,6 +131,12 @@ class _AuthenticateState extends State<Authenticate> {
         _api = SpotifyApi(credentials);
         _state = _loginState.loading;
       });
+      await Future.delayed(Duration(seconds: 3));
+      if (errorInLogin) {
+        setState(() {
+          _state = _loginState.tokenRevoked;
+        });
+      }
     } else {
       setState(() {
         _state = _loginState.waitingUser;

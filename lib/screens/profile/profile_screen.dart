@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'My Profile',
+        titleText: 'My Profile',
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
         return Center(

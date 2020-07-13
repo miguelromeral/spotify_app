@@ -29,7 +29,7 @@ dependencies:
   uni_links: ^0.4.0
   provider: ^4.0.5
   path_provider: ^1.6.11
-  cached_network_image: ^2.2.0+1
+  cached_network_image: ^2.0.0
   firebase_auth: ^0.14.0+5
   shared_preferences: ^0.5.7+3
   cloud_firestore: ^0.13.7
@@ -42,7 +42,7 @@ dependencies:
   flutter_spinkit: "^4.1.2"
   progress_indicators: ^0.1.5
   draggable_scrollbar: ^0.0.4
-
+  search_app_bar: ^1.0.2+2
 
 
   # The following adds the Cupertino Icons font to your application.

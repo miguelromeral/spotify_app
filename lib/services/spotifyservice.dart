@@ -20,6 +20,7 @@ class SpotifyService {
   LocalDB _localDB;
   bool logedin = false;
   Track toShare;
+  bool errorInLogin = false;
   //Following following;
 
   StreamController<List<Track>> _scSaved = new StreamController.broadcast();
@@ -65,6 +66,11 @@ class SpotifyService {
 
   SpotifyService.withApi(SpotifyApi miapi) {
     api = miapi;
+    errorInLogin = false;
+  }
+
+  SpotifyService.errorLogin(){
+    errorInLogin = true;
   }
 
   bool isInit = false;

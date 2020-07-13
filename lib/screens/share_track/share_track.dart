@@ -26,7 +26,7 @@ class _ShareTrackState extends State<ShareTrack> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Share Track',
+        titleText: 'Share Track',
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) => Container(

@@ -21,7 +21,7 @@ class _SuggestionsListState extends State<SuggestionsList> {
     return Flexible(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: 'My Suggestions',
+          titleText: 'My Suggestions',
         ),
         body: BlocBuilder<SpotifyBloc, SpotifyService>(
           builder: (context, state) {

@@ -2,9 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:search_app_bar/filter.dart';
+import 'package:search_app_bar/search_app_bar.dart';
+import 'package:spotify/spotify.dart';
 import 'package:spotify_app/_shared/screens/loading_screen.dart';
+import 'package:spotify_app/_shared/tracks/track_item.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/blocs/track_list_bloc.dart';
+import 'package:spotify_app/screens/savedtracks/test.dart';
 import 'package:spotify_app/services/notifications.dart';
 import 'package:spotify_app/_shared/tracks/track_list.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
@@ -16,6 +22,7 @@ class SavedTracksScreen extends StatefulWidget {
 
 class _SavedTracksScreenState extends State<SavedTracksScreen> {
   SpotifyBloc _bloc;
+  TrackListBloc tlb;
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +35,16 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
         stream: state.saved,
         builder: (context, snp) {
           if (snp.hasData) {
-            var liked = snp.data;
-            return Scaffold(
-              body: Center(
-                child: NotificationListener<RefreshListNotification>(
-                  onNotification: (notification) {
-                    _getData();
-                    return true;
-                  },
-                  child: TrackList(
-                    key: Key(liked.length.toString()),
-                    tracks: liked,
-                    title: 'My Saved Songs',
-                    refresh: true,
-                  ),
-                  //),
-                ),
-              ),
+            List<Track> liked = snp.data;
+            //tlb = TrackListBloc(liked.map((e) => e.name).toList());
+            //tlb = TrackListBloc();
+            print("Recreating Test()");
+            return NotificationListener<RefreshListNotification>(
+              onNotification: (notification) {
+                _getData();
+                return true;
+              },
+              child: Test(list: liked, title: 'My Saved Songs',),
             );
           } else {
             BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());

@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: "My Friends Suggestions",
+            titleText: "My Friends Suggestions",
           ),
           body: Center(
             child: _buildBody(),

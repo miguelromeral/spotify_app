@@ -6,47 +6,47 @@ import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/services/notifications.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  @override
+  final String titleText;
 
-  CustomAppBar({this.title}) : preferredSize = Size.fromHeight(60.0);
+  CustomAppBar({this.titleText});
 
   @override
-  final Size preferredSize;
+  final Size preferredSize = Size.fromHeight(60.0);
+  @override
+  final double elevation = 0.0;
 
   @override
   Widget build(BuildContext context) {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
     return AppBar(
-      title: Row(
-        children: [
-          FutureBuilder<User>(
-            future: state.myUser,
-            initialData: null,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return GestureDetector(
-                  onTap: () {
-                    OpenDrawerNotification().dispatch(context);
-                  },
-                  child: ProfilePicture(
-                    user: snapshot.data,
-                    size: 40.0,
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },
-          ),
-          SizedBox(
-            width: 12.0,
-          ),
-          Text(title),
-        ],
+      leading: Container(
+        padding: EdgeInsets.all(8.0),
+        child: FutureBuilder<User>(
+          future: state.myUser,
+          initialData: null,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return GestureDetector(
+                onTap: () {
+                  OpenDrawerNotification().dispatch(context);
+                },
+                child: ProfilePicture(
+                  user: snapshot.data,
+                  size: 40.0,
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // By default, show a loading spinner.
+            return CircularProgressIndicator();
+          },
+        ),
       ),
+      title: Text(titleText),
+      centerTitle: true,
     );
   }
 }

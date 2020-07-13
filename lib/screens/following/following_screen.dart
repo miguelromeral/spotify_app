@@ -24,7 +24,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
           builder: (context, widget) {
             return Scaffold(
               appBar: CustomAppBar(
-                title: 'Follow App Users',
+                titleText: 'Follow App Users',
               ),
               body: Center(
                 child: FollowingList(),

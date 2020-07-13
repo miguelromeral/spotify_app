@@ -18,79 +18,17 @@ class TrackList extends StatefulWidget {
 }
 
 class _TrackListState extends State<TrackList> {
-  // controls the text label we use as a search bar
-  final TextEditingController _filter = new TextEditingController();
+
   final ScrollController _controller = ScrollController();
 
-  final dio = new Dio(); // for http requests
-  String _searchText = "";
-  Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle; // = new Text('${widget.title}');
+  List<Track> list;
+
   BuildContext _context;
-  DateTime lastUpdate;
 
   Order _order;
 
-  List<Track> initialList = new List();
-  List<Track> filteredTracks = new List();
-
-  _TrackListState() {
-    _filter.addListener(() {
-      if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-          filteredTracks = initialList;
-        });
-      } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
-      }
-    });
-  }
-
-  void _searchPressed() {
-    setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close);
-        this._appBarTitle = new TextField(
-          controller: _filter,
-          decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
-        );
-      } else {
-        this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text(widget.title);
-        filteredTracks = initialList;
-        _filter.clear();
-      }
-    });
-  }
 
   Widget _buildList() {
-    if (_searchText.isNotEmpty) {
-      String text = _searchText.toLowerCase();
-      List<Track> tempList = new List();
-      for (Track t in filteredTracks) {
-        bool hit = false;
-        if (t.name.toLowerCase().contains(text)) {
-          hit = true;
-        }
-        if (!hit) {
-          for (var a in t.artists) {
-            if (a.name.toLowerCase().contains(text)) {
-              hit = true;
-              break;
-            }
-          }
-        }
-        if (hit) {
-          tempList.add(t);
-        }
-      }
-      filteredTracks = tempList;
-    }
-
     if (widget.refresh) {
       return RefreshIndicator(
         onRefresh: _getData,
@@ -108,7 +46,7 @@ class _TrackListState extends State<TrackList> {
         final int currentItem = _controller.hasClients
             ? (_controller.offset /
                     _controller.position.maxScrollExtent *
-                    (filteredTracks == null ? 0 : filteredTracks.length))
+                    (list == null ? 0 : list.length))
                 .floor()
             : -1;
 
@@ -116,11 +54,7 @@ class _TrackListState extends State<TrackList> {
           _getScrollThumbText(currentItem),
           style: TextStyle(color: Colors.black),
         );
-/*
-        return Text(
-          "$currentItem/${filteredTracks.length}",
-          style: TextStyle(color: Colors.black),
-        );*/
+
       },
       labelConstraints: BoxConstraints.tightFor(width: 80.0, height: 30.0),
       controller: _controller,
@@ -130,17 +64,17 @@ class _TrackListState extends State<TrackList> {
           separatorBuilder: (context, index) => Divider(
                 color: colorSeprator,
               ),
-          itemCount: filteredTracks == null ? 0 : filteredTracks.length,
+          itemCount: list == null ? 0 : list.length,
           itemBuilder: (_, index) {
-            return TrackItem(track: filteredTracks[index]);
+            return TrackItem(track: list[index]);
           }),
     );
   }
 
   String _getScrollThumbText(int currentItem) {
-    if (currentItem != -1 && currentItem < filteredTracks.length) {
+    if (currentItem != -1 && currentItem < list.length) {
       return _getTrackNameShort(currentItem);
-    } else if (currentItem == filteredTracks.length) {
+    } else if (currentItem == list.length) {
       return _getTrackNameShort(currentItem - 1);
     } else {
       return "";
@@ -148,7 +82,7 @@ class _TrackListState extends State<TrackList> {
   }
 
   String _getTrackNameShort(int currentItem) {
-    var item = filteredTracks[currentItem];
+    var item = list[currentItem];
     var text = (item.name.length < 10
         ? item.name
         : "${item.name.substring(0, 10)}...");
@@ -165,9 +99,7 @@ class _TrackListState extends State<TrackList> {
 
   @override
   void initState() {
-    initialList = widget.tracks;
-    filteredTracks = widget.tracks;
-    _appBarTitle = new Text('${widget.title}');
+    list = widget.tracks;
     _order = Order.byDefault;
     super.initState();
   }
@@ -184,7 +116,7 @@ class _TrackListState extends State<TrackList> {
       /* else {
         _order = Order.byDefault;
       }*/
-      initialList = _setOrder(initialList);
+      list = _setOrder(list);
     });
   }
 
@@ -194,6 +126,8 @@ class _TrackListState extends State<TrackList> {
       _context = context;
     }
 
+    return  _buildList();
+/*
     return Flexible(
       child: Scaffold(
           appBar: AppBar(centerTitle: true, title: _appBarTitle, actions: [
@@ -201,7 +135,7 @@ class _TrackListState extends State<TrackList> {
               icon: _searchIcon,
               onPressed: _searchPressed,
             ),
-            PopupMenuButton<String>(
+            /*PopupMenuButton<String>(
               onSelected: choiceAction,
               child: Icon(Icons.sort),
               itemBuilder: (BuildContext context) {
@@ -212,10 +146,10 @@ class _TrackListState extends State<TrackList> {
                   );
                 }).toList();
               },
-            ),
+            ),*/
           ]),
           body: _buildList()),
-    );
+    );*/
   }
 
   List<Track> _setOrder(List<Track> list) {
@@ -245,10 +179,12 @@ class _TrackListState extends State<TrackList> {
   }
 }
 
-int _orderName(Track a, Track b) => a.name.compareTo(b.name);
+int _orderName(Track a, Track b) =>
+    a.name.toLowerCase().compareTo(b.name.toLowerCase());
 int _orderArtistName(Track a, Track b) =>
-    a.artists[0].name.compareTo(b.artists[0].name);
-int _orderAlbumName(Track a, Track b) => a.album.name.compareTo(b.album.name);
+    a.artists[0].name.toLowerCase().compareTo(b.artists[0].name.toLowerCase());
+int _orderAlbumName(Track a, Track b) =>
+    a.album.name.toLowerCase().compareTo(b.album.name.toLowerCase());
 
 enum Order {
   name,

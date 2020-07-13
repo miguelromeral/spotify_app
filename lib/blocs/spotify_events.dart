@@ -24,3 +24,11 @@ class UpdateSaved extends SpotifyEventBase {}
 class UpdatePlaylists extends SpotifyEventBase {}
 
 class LogoutEvent extends SpotifyEventBase {}
+
+
+class TrackBlocEvent {}
+
+class OrderTrackName extends TrackBlocEvent {}
+class OrderTrackArtist extends TrackBlocEvent {}
+class OrderTrackAlbum extends TrackBlocEvent {}
+

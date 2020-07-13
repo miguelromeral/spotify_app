@@ -26,7 +26,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       try {
         var cred = await event.service.api.getCredentials();
         //if (event.saveCredentials) {
-          _saveCredentials(cred);
+        _saveCredentials(cred);
         //} else {
         //  _clearCredentials();
         //}
@@ -52,14 +52,14 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             print("Error while registering new user and login in again: $e");
           }
         }
-      /*} on Authori catch (ae) {
+        /*} on Authori catch (ae) {
         if(ae.error == 'invalid_grant'){
 
         }
         yield SpotifyService();*/
-      } catch (e) {
-        print("Error while login: $e");
-        yield SpotifyService();
+      } catch (ae) {
+        print("Error while login: $ae");
+        yield SpotifyService.errorLogin();
         return;
       }
       event.service.db = _db;
