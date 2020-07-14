@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:spotify/spotify.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/models/suggestion.dart';
 
@@ -15,9 +16,9 @@ class FirestoreService {
   static const String defaultTrackId = 'null';
 
   /// *******************************************
-  /// 
+  ///
   /// SUGGESTIONS
-  /// 
+  ///
   ///********************************************
 
   List<Suggestion> _suggestionListFromSnapshot(QuerySnapshot snapshot) {
@@ -91,10 +92,21 @@ class FirestoreService {
   }
 
   /// *******************************************
-  /// 
+  ///
   /// FOLLOWING
-  /// 
+  ///
   ///********************************************
+
+  Future<List<Following>> searchFollowing(String query) async {
+    return cFollowing
+        .where(Following.fname, isGreaterThanOrEqualTo: query)
+        .getDocuments()
+        .then((QuerySnapshot value) => _followingListFromSnapshot(value));
+    /*.catchError(onError){
+        print("Error: $onError");
+        return null;
+    });*/
+  }
 
   Future<Following> getMyFollowing() async {
     return getFollowingBySpotifyUserID(spotifyUserID);
@@ -103,6 +115,19 @@ class FirestoreService {
   Future<Following> getFollowingBySpotifyUserID(String suserid) async {
     var data = await cFollowing.document(suserid).get();
     return Following.fromDocumentSnapshot(data);
+  }
+
+  Future<bool> updateDisplayName(UserPublic me) async {
+    try {
+      var mine = await getMyFollowing();
+      mine.reference.updateData(<String, dynamic>{
+        Following.fname: me.displayName,
+      });
+      return true;
+    } catch (e) {
+      print("Error when adding following: $e");
+    }
+    return false;
   }
 
   Future<bool> addFollowing(Following fol, String suserid) async {
@@ -149,11 +174,11 @@ class FirestoreService {
     return cFollowing.snapshots().map(_followingListFromSnapshot);
   }
 
-  int getFollowers(Following me, List<Following> all){
+  int getFollowers(Following me, List<Following> all) {
     int total = 0;
-    for(var f in all){
+    for (var f in all) {
       //if(f.users.contains(me.suserid)){
-      if(f.suserid != me.suserid && f.users.contains(me.suserid)){
+      if (f.suserid != me.suserid && f.users.contains(me.suserid)) {
         total++;
       }
     }

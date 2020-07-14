@@ -7,6 +7,8 @@ class Following {
   static const String ffuserid = 'fuserid';
   String users;
   static const String fusers = 'users';
+  String name;
+  static const String fname = 'name';
   DocumentReference reference;
   int followedBy = 0;
 
@@ -17,12 +19,14 @@ class Following {
     suserid = data[fsuserid] ?? '';
     fuserid = data[ffuserid] ?? '';
     users = data[fusers] ?? '';
+    name = data[fname] ?? '';
   }
 
   Following.fromDocumentSnapshot(DocumentSnapshot doc) {
     suserid = doc.data[fsuserid] ?? '';
     fuserid = doc.data[ffuserid] ?? '';
     users = doc.data[fusers] ?? '';
+    name = doc.data[fname] ?? '';
     reference = doc.reference;
   }
 
@@ -31,6 +35,7 @@ class Following {
       fsuserid: suserid,
       ffuserid: fsuserid,
       fusers: users,
+      fname: name,
     };
   }
 
@@ -40,7 +45,7 @@ class Following {
     return list;
   }
 
-  int get followingCount => usersList.length - 1;
+  int get followingCount => usersList.length;
 
   String concatenateUser(String suserid) {
     users = '$users$suserid$delimiter';

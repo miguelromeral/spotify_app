@@ -95,8 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         content: snp.data.length.toString(),
                                       );
                                     } else {
-                                      BlocProvider.of<SpotifyBloc>(context)
-                                          .add(UpdateSaved());
+                                      //BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
                                       return Text('Unknown Saveds');
                                     }
                                   },

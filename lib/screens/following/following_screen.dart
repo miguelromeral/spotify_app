@@ -6,6 +6,8 @@ import 'package:spotify_app/_shared/custom_appbar.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/screens/following/following_list.dart';
 import 'package:spotify_app/models/following.dart';
+import 'package:spotify_app/screens/following/following_search_screen.dart';
+import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
 class FollowingScreen extends StatefulWidget {
@@ -18,7 +20,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
+    return _createBody(context);
+    /*return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         return StreamProvider<List<Following>>.value(
           builder: (context, widget) {
@@ -26,6 +29,77 @@ class _FollowingScreenState extends State<FollowingScreen> {
               appBar: CustomAppBar(
                 titleText: 'Follow App Users',
               ),
+              body: Center(
+                //child: Text('ey'),//FollowingList(),
+                
+                ),
+              ),
+              floatingActionButton: FloatingActionButton.extended(
+                key: GlobalKey(),
+                onPressed: () async {
+                  var bloc = BlocProvider.of<SpotifyBloc>(context);
+                  await _displayDialog(context, bloc);
+                  bloc.add(UpdateFeed());
+                },
+                icon: Icon(Icons.add),
+                label: Text("Follow New User"),
+              ),
+            );
+          },
+          value: state.db.following,
+        );
+      },
+    );*/
+  }
+
+  Widget _createBody(BuildContext context) {
+    return SearchUserScreen();
+    /*return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(Icons.search),
+                text: 'Search Users',
+              ),
+              Tab(
+                icon: Icon(Icons.all_inclusive),
+                text: 'All Users',
+              ),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            _createSearchUsersScreen(context),
+            _createAllUsersScreen(context),
+          ],
+        ),
+      ),
+    );*/
+  }
+
+  Widget _createSearchUsersScreen(BuildContext context) {
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: Center(
+            child: Text('ey'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _createAllUsersScreen(BuildContext context) {
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) {
+        return StreamProvider<List<Following>>.value(
+          builder: (context, widget) {
+            return Scaffold(
               body: Center(
                 child: FollowingList(),
               ),

@@ -34,6 +34,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
         _db = await _login(_auth, email, pwd, user.id);
+        _db.updateDisplayName(user);
         print("Logged $email.");
       } on PlatformException catch (err) {
         print("Error while login: PlatformException: $err");
@@ -42,6 +43,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             dynamic firebaseuser =
                 await _auth.registerWithEmailAndPassword(email, pwd);
             _db = await _login(_auth, email, pwd, user.id);
+            _db.updateDisplayName(user);
             _db.initializeFollowing();
             /*if (user != null && firebaseuser is FirebaseUser) {
               _db = DatabaseService(firebaseUserID: firebaseuser.uid);
@@ -107,6 +109,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   }
 
   Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
+    state.updateFollowing(await _updateFollowing(state));
     return await state.db.getsuggestions();
   }
 

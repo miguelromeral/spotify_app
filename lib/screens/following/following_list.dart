@@ -39,25 +39,11 @@ class _FollowingListState extends State<FollowingList> {
                   /*if(state.db.firebaseUserID == item.fuserid){
                       bloc.add(UpdateFollowing());
                     }*/
-                  return FutureBuilder(
-                      future: state.api.users.get(item.suserid),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          UserPublic user = snapshot.data;
-                          item.followedBy = state.db.getFollowers(item, fol);
-
-                          return FollowingItem(
-                            myFollowings: myFollowings,
-                            user: user,
-                            following: item,
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      });
+                  return FollowingItem(
+                    myFollowings: myFollowings,
+                    suserid: item.suserid,
+                    //following: item,
+                  );
                 }));
       });
     } else {

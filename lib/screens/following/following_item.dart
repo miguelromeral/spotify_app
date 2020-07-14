@@ -14,10 +14,10 @@ import 'package:spotify_app/services/spotifyservice.dart';
 
 class FollowingItem extends StatefulWidget {
   final Following myFollowings;
-  final Following following;
-  final UserPublic user;
+  //final Following following;
+  final String suserid;
 
-  FollowingItem({this.myFollowings, this.following, this.user});
+  FollowingItem({this.myFollowings, /*this.following,*/ this.suserid});
 
   @override
   _FollowingItemState createState() => _FollowingItemState();
@@ -27,7 +27,7 @@ class _FollowingItemState extends State<FollowingItem> {
   bool liked;
 
   bool get currentlyFollowing =>
-      widget.myFollowings.usersList.contains(widget.user.id);
+      widget.myFollowings.usersList.contains(widget.suserid);
 
   @override
   void initState() {
@@ -42,26 +42,45 @@ class _FollowingItemState extends State<FollowingItem> {
 
   Widget _newListTile(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      return CustomListTile(
-        key: Key(widget.user.id),
-        leadingIcon: ProfilePicture(
-          user: widget.user,
-          size: 50.0,
-        ),
-        trailingIcon: _followingIcon(state),
-        content: _createContent(),
-        bottomIcons: _createBottomBar(context, state, widget.user),
-        menuItems: _getActions(state, widget.user),
+      return FutureBuilder(
+        future: state.db.getFollowingBySpotifyUserID(widget.suserid),
+        builder: (context, snp) {
+          // TODO: check if null
+          Following fol = snp.data;
+          if (fol == null) return Text('Fol null in FollowingItem');
+          return FutureBuilder(
+              future: state.api.users.get(widget.suserid),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  UserPublic user = snapshot.data;
+                  return CustomListTile(
+                    key: Key(widget.suserid),
+                    leadingIcon: ProfilePicture(
+                      user: user,
+                      size: 50.0,
+                    ),
+                    trailingIcon: _followingIcon(fol, user, state),
+                    content: _createContent(user),
+                    bottomIcons: _createBottomBar(fol, context, state, user),
+                    menuItems: _getActions(state, user),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              });
+        },
       );
     });
   }
 
-  List<Widget> _createContent() {
+  List<Widget> _createContent(UserPublic user) {
     return [
       Container(
         //color: Colors.green,
         child: Text(
-          widget.user.displayName,
+          user.displayName,
           style: styleFeedTitle,
         ),
       ),
@@ -69,14 +88,16 @@ class _FollowingItemState extends State<FollowingItem> {
       Container(
         //color: Colors.yellow[100],
         child: Text(
-          "ID: ${widget.user.id}",
+          "ID: ${widget.suserid}",
           style: styleFeedTrack,
         ),
       ),
     ];
   }
 
+
   List<Widget> _createBottomBar(
+    Following fol,
       BuildContext context, SpotifyService state, UserPublic user) {
     List<Widget> list = List();
 
@@ -89,10 +110,10 @@ class _FollowingItemState extends State<FollowingItem> {
         SizedBox(
           width: 4.0,
         ),
-        Text('Following: ${widget.following.followingCount}'),
+        Text('Following: ${fol.followingCount}'),
       ],
     ));
-    list.add(Row(
+    /*list.add(Row(
       children: [
         MyIcon(
           icon: 'user_broadcast',
@@ -101,20 +122,20 @@ class _FollowingItemState extends State<FollowingItem> {
         SizedBox(
           width: 4.0,
         ),
-        Text('Followers: ${widget.following.followedBy}'),
+        Text('Followers: ${fol.followedBy}'),
       ],
-    ));
+    ));*/
     return list;
   }
 
-  Widget _followingIcon(SpotifyService state) {
+  Widget _followingIcon(Following fol, UserPublic user, SpotifyService state) {
     var size = 27.0;
     if (currentlyFollowing) {
       return MyIcon(
         icon: 'heart_filled',
         size: size,
         callback: () {
-          _followUnfollow(state);
+          _followUnfollow(fol, user, state);
         },
       );
     } else {
@@ -122,28 +143,29 @@ class _FollowingItemState extends State<FollowingItem> {
         icon: 'heart_empty',
         size: size,
         callback: () {
-          _followUnfollow(state);
+          _followUnfollow(fol, user, state);
         },
       );
     }
   }
 
-  Future _followUnfollow(SpotifyService state) async {
-    if (state.db.firebaseUserID != widget.following.fuserid) {
+  Future _followUnfollow(
+      Following fol, UserPublic user, SpotifyService state) async {
+    if (state.db.firebaseUserID != fol.fuserid) {
       if (currentlyFollowing) {
-        await state.db.removeFollowing(widget.myFollowings, widget.user.id);
+        await state.db.removeFollowing(widget.myFollowings, widget.suserid);
         Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('You no longer follow ${widget.user.displayName}!')));
+            content: Text('You no longer follow ${user.displayName}!')));
       } else {
-        await state.db.addFollowing(widget.myFollowings, widget.user.id);
-        Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('You followed ${widget.user.displayName}!')));
+        await state.db.addFollowing(widget.myFollowings, widget.suserid);
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text('You followed ${user.displayName}!')));
       }
 
       BlocProvider.of<SpotifyBloc>(context).add(UpdateFeed());
     } else {
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+          SnackBar(content: Text('You Can Not Unfollow Yourself!')));
     }
   }
 

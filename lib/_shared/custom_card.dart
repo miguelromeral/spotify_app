@@ -23,9 +23,11 @@ class _CustomCardState extends State<CustomCard> {
         ),
         margin: EdgeInsets.symmetric(vertical: 4.0),
         width: constraints.maxWidth - 30.0,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: widget.content,
+        child: Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.content,
+          ),
         ),
       );
     });
