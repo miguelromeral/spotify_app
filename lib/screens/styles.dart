@@ -50,7 +50,7 @@ ThemeData _buildAppTheme() {
       buttonTextTheme: ButtonTextTheme.accent,
     ),
     bottomNavigationBarTheme: base.bottomNavigationBarTheme.copyWith(
-      backgroundColor: Colors.red,
+      backgroundColor: colorSemiBackground,
       elevation: 300,
     ),
   );

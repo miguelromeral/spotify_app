@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spotify_app/screens/following/following_screen.dart';
 import 'package:spotify_app/screens/home/home_screen.dart';
 import 'package:spotify_app/screens/profile/profile_screen.dart';
 import 'package:spotify_app/screens/savedtracks/savedtracks_screen.dart';
@@ -22,11 +21,11 @@ class TabNavigationItem {
           icon: Icon(Icons.home),
           title: Text("Home"),
         ),
-        TabNavigationItem(
-          page: FollowingScreen(),
+        /*TabNavigationItem(
+          page: SearchUserScreen(),
           icon: Icon(Icons.tag_faces),
           title: Text("Users"),
-        ),
+        ),*/
         TabNavigationItem(
           page: SavedTracksScreen(),
           icon: Icon(Icons.music_note),

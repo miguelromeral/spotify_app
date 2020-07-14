@@ -10,87 +10,35 @@ import 'package:spotify_app/screens/following/following_search_screen.dart';
 import 'package:spotify_app/screens/styles.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
-class FollowingScreen extends StatefulWidget {
+class AllUsersScreen extends StatefulWidget {
   @override
-  _FollowingScreenState createState() => _FollowingScreenState();
+  _AllUsersScreenState createState() => _AllUsersScreenState();
 }
 
-class _FollowingScreenState extends State<FollowingScreen> {
+class _AllUsersScreenState extends State<AllUsersScreen> {
   TextEditingController _textFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return _createBody(context);
-    /*return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) {
-        return StreamProvider<List<Following>>.value(
-          builder: (context, widget) {
-            return Scaffold(
-              appBar: CustomAppBar(
-                titleText: 'Follow App Users',
-              ),
-              body: Center(
-                //child: Text('ey'),//FollowingList(),
-                
-                ),
-              ),
-              floatingActionButton: FloatingActionButton.extended(
-                key: GlobalKey(),
-                onPressed: () async {
-                  var bloc = BlocProvider.of<SpotifyBloc>(context);
-                  await _displayDialog(context, bloc);
-                  bloc.add(UpdateFeed());
-                },
-                icon: Icon(Icons.add),
-                label: Text("Follow New User"),
-              ),
-            );
-          },
-          value: state.db.following,
-        );
-      },
-    );*/
   }
 
   Widget _createBody(BuildContext context) {
-    return SearchUserScreen();
-    /*return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                icon: Icon(Icons.search),
-                text: 'Search Users',
-              ),
-              Tab(
-                icon: Icon(Icons.all_inclusive),
-                text: 'All Users',
-              ),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            _createSearchUsersScreen(context),
-            _createAllUsersScreen(context),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('All Users'),
       ),
-    );*/
-  }
-
-  Widget _createSearchUsersScreen(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: Center(
-            child: Text('ey'),
-          ),
-        );
-      },
+      body: _createAllUsersScreen(context),
+      floatingActionButton: FloatingActionButton.extended(
+        key: GlobalKey(),
+        onPressed: () async {
+          var bloc = BlocProvider.of<SpotifyBloc>(context);
+          await _displayDialog(context, bloc);
+          bloc.add(UpdateFeed());
+        },
+        icon: Icon(Icons.add),
+        label: Text("Follow New User"),
+      ),
     );
   }
 
@@ -99,20 +47,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
       builder: (context, state) {
         return StreamProvider<List<Following>>.value(
           builder: (context, widget) {
-            return Scaffold(
-              body: Center(
-                child: FollowingList(),
-              ),
-              floatingActionButton: FloatingActionButton.extended(
-                key: GlobalKey(),
-                onPressed: () async {
-                  var bloc = BlocProvider.of<SpotifyBloc>(context);
-                  await _displayDialog(context, bloc);
-                  bloc.add(UpdateFeed());
-                },
-                icon: Icon(Icons.add),
-                label: Text("Follow New User"),
-              ),
+            return Center(
+              child: FollowingList(),
             );
           },
           value: state.db.following,

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spotify/spotify.dart';
+import 'package:spotify_app/_shared/users/profile_picture.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
 import 'package:spotify_app/blocs/spotify_events.dart';
+import 'package:spotify_app/screens/following/all_users_screen.dart';
+import 'package:spotify_app/screens/following/following_search_screen.dart';
 import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
 import 'package:spotify_app/screens/playlists/my_playlists_screen.dart';
+import 'package:spotify_app/services/spotifyservice.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({
@@ -15,48 +20,93 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: Colors.blue,
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) => Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            /*DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),*/
+            FutureBuilder(
+              future: state.myUser,
+              builder: (context, snp) {
+                if (snp.hasData) {
+                  User me = snp.data;
+                  return UserAccountsDrawerHeader(
+                    accountName: Text(me.displayName),
+                    accountEmail: Text(me.email),
+                    currentAccountPicture: ProfilePicture(
+                      user: me,
+                    ),
+                  );
+                } else {
+                  return DrawerHeader(
+                    child: Text('Loading User...'),
+                    /*decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),*/
+                  );
+                }
+              },
             ),
-          ),
-          ListTile(
-            title: Text('My Playlists'),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyPlaylistsScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('My Suggestions'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MySuggestionsScreen()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text('Logout'),
-            onTap: () {
-              Navigator.pop(context);
-              BlocProvider.of<SpotifyBloc>(context).add(LogoutEvent());
-            },
-          ),
-        ],
+            ListTile(
+              title: Text('My Playlists'),
+              onTap: () async {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyPlaylistsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Search Users'),
+              onTap: () async {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchUserScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('All Users'),
+              onTap: () async {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllUsersScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('My Suggestions'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MySuggestionsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Logout'),
+              onTap: () {
+                Navigator.pop(context);
+                BlocProvider.of<SpotifyBloc>(context).add(LogoutEvent());
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

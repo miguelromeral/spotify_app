@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_app/_shared/screens/loading_screen.dart';
 import 'package:spotify_app/blocs/spotify_bloc.dart';
+import 'package:spotify_app/blocs/spotify_events.dart';
 import 'package:spotify_app/models/following.dart';
 import 'package:spotify_app/services/spotifyservice.dart';
 
@@ -110,16 +112,22 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
         return StreamBuilder<Following>(
             stream: state.following,
             builder: (context, snapshot) {
-              var fol = snapshot.data;
-              print("Fol: ${fol}");
-              if (fol == null) return Text('fol null');
-              return Scaffold(
-                appBar: _buildBar(context),
-                body: Container(
-                  child: _buildList(fol),
-                ),
-                resizeToAvoidBottomPadding: false,
-              );
+              if (snapshot.hasData) {
+                var fol = snapshot.data;
+                return Scaffold(
+                  appBar: _buildBar(context),
+                  body: Container(
+                    child: _buildList(fol),
+                  ),
+                  resizeToAvoidBottomPadding: false,
+                );
+              } else {
+                _bloc.add(UpdateFeed());
+                return Scaffold(
+                  appBar: _buildBar(context),
+                  body: LoadingScreen(),
+                );
+              }
             });
       },
     );
@@ -129,10 +137,12 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
     return new AppBar(
       centerTitle: true,
       title: _appBarTitle,
-      leading: new IconButton(
-        icon: _searchIcon,
-        onPressed: _searchPressed,
-      ),
+      actions: [
+        new IconButton(
+          icon: _searchIcon,
+          onPressed: _searchPressed,
+        ),
+      ],
     );
   }
 }

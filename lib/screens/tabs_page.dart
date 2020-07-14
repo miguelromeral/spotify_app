@@ -113,10 +113,7 @@ class _TabsPageState extends State<TabsPage> {
         ),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
-              // sets the background color of the `BottomNavigationBar`
               canvasColor: colorSemiBackground,
-              // sets the active color of the `BottomNavigationBar` if `Brightness` is light
-              primaryColor: Colors.red,
               textTheme: Theme.of(context).textTheme.copyWith(
                   caption: new TextStyle(
                       color: Colors
