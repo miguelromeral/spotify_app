@@ -80,14 +80,14 @@ class _CustomListTileState extends State<CustomListTile> {
     );
   }
 
-  Widget _createTrailingIcon(BuildContext context, SpotifyService state){
-    if(widget.trailingIcon == null && widget.bottomIcons == null){
-      if(widget.menuItems == null){
+  Widget _createTrailingIcon(BuildContext context, SpotifyService state) {
+    if (widget.trailingIcon == null && widget.bottomIcons == null) {
+      if (widget.menuItems == null || widget.menuItems.isEmpty) {
         return Container();
-      }else{
+      } else {
         return _createMenu(state);
       }
-    }else{
+    } else {
       return widget.trailingIcon;
     }
   }

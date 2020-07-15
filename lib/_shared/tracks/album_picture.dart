@@ -18,16 +18,35 @@ class _AlbumPictureState extends State<AlbumPicture>
     with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: CachedNetworkImage(
-        placeholder: (context, url) => SpinKitCubeGrid(
-          color: colorAccent,
-          duration: Duration(seconds: 1),
-          size: widget.size - 20,
+    /*if (widget.track != null &&
+        widget.track.album != null &&
+        widget.track.album.images != null &&
+        widget.track.album.images.length > 0) {*/
+    if (widget.track.id != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: CachedNetworkImage(
+          placeholder: (context, url) => SpinKitCubeGrid(
+            color: colorAccent,
+            duration: Duration(seconds: 1),
+            size: widget.size - 20,
+          ),
+          imageUrl: widget.track.album.images[0].url,
         ),
-        imageUrl: widget.track.album.images[0].url,
-      ),
-    );
+      );
+    } else {
+      return CircleAvatar(
+        backgroundColor: Colors.white,
+        child: Icon(Icons.music_note),
+        /* Text(
+            'LF',
+            style: TextStyle(
+              fontSize: 24.0,
+              color: Colors.black,
+            ),
+            ),
+          */
+      );
+    }
   }
 }

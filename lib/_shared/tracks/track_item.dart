@@ -40,6 +40,7 @@ class _TrackItemState extends State<TrackItem> {
   }
 
   List<PopupMenuItem<PopupItemBase>> _getActions() {
+    if (widget.track.id == null) return [];
     return [
       PopupItemOpenTrack(track: widget.track).create(),
       PopupItemUpdateSuggestion(track: widget.track).create(),
@@ -47,7 +48,7 @@ class _TrackItemState extends State<TrackItem> {
     ];
   }
 
-  String _getShareContent(){
+  String _getShareContent() {
     return '${widget.track.name}, by ${widget.track.artists[0].name}';
   }
 
@@ -66,7 +67,12 @@ class _TrackItemState extends State<TrackItem> {
       Text(
         "${widget.track.album.name}",
         style: styleFeedArtist,
-      )
+      ),
+      SizedBox(height: 4.0),
+      Text(
+        "${widget.track.popularity}% pop.",
+        style: styleFeedAgo,
+      ),
     ];
   }
 

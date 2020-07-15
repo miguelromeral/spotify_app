@@ -82,6 +82,10 @@ class _ShareTrackState extends State<ShareTrack> {
             SizedBox(
               height: 8.0,
             ),
+            Text('Duration: ${printDuration(Duration(milliseconds: widget.track.durationMs))}'),
+            Text('Explicit: ${widget.track.explicit}'),
+            Text('Popularity: ${widget.track.popularity}'),
+
             Form(
                 key: _formKey,
                 child: Column(children: <Widget>[
