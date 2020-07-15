@@ -78,7 +78,7 @@ class _ShareTrackState extends State<ShareTrack> {
                             // you'd often call a server or save the information in a database.
 
                             var spUser = state.myUser;
-                            var sug = await state.db.updateUserData(
+                            var sug = await state.updateUserData(
                                 spUser.id, widget.track.id, _description);
 
                             await state.insertSuggestion(sug);

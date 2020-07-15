@@ -91,7 +91,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           Text('My Last Suggestion'),
           SizedBox(height: 8.0,),
           FutureBuilder(
-            future: state.db.getSuggestion(widget.user.id),
+            future: state.getSuggestion(widget.user.id),
             builder: (context, snp) {
               if (snp.hasData) {
                 Suggestion sug = snp.data;

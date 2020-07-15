@@ -33,7 +33,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
 
   void _getNames(String query) async {
     print('Retrieving: $query');
-    dynamic list = await _bloc.state.db.searchFollowing(query);
+    dynamic list = await _bloc.state.searchFollowing(query);
 
     if (list == null) {
       setState(() {
@@ -41,7 +41,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
         print('No List Found');
       });
     } else {
-      var mf = await _bloc.state.db.getMyFollowing();
+      var mf = await _bloc.state.getMyFollowing();
       setState(() {
         myFollowing = mf;
         names = list;

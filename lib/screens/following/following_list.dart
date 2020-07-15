@@ -24,8 +24,8 @@ class _FollowingListState extends State<FollowingList> {
     if (fol != null && fol.length > 0) {
       return BlocBuilder<SpotifyBloc, SpotifyService>(
           builder: (context, state) {
-        Following myFollowings = fol.firstWhere(
-            (element) => element.fuserid == state.db.firebaseUserID);
+        Following myFollowings = fol
+            .firstWhere((element) => element.fuserid == state.myFirebaseUserId);
 
         return Flexible(
             child: ListView.separated(

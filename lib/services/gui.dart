@@ -7,8 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
     Track track) async {
-  if (state.db.firebaseUserID != suggestion.fuserid) {
-    await state.db.likeSuggestion(suggestion);
+  if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
+    await state.likeSuggestion(suggestion);
 
     //bloc.add(UpdateFeed());
     UpdatedFeedNotification().dispatch(context);

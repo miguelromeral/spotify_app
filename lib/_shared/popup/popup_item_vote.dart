@@ -17,8 +17,8 @@ class PopupItemVote extends PopupItemBase {
 
   @override
   void execute(BuildContext context) async {
-    if (state.db.firebaseUserID != suggestion.fuserid) {
-      await state.db.likeSuggestion(suggestion);
+    if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
+      await state.likeSuggestion(suggestion);
 
       //bloc.add(UpdateFeed());
       UpdatedFeedNotification().dispatch(context);

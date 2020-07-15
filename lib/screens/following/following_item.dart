@@ -44,7 +44,7 @@ class _FollowingItemState extends State<FollowingItem> {
   Widget _newListTile(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       return FutureBuilder(
-        future: state.db.getFollowingBySpotifyUserID(widget.suserid),
+        future: state.getFollowingBySpotifyUserID(widget.suserid),
         builder: (context, snp) {
           // TODO: check if null
           Following fol = snp.data;
@@ -156,13 +156,13 @@ class _FollowingItemState extends State<FollowingItem> {
 
   Future _followUnfollow(
       Following fol, UserPublic user, SpotifyService state) async {
-    if (state.db.firebaseUserID != fol.fuserid) {
+    if (!state.firebaseUserIdEquals(fol.fuserid)) {
       if (currentlyFollowing) {
-        await state.db.removeFollowing(widget.myFollowings, widget.suserid);
+        await state.removeFollowing(widget.myFollowings, widget.suserid);
         Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('You no longer follow ${user.displayName}!')));
       } else {
-        await state.db.addFollowing(widget.myFollowings, widget.suserid);
+        await state.addFollowing(widget.myFollowings, widget.suserid);
         Scaffold.of(context).showSnackBar(
             SnackBar(content: Text('You followed ${user.displayName}!')));
       }

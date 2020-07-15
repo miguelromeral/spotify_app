@@ -151,7 +151,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
           content: _content(),
           bottomIcons: _createBottomBar(state),
           menuItems: _getActions(widget.track, widget.user, widget.suggestion,
-              state.db.spotifyUserID, state),
+              state.mySpotifyUserId, state),
         );
       },
     );

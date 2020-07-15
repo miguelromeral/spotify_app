@@ -67,7 +67,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         yield SpotifyService.errorLogin();
         return;
       }
-      event.service.db = _db;
+      event.service.updateDB(_db);
       event.service.init();
       event.service.auth = _auth;
       _load(event.service);
@@ -91,7 +91,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     } else if (event is LogoutEvent) {
       print("Login out in BLOC...");
       _clearCredentials();
-      //state.dispose();
+      state.dispose();
       //state.logout();
       SpotifyService newone = SpotifyService();
       yield newone;
@@ -109,16 +109,16 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   }
 
   Future<Following> _updateFollowing(SpotifyService state) async {
-    return await state.db.getMyFollowing();
+    return await state.getMyFollowing();
   }
 
   Future<Suggestion> _updateMySuggestion(SpotifyService state) async {
-    return await state.db.getMySuggestion();
+    return await state.getMySuggestion();
   }
 
   Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
     state.updateFollowing(await _updateFollowing(state));
-    return await state.db.getsuggestions();
+    return await state.getsuggestions();
   }
 
   Future<List<Track>> _updateSaved(SpotifyService state) async {

@@ -16,7 +16,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       return FutureBuilder(
-        future: state.getSuggestionsBySpotifyUserID(state.db.spotifyUserID),
+        future: state.getMySuggestions(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Suggestion> list = snapshot.data;

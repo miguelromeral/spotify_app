@@ -16,7 +16,7 @@ import 'local_database.dart';
 class SpotifyService {
   SpotifyApi api;
   FirebaseAuthService auth;
-  FirestoreService db;
+  FirestoreService _db;
   LocalDB _localDB;
   bool logedin = false;
   Track toShare;
@@ -42,7 +42,6 @@ class SpotifyService {
 
   User myUser;
 
-
   void updateFeed(List<Suggestion> newFeed) {
     _scFeed.add(newFeed);
   }
@@ -63,7 +62,7 @@ class SpotifyService {
     _scPlaylists.add(list);
   }
 
-  void updateMyUser(User me){
+  void updateMyUser(User me) {
     myUser = me;
   }
 
@@ -76,7 +75,7 @@ class SpotifyService {
     errorInLogin = false;
   }
 
-  SpotifyService.errorLogin(){
+  SpotifyService.errorLogin() {
     errorInLogin = true;
   }
 
@@ -104,39 +103,6 @@ class SpotifyService {
     toShare = null;
   }
 
-  Future followUnfollow(BuildContext context, Following following, Following myFollowings,
-      bool currentlyFollowing, UserPublic user) async {
-    if (db.firebaseUserID != following.fuserid) {
-      if (currentlyFollowing) {
-        await db.removeFollowing(myFollowings, user.id);
-        Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('You no longer follow ${user.displayName}!')));
-      } else {
-        await db.addFollowing(myFollowings, user.id);
-        Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text('You followed ${user.displayName}!')));
-      }
-
-      BlocProvider.of<SpotifyBloc>(context).add(UpdateFeed());
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
-    }
-  }
-
-  //Future<User> get myUser => api == null ? null : api.me.get();
-
-  Future<Iterable<PlaylistSimple>> get myPlaylists =>
-      api == null ? null : api.playlists.me.all();
-
-  void getFollowers(Me me) {
-    var following = me.following(FollowingType.artist);
-    /*for(var f in following){
-      print
-    }*/
-    print("Following: $following");
-  }
-
   void login() {
     logedin = true;
   }
@@ -145,7 +111,7 @@ class SpotifyService {
     logedin = false;
     api = null;
     auth = null;
-    db = null;
+    _db = null;
     _localDB = null;
     toShare = null;
   }
@@ -162,16 +128,91 @@ class SpotifyService {
   }
 
   /// ****************************************
-  /// 
+  ///
   /// LOCAL DB
-  /// 
+  ///
   ///**************************************
 
   Future insertSuggestion(Suggestion sug) async {
     await _localDB.insertSuggestion(sug);
   }
 
-  Future<List<Suggestion>> getSuggestionsBySpotifyUserID(String suserid) async {
-    return await _localDB.suggestions(suserid);
+  Future<List<Suggestion>> getSuggestionsBySpotifyUserID(
+          String suserid) async =>
+      await _localDB.suggestions(suserid);
+
+  Future<List<Suggestion>> getMySuggestions() async =>
+      await _localDB.suggestions(_db.spotifyUserID);
+
+  /// ****************************************
+  ///
+  /// FIRESTORE DB
+  ///
+  ///**************************************
+
+  void updateDB(FirestoreService db) {
+    _db = db;
   }
+
+  bool firebaseUserIdEquals(String fuserid) {
+    return _db.firebaseUserID == fuserid;
+  }
+
+  Future likeSuggestion(Suggestion sug) async {
+    return await _db.likeSuggestion(sug);
+  }
+
+  Future followUnfollow(BuildContext context, Following following,
+      Following myFollowings, bool currentlyFollowing, UserPublic user) async {
+    if (_db.firebaseUserID != following.fuserid) {
+      if (currentlyFollowing) {
+        await _db.removeFollowing(myFollowings, user.id);
+        Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('You no longer follow ${user.displayName}!')));
+      } else {
+        await _db.addFollowing(myFollowings, user.id);
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text('You followed ${user.displayName}!')));
+      }
+
+      BlocProvider.of<SpotifyBloc>(context).add(UpdateFeed());
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+    }
+  }
+
+  Future<Suggestion> updateUserData(
+          String spotifyuserid, String trackid, String text) async =>
+      await _db.updateUserData(spotifyuserid, trackid, text);
+
+  Future<Suggestion> getMySuggestion() async => await _db.getMySuggestion();
+
+  Future<Suggestion> getSuggestion(String suserid) async =>
+      await _db.getSuggestion(suserid);
+
+  Future<List<Following>> searchFollowing(String query) async =>
+      await _db.searchFollowing(query);
+
+  Future<Following> getMyFollowing() async => await _db.getMyFollowing();
+
+  String get myFirebaseUserId => _db.firebaseUserID;
+
+  String get mySpotifyUserId => _db.spotifyUserID;
+
+  Future<bool> addFollowing(Following fol, String suserid) async =>
+      await _db.addFollowing(fol, suserid);
+
+  Future removeFollowing(Following fol, String suserid) async =>
+      await _db.removeFollowing(fol, suserid);
+
+  Future<Following> getFollowingBySpotifyUserID(String suserid) async =>
+      await _db.getFollowingBySpotifyUserID(suserid);
+
+  Future<bool> addFollowingByUserId(String suserid) async =>
+      await _db.addFollowingByUserId(suserid);
+
+  Stream<List<Following>> get allFollowings => _db.following;
+
+  Future<List<Suggestion>> getsuggestions() async => await _db.getsuggestions();
 }

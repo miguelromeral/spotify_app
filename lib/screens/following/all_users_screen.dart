@@ -51,7 +51,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
               child: FollowingList(),
             );
           },
-          value: state.db.following,
+          value: state.allFollowings,
         );
       },
     );
@@ -85,7 +85,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
 
   Future _handleAddition(
       SpotifyService state, String suserid, BuildContext context) async {
-    var success = await state.db.addFollowingByUserId(suserid);
+    var success = await state.addFollowingByUserId(suserid);
     if (success) {
       _showDialog(
           "New Following", "You're now following the user with ID $suserid!");
