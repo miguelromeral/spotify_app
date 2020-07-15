@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -14,14 +15,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider.value(
-      value: FirebaseAuthService().user,
-      child: BlocProvider<SpotifyBloc>(
-        create: (context) => SpotifyBloc(),
-        child: MaterialApp(
-          home: Wrapper(),
-          theme: appTheme,
-        ),
-      ),
-    );
+        value: FirebaseAuthService().user,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<LocalDbBloc>(
+              create: (BuildContext context) => LocalDbBloc(),
+            ),
+            BlocProvider<SpotifyBloc>(
+              create: (BuildContext context) => SpotifyBloc(),
+            ),
+          ],
+          child: MaterialApp(
+            home: Wrapper(),
+            theme: appTheme,
+          ),
+        ));
   }
 }

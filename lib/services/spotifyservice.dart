@@ -132,7 +132,7 @@ class SpotifyService {
   /// LOCAL DB
   ///
   ///**************************************
-
+/*
   Future insertSuggestion(Suggestion sug) async {
     await _localDB.insertSuggestion(sug);
   }
@@ -143,7 +143,7 @@ class SpotifyService {
 
   Future<List<Suggestion>> getMySuggestions() async =>
       await _localDB.suggestions(_db.spotifyUserID);
-
+*/
   /// ****************************************
   ///
   /// FIRESTORE DB

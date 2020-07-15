@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/_shared/custom_listtile.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
@@ -131,6 +132,10 @@ class _FollowingItemState extends State<FollowingItem> {
     var size = 27.0;
     if (currentlyFollowing) {
       return RaisedButton.icon(
+        textColor: Colors.black,
+        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.white)),
         onPressed: () async {
           _followUnfollow(fol, user, state);
         },
@@ -142,6 +147,11 @@ class _FollowingItemState extends State<FollowingItem> {
       );
     } else {
       return RaisedButton.icon(
+      
+        color: colorPrimary,
+        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.white)),
         onPressed: () async {
           _followUnfollow(fol, user, state);
         },

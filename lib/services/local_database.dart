@@ -4,14 +4,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class LocalDB {
+  bool isInit = false;
   Future<Database> database;
 
   LocalDB() {
-    init();
+    //init();
   }
 
   Future init() async {
     // Open the database and store the reference.
+    print("Openning Database");
     database = openDatabase(
       // Set the path to the database. Note: Using the `join` function from the
       // `path` package is best practice to ensure the path is correctly
@@ -28,6 +30,7 @@ class LocalDB {
       // path to perform database upgrades and downgrades.
       version: 1,
     );
+    isInit = true;
   }
 
 // Define a function that inserts dogs into the database
@@ -44,6 +47,7 @@ class LocalDB {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
 
   // A method that retrieves all the dogs from the dogs table.
   Future<List<Suggestion>> suggestions(String mySpotifyUserId) async {
