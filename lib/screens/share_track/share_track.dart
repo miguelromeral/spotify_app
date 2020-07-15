@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/_shared/tracks/album_picture.dart';
-import 'package:spotify_app/_shared/custom_appbar.dart';
-import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/_shared/tracks/album_picture.dart';
+import 'package:ShareTheMusic/_shared/custom_appbar.dart';
+import 'package:ShareTheMusic/services/notifications.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class ShareTrack extends StatefulWidget {
   final Track track;
@@ -77,7 +77,7 @@ class _ShareTrackState extends State<ShareTrack> {
                             // If the form is valid, display a snackbar. In the real world,
                             // you'd often call a server or save the information in a database.
 
-                            var spUser = await state.myUser;
+                            var spUser = state.myUser;
                             var sug = await state.db.updateUserData(
                                 spUser.id, widget.track.id, _description);
 

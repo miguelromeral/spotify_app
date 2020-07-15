@@ -1,5 +1,5 @@
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import '../services/spotifyservice.dart';
 
 class SpotifyEventBase {}
 
@@ -24,6 +24,7 @@ class UpdateSaved extends SpotifyEventBase {}
 class UpdatePlaylists extends SpotifyEventBase {}
 
 class LogoutEvent extends SpotifyEventBase {}
+
 
 
 class TrackBlocEvent {}

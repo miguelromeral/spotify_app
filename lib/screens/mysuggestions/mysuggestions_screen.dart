@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/screens/mysuggestions/suggestions_list.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/screens/mysuggestions/suggestions_list.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class MySuggestionsScreen extends StatefulWidget {
   @override

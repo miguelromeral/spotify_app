@@ -1,19 +1,19 @@
-import 'dart:async';
+/*import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/custom_card.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/_shared/card_info.dart';
-import 'package:spotify_app/_shared/custom_appbar.dart';
-import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
-import 'package:spotify_app/_shared/users/profile_picture.dart';
-import 'package:spotify_app/services/gui.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/custom_card.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/_shared/card_info.dart';
+import 'package:ShareTheMusic/_shared/custom_appbar.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
+import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
+import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -30,8 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
         return Center(
-          child: FutureBuilder<User>(
-            future: state.myUser,
+          child: StreamBuilder<User>(
+            stream: state.myUser,
             initialData: null,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -216,3 +216,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 }
+*/

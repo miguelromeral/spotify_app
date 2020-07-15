@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/custom_listtile.dart';
-import 'package:spotify_app/_shared/popup/popup_item_open_track.dart';
-import 'package:spotify_app/_shared/popup/popup_item_update_suggestion.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/popup/popup_item_base.dart';
-import 'package:spotify_app/services/gui.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/custom_listtile.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_open_track.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_share.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_update_suggestion.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
+import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 import 'album_picture.dart';
 
@@ -42,7 +43,12 @@ class _TrackItemState extends State<TrackItem> {
     return [
       PopupItemOpenTrack(track: widget.track).create(),
       PopupItemUpdateSuggestion(track: widget.track).create(),
+      PopupItemShare(shareContent: _getShareContent(), title: 'Share Track').create(),
     ];
+  }
+
+  String _getShareContent(){
+    return '${widget.track.name}, by ${widget.track.artists[0].name}';
   }
 
   List<Widget> _content() {

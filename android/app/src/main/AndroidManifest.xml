@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="spotify_app"
+        android:label="ShareTheTrack"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -50,7 +50,7 @@
         <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
         <!-- es.miguelromeral.spotifyapp://login.com -->
         <data
-          android:scheme="es.miguelromeral.spotifyapp"
+          android:scheme="es.miguelromeral.spotifyfriends"
           android:host="login.com" />
       </intent-filter>
       

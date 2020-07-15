@@ -1,5 +1,5 @@
-name: spotify_app
-description: A new Flutter project.
+name: ShareTheMusic
+description: Social app to share your favorite Spotify tracks with your friends.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -43,6 +43,7 @@ dependencies:
   progress_indicators: ^0.1.5
   draggable_scrollbar: ^0.0.4
   search_app_bar: ^1.0.2+2
+  share: ^0.6.4+3
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -2,13 +2,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/services/firestore_db.dart';
-import 'package:spotify_app/services/firebase_auth.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
-import 'package:spotify_app/services/password_generator.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/services/firestore_db.dart';
+import 'package:ShareTheMusic/services/firebase_auth.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
+import 'package:ShareTheMusic/services/password_generator.dart';
+import 'spotify_events.dart';
 
 class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   // Estado inicial
@@ -34,6 +35,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
         _db = await _login(_auth, email, pwd, user.id);
+        event.service.updateMyUser(user);
         _db.updateDisplayName(user);
         print("Logged $email.");
       } on PlatformException catch (err) {
@@ -43,6 +45,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             dynamic firebaseuser =
                 await _auth.registerWithEmailAndPassword(email, pwd);
             _db = await _login(_auth, email, pwd, user.id);
+            event.service.updateMyUser(user);
             _db.updateDisplayName(user);
             _db.initializeFollowing();
             /*if (user != null && firebaseuser is FirebaseUser) {
@@ -70,18 +73,23 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       _load(event.service);
       yield event.service;
     } else if (event is UpdateFeed) {
+      print("Updating My Feed in BLOC...");
       state.updateFeed(await _updateFeed(state));
       yield state;
     } else if (event is UpdateMySuggestion) {
+      print("Updating My Suggestion in BLOC...");
       state.updateMySuggestion(await _updateMySuggestion(state));
       yield state;
     } else if (event is UpdateSaved) {
+      print("Updating My Saved Tracks in BLOC...");
       state.updateSaved(await _updateSaved(state));
       yield state;
     } else if (event is UpdatePlaylists) {
+      print("Updating My Playlists in BLOC...");
       state.updatePlaylists(await _updatePlaylists(state));
       yield state;
     } else if (event is LogoutEvent) {
+      print("Login out in BLOC...");
       _clearCredentials();
       //state.dispose();
       //state.logout();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/screens/tabs_page.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/screens/tabs_page.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'login/authenticate.dart';
 
 class Wrapper extends StatefulWidget {

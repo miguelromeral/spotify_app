@@ -1,17 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify_app/_shared/myicon.dart';
-import 'package:spotify_app/_shared/popup/popup_item_open_track.dart';
-import 'package:spotify_app/_shared/popup/popup_item_vote.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/popup/popup_item_base.dart';
-import 'package:spotify_app/_shared/tracks/album_picture.dart';
-import 'package:spotify_app/_shared/users/profile_picture.dart';
-import 'package:spotify_app/services/gui.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:share/share.dart';
+import 'package:ShareTheMusic/_shared/myicon.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_open_track.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_share.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_vote.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
+import 'package:ShareTheMusic/_shared/tracks/album_picture.dart';
+import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
+import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/models/suggestion.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
 
 import '../custom_listtile.dart';
 
@@ -53,7 +55,18 @@ class _SuggestionItemState extends State<SuggestionItem> {
       list.add(PopupItemVote(track: track, suggestion: suggestion, state: state)
           .create());
     }
+    list.add(PopupItemShare(
+            shareContent: _getShareContent(), title: 'Share Suggestion')
+        .create());
     return list;
+  }
+
+  String _getShareContent() {
+    if (widget.user == null) {
+      return '${widget.track.name}, by ${widget.track.artists[0].name}';
+    } else {
+      return '${widget.user.displayName} recommends "${widget.track.name}", by ${widget.track.artists[0].name}';
+    }
   }
 
   Widget _createLeadingIcon(UserPublic user, Track track) {
@@ -212,6 +225,14 @@ class _SuggestionItemState extends State<SuggestionItem> {
     ));
     list.add(SizedBox(
       width: 8.0,
+    ));
+
+    list.add(Container(
+      padding: EdgeInsets.all(8.0),
+      child: MyIcon(
+          icon: 'share',
+          size: 20.0,
+          callback: () => Share.share(_getShareContent())),
     ));
 
     return list;

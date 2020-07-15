@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_app/_shared/custom_listtile.dart';
-import 'package:spotify_app/screens/styles.dart';
+import 'package:ShareTheMusic/_shared/custom_listtile.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String title;

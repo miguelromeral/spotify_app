@@ -5,13 +5,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/mydrawer.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/models/tab_navigation_item.dart';
-import 'package:spotify_app/screens/share_track/share_track.dart';
-import 'package:spotify_app/screens/styles.dart';
-import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/mydrawer.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/models/tab_navigation_item.dart';
+import 'package:ShareTheMusic/screens/share_track/share_track.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/notifications.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class TabsPage extends StatefulWidget {
   @override

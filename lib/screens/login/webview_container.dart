@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewContainer extends StatefulWidget {

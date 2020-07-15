@@ -2,19 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/screens/loading_screen.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 import 'following_item.dart';
 
 class SearchUserScreen extends StatefulWidget {
   final Key key;
-  final String title;
 
-  SearchUserScreen({this.key, this.title});
+  SearchUserScreen({this.key});
 
   @override
   _SearchUserScreenState createState() => _SearchUserScreenState();
@@ -26,9 +26,10 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   String _searchText = "";
   List<Following> names = new List<Following>(); // names we get from API
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Search Example');
+  Widget _appBarTitle = new Text(title);
   Following myFollowing;
   SpotifyBloc _bloc;
+  static String title = 'Search Users by Name';
 
   void _getNames(String query) async {
     print('Retrieving: $query');
@@ -60,7 +61,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text('Search Example');
+        this._appBarTitle = new Text(title);
         _filter.clear();
       }
     });
@@ -68,9 +69,11 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
 
   _SearchUserScreenState() {
     _filter.addListener(() {
+      print("Filter Text: ${_filter.text}");
       if (_filter.text.isEmpty) {
         setState(() {
           _searchText = "";
+          names = List();
         });
       } else {
         setState(() {
@@ -82,7 +85,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   }
 
   Widget _buildList(Following fol) {
-    if (names.isNotEmpty) {
+    if (names.isNotEmpty && _filter.text.isNotEmpty) {
       return ListView.builder(
           itemCount: names == null ? 0 : names.length,
           itemBuilder: (BuildContext context, int index) {
@@ -96,8 +99,17 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
               suserid: names[index].suserid,
             );
           });
+    } else if (_filter.text.isNotEmpty) {
+      return ErrorScreen(
+        title: "No users found with that criteria.",
+        stringBelow: ['Please, try a different search.'],
+      );
     } else {
-      return Text('Type something.');
+      return Container(
+        child: Center(
+          child: Text("Type the user's name in the search bar."),
+        ),
+      );
     }
   }
 

@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify_app/_shared/custom_listtile.dart';
-import 'package:spotify_app/_shared/myicon.dart';
-import 'package:spotify_app/_shared/popup/popup_item_open_user.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/_shared/users/profile_picture.dart';
+import 'package:ShareTheMusic/_shared/custom_listtile.dart';
+import 'package:ShareTheMusic/_shared/myicon.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_open_user.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/popup/popup_item_base.dart';
-import 'package:spotify_app/services/gui.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
+import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class FollowingItem extends StatefulWidget {
   final Following myFollowings;
@@ -95,10 +96,8 @@ class _FollowingItemState extends State<FollowingItem> {
     ];
   }
 
-
-  List<Widget> _createBottomBar(
-    Following fol,
-      BuildContext context, SpotifyService state, UserPublic user) {
+  List<Widget> _createBottomBar(Following fol, BuildContext context,
+      SpotifyService state, UserPublic user) {
     List<Widget> list = List();
 
     list.add(Row(
@@ -131,20 +130,26 @@ class _FollowingItemState extends State<FollowingItem> {
   Widget _followingIcon(Following fol, UserPublic user, SpotifyService state) {
     var size = 27.0;
     if (currentlyFollowing) {
-      return MyIcon(
-        icon: 'heart_filled',
-        size: size,
-        callback: () {
+      return RaisedButton.icon(
+        onPressed: () async {
           _followUnfollow(fol, user, state);
         },
+        icon: MyIcon(
+          icon: 'heart_filled',
+          size: size,
+        ),
+        label: Text('Unfollow'),
       );
     } else {
-      return MyIcon(
-        icon: 'heart_empty',
-        size: size,
-        callback: () {
+      return RaisedButton.icon(
+        onPressed: () async {
           _followUnfollow(fol, user, state);
         },
+        icon: MyIcon(
+          icon: 'heart_empty',
+          size: size,
+        ),
+        label: Text('Follow!'),
       );
     }
   }
@@ -175,6 +180,7 @@ class _FollowingItemState extends State<FollowingItem> {
 
 //    list.add(PopupItem.createFollowUserOption(user, currentlyFollowing, _followUnfollowCallback(state)));
     list.add(PopupItemOpenUser(user: user).create());
+    list.add(PopupItemOpenProfile(user: user).create());
     return list;
   }
 }

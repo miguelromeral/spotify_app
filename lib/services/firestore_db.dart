@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/models/suggestion.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
 
 class FirestoreService {
   final String spotifyUserID;
@@ -53,9 +53,13 @@ class FirestoreService {
   }
 
   Future<Suggestion> getMySuggestion() async {
+    return await getSuggestion(spotifyUserID);
+  }
+
+  Future<Suggestion> getSuggestion(String suserid) async {
     try {
       return Suggestion.fromDocumentSnapshot(
-          await cSuggestions.document(spotifyUserID).get());
+          await cSuggestions.document(suserid).get());
     } catch (err) {
       print("error while getting suggestion: $err");
       return null;

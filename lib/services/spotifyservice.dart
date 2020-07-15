@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/services/firestore_db.dart';
-import 'package:spotify_app/services/firebase_auth.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/services/firestore_db.dart';
+import 'package:ShareTheMusic/services/firebase_auth.dart';
 
 import 'local_database.dart';
 
@@ -40,6 +40,9 @@ class SpotifyService {
   StreamController<Following> _scFollowing = new StreamController.broadcast();
   Stream<Following> get following => _scFollowing.stream;
 
+  User myUser;
+
+
   void updateFeed(List<Suggestion> newFeed) {
     _scFeed.add(newFeed);
   }
@@ -58,6 +61,10 @@ class SpotifyService {
 
   void updatePlaylists(List<PlaylistSimple> list) {
     _scPlaylists.add(list);
+  }
+
+  void updateMyUser(User me){
+    myUser = me;
   }
 
   static final String redirectUri = "es.miguelromeral.spotifyapp://login.com";
@@ -117,7 +124,7 @@ class SpotifyService {
     }
   }
 
-  Future<User> get myUser => api == null ? null : api.me.get();
+  //Future<User> get myUser => api == null ? null : api.me.get();
 
   Future<Iterable<PlaylistSimple>> get myPlaylists =>
       api == null ? null : api.playlists.me.all();

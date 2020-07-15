@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/custom_sliver_appbar.dart';
-import 'package:spotify_app/_shared/screens/error_screen.dart';
-import 'package:spotify_app/_shared/screens/loading_screen.dart';
-import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
-import 'package:spotify_app/_shared/users/profile_picture.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/custom_appbar.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/services/firestore_db.dart';
-import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/custom_sliver_appbar.dart';
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
+import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/_shared/custom_appbar.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/services/firestore_db.dart';
+import 'package:ShareTheMusic/services/notifications.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 import '../styles.dart';
 

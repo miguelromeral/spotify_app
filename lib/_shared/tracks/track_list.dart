@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/tracks/track_item.dart';
-import 'package:spotify_app/screens/styles.dart';
-import 'package:spotify_app/services/notifications.dart';
+import 'package:ShareTheMusic/_shared/tracks/track_item.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/notifications.dart';
 
 class TrackList extends StatefulWidget {
   final List<Track> tracks;

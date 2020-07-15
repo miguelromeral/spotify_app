@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/screens/styles.dart';
-import 'package:spotify_app/screens/wrapper.dart';
-import 'package:spotify_app/services/firebase_auth.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/screens/wrapper.dart';
+import 'package:ShareTheMusic/services/firebase_auth.dart';
 
 void main() {
   runApp(MyApp());

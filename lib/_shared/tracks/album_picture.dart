@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/screens/styles.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
 
 class AlbumPicture extends StatefulWidget {
   final Track track;

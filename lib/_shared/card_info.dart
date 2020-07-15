@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_app/services/gui.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 
 class CardInfo extends StatelessWidget {
   final String title;

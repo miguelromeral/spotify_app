@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/services/notifications.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,

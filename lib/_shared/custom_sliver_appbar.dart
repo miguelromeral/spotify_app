@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/users/profile_picture.dart';
-import 'package:spotify_app/services/notifications.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import '../_shared/users/profile_picture.dart';
+import '../services/notifications.dart';
+import '../services/spotifyservice.dart';
+import '../blocs/spotify_bloc.dart';
+import '../blocs/spotify_events.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   final String title;
@@ -15,38 +18,32 @@ class CustomSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       leading: Container(
         padding: EdgeInsets.all(8.0),
-        child: FutureBuilder<User>(
-          future: state.myUser,
-          initialData: null,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return GestureDetector(
-                onTap: () {
-                  OpenDrawerNotification().dispatch(context);
-                },
-                child: ProfilePicture(
-                  user: snapshot.data,
-                  size: 40.0,
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return CircularProgressIndicator();
+        child: BlocBuilder<SpotifyBloc, SpotifyService>(
+          builder: (context, state) {
+            return GestureDetector(
+              onTap: () {
+                OpenDrawerNotification().dispatch(context);
+              },
+              child: _buildContent(context, state.myUser),
+            );
           },
         ),
       ),
       title: Text(title),
       centerTitle: true,
-      //expandedHeight: 200.0,
       floating: true,
-      //snap: true,
-      /*flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          color: Colors.white,
-        ),
-      ),*/
     );
+  }
+
+  Widget _buildContent(BuildContext context, User state) {
+    if (state != null) {
+      return ProfilePicture(
+        user: state,
+        size: 40.0,
+      );
+    } else {
+      //return CircularProgressIndicator();
+      return Icon(Icons.list);
+    }
   }
 }

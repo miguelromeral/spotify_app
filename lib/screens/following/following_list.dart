@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify/spotify.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/screens/following/following_item.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/screens/styles.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/screens/following/following_item.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class FollowingList extends StatefulWidget {
   @override

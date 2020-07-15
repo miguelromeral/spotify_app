@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/_shared/custom_appbar.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/screens/following/following_list.dart';
-import 'package:spotify_app/models/following.dart';
-import 'package:spotify_app/screens/following/following_search_screen.dart';
-import 'package:spotify_app/screens/styles.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/_shared/custom_appbar.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/screens/following/following_list.dart';
+import 'package:ShareTheMusic/models/following.dart';
+import 'package:ShareTheMusic/screens/following/following_search_screen.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class AllUsersScreen extends StatefulWidget {
   @override

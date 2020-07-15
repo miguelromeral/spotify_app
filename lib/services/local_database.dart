@@ -1,5 +1,5 @@
 import 'package:path/path.dart';
-import 'package:spotify_app/models/suggestion.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -16,7 +16,7 @@ class LocalDB {
       // Set the path to the database. Note: Using the `join` function from the
       // `path` package is best practice to ensure the path is correctly
       // constructed for each platform.
-      join(await getDatabasesPath(), 'spotify_app_mr.db'),
+      join(await getDatabasesPath(), 'ShareTheMusic_mr.db'),
       // When the database is first created, create a table to store dogs.
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/models/suggestion.dart';
-import 'package:spotify_app/_shared/custom_appbar.dart';
-import 'package:spotify_app/_shared/suggestions/suggestion_item.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/models/suggestion.dart';
+import 'package:ShareTheMusic/_shared/custom_appbar.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class SuggestionsList extends StatefulWidget {
   final List<Suggestion> suggestions;
@@ -20,8 +20,9 @@ class _SuggestionsListState extends State<SuggestionsList> {
   Widget build(BuildContext context) {
     return Flexible(
       child: Scaffold(
-        appBar: CustomAppBar(
-          titleText: 'My Suggestions',
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('My Suggestions'),
         ),
         body: BlocBuilder<SpotifyBloc, SpotifyService>(
           builder: (context, state) {

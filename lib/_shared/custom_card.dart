@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_app/screens/styles.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
 
 class CustomCard extends StatefulWidget {
   final List<Widget> content;

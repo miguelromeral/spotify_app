@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:spotify_app/_shared/users/profile_picture.dart';
-import 'package:spotify_app/blocs/spotify_bloc.dart';
-import 'package:spotify_app/blocs/spotify_events.dart';
-import 'package:spotify_app/screens/following/all_users_screen.dart';
-import 'package:spotify_app/screens/following/following_search_screen.dart';
-import 'package:spotify_app/screens/mysuggestions/mysuggestions_screen.dart';
-import 'package:spotify_app/screens/playlists/my_playlists_screen.dart';
-import 'package:spotify_app/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_events.dart';
+import 'package:ShareTheMusic/screens/following/all_users_screen.dart';
+import 'package:ShareTheMusic/screens/following/following_search_screen.dart';
+import 'package:ShareTheMusic/screens/mysuggestions/mysuggestions_screen.dart';
+import 'package:ShareTheMusic/screens/playlists/my_playlists_screen.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({
@@ -35,28 +35,7 @@ class MyDrawer extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),*/
-            FutureBuilder(
-              future: state.myUser,
-              builder: (context, snp) {
-                if (snp.hasData) {
-                  User me = snp.data;
-                  return UserAccountsDrawerHeader(
-                    accountName: Text(me.displayName),
-                    accountEmail: Text(me.email),
-                    currentAccountPicture: ProfilePicture(
-                      user: me,
-                    ),
-                  );
-                } else {
-                  return DrawerHeader(
-                    child: Text('Loading User...'),
-                    /*decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),*/
-                  );
-                }
-              },
-            ),
+            _buildHeader(state),
             ListTile(
               title: Text('My Playlists'),
               onTap: () async {
@@ -109,5 +88,22 @@ class MyDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildHeader(SpotifyService state) {
+    if (state.myUser != null) {
+      return UserAccountsDrawerHeader(
+        accountName: Text(state.myUser.displayName),
+        accountEmail: Text(state.myUser.email),
+        currentAccountPicture: ProfilePicture(user: state.myUser),
+      );
+    } else {
+      return DrawerHeader(
+        child: Text('Loading User...'),
+        /*decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),*/
+      );
+    }
   }
 }
