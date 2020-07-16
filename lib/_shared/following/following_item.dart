@@ -5,7 +5,6 @@ import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_user.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:flutter/material.dart';

@@ -44,6 +44,9 @@ dependencies:
   draggable_scrollbar: ^0.0.4
   search_app_bar: ^1.0.2+2
   share: ^0.6.4+3
+  #settings_ui: ^0.3.0
+  #shared_preferences_settings: ^1.2.0
+  flutter_settings_screens: ^0.2.0+1
 
 
   # The following adds the Cupertino Icons font to your application.

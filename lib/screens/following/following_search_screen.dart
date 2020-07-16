@@ -9,7 +9,7 @@ import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
-import 'following_item.dart';
+import '../../_shared/following/following_item.dart';
 
 class SearchUserScreen extends StatefulWidget {
   final Key key;
@@ -30,6 +30,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   Following myFollowing;
   SpotifyBloc _bloc;
   static String title = 'Search Users by Name';
+
 
   void _getNames(String query) async {
     print('Retrieving: $query');

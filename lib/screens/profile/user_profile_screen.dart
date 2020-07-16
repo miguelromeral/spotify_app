@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
@@ -27,8 +28,17 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  SpotifyBloc _bloc;
+  Suggestion suggestion;
+  Track track;
+
   @override
   Widget build(BuildContext context) {
+    if (_bloc == null) {
+      _bloc = BlocProvider.of<SpotifyBloc>(context);
+      _getData();
+    }
+
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         return Scaffold(
@@ -89,35 +99,58 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               style: styleCardHeader,
             ),*/
           Text('My Last Suggestion'),
-          SizedBox(height: 8.0,),
-          FutureBuilder(
-            future: state.getSuggestion(widget.user.id),
-            builder: (context, snp) {
-              if (snp.hasData) {
-                Suggestion sug = snp.data;
-                return FutureBuilder(
-                  future: state.api.tracks.get(sug.trackid),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return SuggestionItem(
-                        //user: widget.user,
-                        suggestion: sug,
-                        track: snapshot.data,
-                      );
-                    } else {
-                      return Text('Unknown Song');
-                    }
-                  },
-                );
-              } else {
-                BlocProvider.of<SpotifyBloc>(context).add(UpdateMySuggestion());
-                return Text('Unknown Suggestion');
-              }
+          SizedBox(
+            height: 8.0,
+          ),
+          NotificationListener<UpdatedFeedNotification>(
+            onNotification: (notification) {
+              _getData();
+              return true;
             },
+            child: _buildContent(state),
           ),
           //     ]),
         ],
       ),
     );
+  }
+
+  Widget _buildContent(SpotifyService state) {
+    if (suggestion == null) {
+      _getData();
+      return LoadingScreen(
+        title: 'Loading Suggestion...',
+      );
+    }
+
+    if (track == null) {
+      _getData();
+      return LoadingScreen(
+        title: 'Loading Track...',
+      );
+    }
+
+    return SuggestionItem(
+      //user: widget.user,
+      suggestion: suggestion,
+      track: track,
+    );
+  }
+
+  Future<void> _getData() async {
+    if (_bloc != null) {
+      var res = await _bloc.state.getSuggestion(widget.user.id);
+      _bloc.add(UpdateFeed());
+      Track tr;
+      if (track == null) {
+        tr = await _bloc.state.api.tracks.get(res.trackid);
+      }
+      setState(() {
+        suggestion = res;
+        if (tr != null) {
+          track = tr;
+        }
+      });
+    }
   }
 }

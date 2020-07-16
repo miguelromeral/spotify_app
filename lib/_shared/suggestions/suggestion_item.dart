@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share/share.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
@@ -58,6 +59,11 @@ class _SuggestionItemState extends State<SuggestionItem> {
     list.add(PopupItemShare(
             shareContent: _getShareContent(), title: 'Share Suggestion')
         .create());
+
+    if(user != null){
+      list.add(PopupItemOpenProfile(user: user).create());
+    }
+
     return list;
   }
 

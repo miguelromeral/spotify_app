@@ -1,9 +1,8 @@
+import 'package:ShareTheMusic/screens/mysettings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ShareTheMusic/screens/home/home_screen.dart';
 import 'package:ShareTheMusic/screens/profile/my_profile_screen.dart';
-import 'package:ShareTheMusic/screens/profile/profile_screen.dart';
-import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/screens/savedtracks/savedtracks_screen.dart';
 
 class TabNavigationItem {
@@ -37,6 +36,11 @@ class TabNavigationItem {
           page: MyProfileScreen(),
           icon: Icon(Icons.face),
           title: Text("Profile"),
+        ),
+        TabNavigationItem(
+          page: MySettingsScreen(),
+          icon: Icon(Icons.settings),
+          title: Text("Settings"),
         ),
       ];
 }
