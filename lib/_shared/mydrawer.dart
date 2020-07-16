@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
@@ -66,6 +67,16 @@ class MyDrawer extends StatelessWidget {
                 );
               },
             ),
+            /*ListTile(
+              title: Text('My Profile'),
+              onTap: () async {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfileScreen(user: state.myUser,)),
+                );
+              },
+            ),*/
             ListTile(
               title: Text('My Suggestions'),
               onTap: () {

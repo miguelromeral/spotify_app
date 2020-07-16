@@ -1,8 +1,9 @@
 import 'package:ShareTheMusic/screens/mysettings_screen.dart';
+import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ShareTheMusic/screens/home/home_screen.dart';
-import 'package:ShareTheMusic/screens/profile/my_profile_screen.dart';
 import 'package:ShareTheMusic/screens/savedtracks/savedtracks_screen.dart';
 
 class TabNavigationItem {
@@ -16,7 +17,7 @@ class TabNavigationItem {
     @required this.icon,
   });
 
-  static List<TabNavigationItem> get items => [
+  static List<TabNavigationItem> items(SpotifyService state) => [
         TabNavigationItem(
           page: HomeScreen(),
           icon: Icon(Icons.home),
@@ -33,7 +34,7 @@ class TabNavigationItem {
           title: Text("Saved Songs"),
         ),
         TabNavigationItem(
-          page: MyProfileScreen(),
+          page: UserProfileScreen(user: state.myUser,),
           icon: Icon(Icons.face),
           title: Text("Profile"),
         ),

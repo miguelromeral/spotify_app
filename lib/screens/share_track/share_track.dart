@@ -26,7 +26,7 @@ class _ShareTrackState extends State<ShareTrack> {
   final _formKey = GlobalKey<FormState>();
 
   //String _description = "Ey! Listen to this amazing track.";
-  String _description = "Ey! Listen to this amazing track.";
+  String _description = "";
 
   @override
   Widget build(BuildContext context) {

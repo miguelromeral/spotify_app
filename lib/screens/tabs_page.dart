@@ -108,7 +108,7 @@ class _TabsPageState extends State<TabsPage> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            for (final tabItem in TabNavigationItem.items) tabItem.page,
+            for (final tabItem in TabNavigationItem.items(state)) tabItem.page,
           ],
         ),
         bottomNavigationBar: Theme(
@@ -124,7 +124,7 @@ class _TabsPageState extends State<TabsPage> {
             currentIndex: _currentIndex,
             onTap: (int index) => setState(() => _currentIndex = index),
             items: [
-              for (final tabItem in TabNavigationItem.items)
+              for (final tabItem in TabNavigationItem.items(state))
                 BottomNavigationBarItem(
                   icon: tabItem.icon,
                   title: tabItem.title,
