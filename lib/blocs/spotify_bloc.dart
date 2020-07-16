@@ -104,8 +104,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     service.updateFollowing(await _updateFollowing(service));
     service.updateMySuggestion(await _updateMySuggestion(service));
     service.updateFeed(await _updateFeed(service));
-    service.updateSaved(await _updateSaved(service));
-    service.updatePlaylists(await _updatePlaylists(service));
+    //service.updateSaved(await _updateSaved(service));
+    //service.updatePlaylists(await _updatePlaylists(service));
   }
 
   Future<Following> _updateFollowing(SpotifyService state) async {

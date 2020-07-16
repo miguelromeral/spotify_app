@@ -46,7 +46,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
               ),
             );
           } else {
-            //BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
+            BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
             return LoadingScreen();
           }
         },

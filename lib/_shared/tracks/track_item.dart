@@ -1,5 +1,7 @@
+import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/custom_listtile.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_track.dart';
@@ -44,7 +46,8 @@ class _TrackItemState extends State<TrackItem> {
     return [
       PopupItemOpenTrack(track: widget.track).create(),
       PopupItemUpdateSuggestion(track: widget.track).create(),
-      PopupItemShare(shareContent: _getShareContent(), title: 'Share Track').create(),
+      PopupItemShare(shareContent: _getShareContent(), title: 'Share Track')
+          .create(),
     ];
   }
 
@@ -53,27 +56,31 @@ class _TrackItemState extends State<TrackItem> {
   }
 
   List<Widget> _content() {
-    return [
-      Text(
-        "${widget.track.name}",
-        style: styleFeedTitle,
-      ),
-      SizedBox(height: 4.0),
-      Text(
-        "${widget.track.artists[0].name}",
-        style: styleFeedTrack,
-      ),
-      SizedBox(height: 4.0),
-      Text(
-        "${widget.track.album.name}",
-        style: styleFeedArtist,
-      ),
-      SizedBox(height: 4.0),
-      Text(
+    List<Widget> list = List();
+    list.add(Text(
+      "${widget.track.name}",
+      style: styleFeedTitle,
+    ));
+    list.add(SizedBox(height: 4.0));
+    list.add(Text(
+      "${widget.track.artists[0].name}",
+      style: styleFeedTrack,
+    ));
+    list.add(SizedBox(height: 4.0));
+    list.add(Text(
+      "${widget.track.album.name}",
+      style: styleFeedArtist,
+    ));
+
+    if (Settings.getValue<bool>(settings_track_popularity, true)) {
+      list.add(SizedBox(height: 4.0));
+      list.add(Text(
         "${widget.track.popularity}% pop.",
         style: styleFeedAgo,
-      ),
-    ];
+      ));
+    }
+
+    return list;
   }
 
   Widget _leadingIcon() {

@@ -43,6 +43,11 @@ ThemeData _buildAppTheme() {
         secondary: colorPrimary,
       ),
     ),
+    cardColor: colorThirdBackground,
+    /*cardTheme: base.cardTheme.copyWith(
+      color: Colors.red,
+      elevation: 0,      
+    ),*/
     snackBarTheme: base.snackBarTheme.copyWith(
       backgroundColor: colorAccent,
     ),

@@ -1,4 +1,4 @@
-import 'package:ShareTheMusic/screens/mysettings_screen.dart';
+import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';

@@ -9,17 +9,17 @@ import 'package:ShareTheMusic/screens/wrapper.dart';
 import 'package:ShareTheMusic/services/firebase_auth.dart';
 
 Future<void> main() async {
-  //await initSettings();
+  await initSettings();
   runApp(MyApp());
 }
-/*
+
 Future<void> initSettings() async {
   await Settings.init(
     //cacheProvider: _isUsingHive ? HiveCache() : SharePreferenceCache(),
     cacheProvider: SharePreferenceCache(),
   );
 }
-*/
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

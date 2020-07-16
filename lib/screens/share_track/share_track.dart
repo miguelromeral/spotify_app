@@ -1,9 +1,11 @@
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
+import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_events.dart';
@@ -26,7 +28,7 @@ class _ShareTrackState extends State<ShareTrack> {
   final _formKey = GlobalKey<FormState>();
 
   //String _description = "Ey! Listen to this amazing track.";
-  String _description = "";
+  String _description = Settings.getValue<String>(settings_suggestion_message, '');
 
   @override
   Widget build(BuildContext context) {
