@@ -76,7 +76,9 @@ class _AuthenticateState extends State<Authenticate> {
                     content: Text(
                         ));
                 _scaffoldKey.currentState.showSnackBar(sb);*/
-                _showSnackBar('Your session has expired. Please, log in manually.', context);
+                _showSnackBar(
+                    'Your session has expired. Please, log in manually.',
+                    context);
                 //Scaffold.of(context).showSnackBar(sb);
               }
               return Center(
@@ -85,6 +87,10 @@ class _AuthenticateState extends State<Authenticate> {
                   children: [
                     RaisedButton(
                         child: Text('Log In'),
+                        textColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.white)),
                         onPressed: () async {
                           login(context);
                         }),

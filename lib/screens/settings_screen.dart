@@ -20,8 +20,9 @@ class _SettingsScreenState extends State<MySettingsScreen> {
               SwitchSettingsTile(
                 settingKey: settings_track_popularity,
                 title: 'Show Popularity',
-                enabledLabel: 'A percentage will appear in the track info. This value is calculated by Spotify according to'
-                ' most currently played songs.',
+                enabledLabel:
+                    'A percentage will appear in the track info. This value is calculated by Spotify according to'
+                    ' most currently played songs.',
                 disabledLabel: 'No popularity measure is shown.',
                 leading: Icon(Icons.people_outline),
                 defaultValue: true,
@@ -31,9 +32,18 @@ class _SettingsScreenState extends State<MySettingsScreen> {
           SettingsGroup(
             title: 'Suggestions',
             subtitle: 'How the app should work with suggestions.',
-            children: [
+            children: [],
+          ),
+          SwitchSettingsTile(
+            leading: Icon(Icons.add_comment),
+            settingKey: settings_suggestion_message_enabled,
+            title: 'Default Text For Your Suggestions.',
+            /*onChange: (value) {
+                  debugPrint('key-switch-dev-mod: $value');
+                },*/
+            childrenIfEnabled: <Widget>[
               TextInputSettingsTile(
-                title: 'Default Text for your Suggestions',
+                title: 'Save a message to load when sharing a new track.',
                 settingKey: settings_suggestion_message,
                 initialValue: '',
                 validator: (String username) {
@@ -396,6 +406,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
   }
 }
 
-
 final String settings_track_popularity = 'set_track_popularity';
 final String settings_suggestion_message = 'set_suggestion_message';
+final String settings_suggestion_message_enabled =
+    'set_suggestion_message_enabled';

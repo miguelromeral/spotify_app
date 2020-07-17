@@ -28,7 +28,9 @@ class _ShareTrackState extends State<ShareTrack> {
   final _formKey = GlobalKey<FormState>();
 
   //String _description = "Ey! Listen to this amazing track.";
-  String _description = Settings.getValue<String>(settings_suggestion_message, '');
+  String _description = 
+    (Settings.getValue<bool>(settings_suggestion_message_enabled, false) ?
+    Settings.getValue<String>(settings_suggestion_message, '') : '');
 
   @override
   Widget build(BuildContext context) {
