@@ -1,6 +1,8 @@
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
+import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:share/share.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_track.dart';
@@ -96,6 +98,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         padding: EdgeInsets.all(8.0),
         //color: Colors.red,
         child: AlbumPicture(
+          showDuration: Settings.getValue<bool>(settings_track_duration, true),
           track: track,
           size: maxsize,
         ),
@@ -112,6 +115,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         padding: EdgeInsets.all(8.0),
         //color: Colors.red,
         child: AlbumPicture(
+          showDuration: Settings.getValue<bool>(settings_track_duration, true),
           track: track,
           size: maxsize,
         ),
@@ -215,9 +219,10 @@ class _SuggestionItemState extends State<SuggestionItem> {
               width: 4.0,
             ),
             ShowUp(
-              key: Key('${widget.suggestion.suserid}-${widget.suggestion.likes}'),
-              child: Text(widget.suggestion.likes.toString()),
-              delay: 300,
+              key: Key(
+                  '${widget.suggestion.suserid}-${widget.suggestion.likes}'),
+              child: Text(_likesFormatted(widget.suggestion.likes)),
+              delay: 350,
             ),
           ],
         ),
@@ -247,5 +252,19 @@ class _SuggestionItemState extends State<SuggestionItem> {
     ));
 
     return list;
+  }
+
+  String _likesFormatted(int likes) {
+    if (likes >= 1000000) {
+      int miles = (likes / 1000000).truncate();
+      int dec = ((likes / 100000).truncate() % 10);
+      return '$miles,$dec M';
+    } else if (likes >= 1000) {
+      int miles = (likes / 1000).truncate();
+      int dec = ((likes / 100).truncate() % 10);
+      return '$miles,$dec K';
+    } else {
+      return likes.toString();
+    }
   }
 }

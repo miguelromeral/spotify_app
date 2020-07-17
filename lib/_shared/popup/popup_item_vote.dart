@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
@@ -17,18 +18,6 @@ class PopupItemVote extends PopupItemBase {
 
   @override
   void execute(BuildContext context) async {
-    if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
-      await state.likeSuggestion(suggestion);
-
-      //bloc.add(UpdateFeed());
-      UpdatedFeedNotification().dispatch(context);
-
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
-    }
+    await vote(context, state, suggestion, track);
   }
-
 }

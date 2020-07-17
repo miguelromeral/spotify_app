@@ -10,7 +10,6 @@ Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
   if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
     await state.likeSuggestion(suggestion);
 
-    //bloc.add(UpdateFeed());
     UpdatedFeedNotification().dispatch(context);
 
     Scaffold.of(context)
@@ -61,7 +60,8 @@ final TextStyle styleCardContent =
 
 const double albumIconSize = 70.0;
 
-String printDuration(Duration duration) {
+String printDuration(int ms) {
+  Duration duration = Duration(milliseconds: ms);
   String twoDigits(int n) => n.toString().padLeft(2, "0");
   String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));

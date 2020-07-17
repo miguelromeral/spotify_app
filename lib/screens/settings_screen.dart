@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
@@ -27,36 +28,88 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 leading: Icon(Icons.people_outline),
                 defaultValue: true,
               ),
+              SwitchSettingsTile(
+                settingKey: settings_track_duration,
+                title: 'Show Duration',
+                enabledLabel:
+                    'Display the duration of the track in the album icon in some screens',
+                disabledLabel: 'No duration displayed',
+                leading: Icon(Icons.timer),
+                defaultValue: true,
+              ),
             ],
           ),
           SettingsGroup(
             title: 'Suggestions',
             subtitle: 'How the app should work with suggestions.',
-            children: [],
-          ),
-          SwitchSettingsTile(
-            leading: Icon(Icons.add_comment),
-            settingKey: settings_suggestion_message_enabled,
-            title: 'Default Text For Your Suggestions.',
-            /*onChange: (value) {
+            children: [
+              SwitchSettingsTile(
+                leading: Icon(Icons.add_comment),
+                settingKey: settings_suggestion_message_enabled,
+                title: 'Default Text For Your Suggestions.',
+                /*onChange: (value) {
                   debugPrint('key-switch-dev-mod: $value');
                 },*/
-            childrenIfEnabled: <Widget>[
-              TextInputSettingsTile(
-                title: 'Save a message to load when sharing a new track.',
-                settingKey: settings_suggestion_message,
-                initialValue: '',
-                validator: (String username) {
-                  if (username != null && username.length < 140) {
-                    return null;
-                  }
-                  return "The text must be less than 140 characters.";
-                },
-                borderColor: Colors.blueAccent,
-                errorColor: Colors.deepOrangeAccent,
+                childrenIfEnabled: <Widget>[
+                  TextInputSettingsTile(
+                    title: 'Save a message to load when sharing a new track.',
+                    settingKey: settings_suggestion_message,
+                    initialValue: '',
+                    validator: (String username) {
+                      if (username != null && username.length < 140) {
+                        return null;
+                      }
+                      return "The text must be less than 140 characters.";
+                    },
+                    borderColor: Colors.blueAccent,
+                    errorColor: Colors.deepOrangeAccent,
+                  ),
+                ],
               ),
             ],
           ),
+          SettingsGroup(
+            title: 'About',
+            //subtitle: 'More info about the app',
+            children: [
+              ListTile(
+                title: Text('View GitHub Repository'),
+                subtitle: Text('Take a look to the whole code of the app'),
+                onTap: () {
+                  openUrl('https://github.com/miguelromeral/spotify_app');
+                },
+              ),
+              ListTile(
+                title: Text('Report a bug'),
+                subtitle: Text('Report an error or issue in the app on GitHub'),
+                onTap: () {
+                  openUrl(
+                      'https://github.com/miguelromeral/spotify_app/issues');
+                },
+              ),
+              ListTile(
+                title: Text('Read Privacy Policy'),
+                //TODO: Add Privacy Policy link
+                subtitle: Text('TODO'),
+                onTap: () {
+                  //  openUrl('https://github.com/miguelromeral/spotify_app/issues');
+                },
+              ),
+              ListTile(
+                title: Text('Additional Thanks To'),
+                subtitle: Text(
+                    'Data: Spotify\n'
+                    'Backend: Firebase (Firestore)\n'
+                    'Icons: app.streamlineicons.com\n'
+                    'And last but not least: You for using the app 🙂\n'
+                    ),
+                /*: () {
+                  //  openUrl('https://github.com/miguelromeral/spotify_app/issues');
+                },*/
+              ),
+            ],
+          ),
+          ///////////////////////////////////////////////////////////////////
           SettingsGroup(
             title: 'Single Choice Settings',
             children: <Widget>[
@@ -407,6 +460,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
 }
 
 final String settings_track_popularity = 'set_track_popularity';
+final String settings_track_duration = 'set_track_duration';
 final String settings_suggestion_message = 'set_suggestion_message';
 final String settings_suggestion_message_enabled =
     'set_suggestion_message_enabled';

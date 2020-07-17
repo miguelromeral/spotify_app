@@ -4,27 +4,47 @@ import 'package:progress_indicators/progress_indicators.dart';
 class LoadingScreen extends StatelessWidget {
   final String title;
   final List<Widget> below;
+  final List<String> stringBelow;
+  final bool safeArea;
 
   LoadingScreen({
     Key key,
     this.title,
+    this.stringBelow,
     this.below,
+    this.safeArea,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FadingText(_getTitle(),
-            style: _styleLoading,
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Column(children: _getContentBelow()),
-        ],
+    if (safeArea != null && safeArea) {
+      return Scaffold(
+        body: SafeArea(
+          child: _buildContent(context),
+        ),
+      );
+    } else {
+      return _buildContent(context);
+    }
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FadingText(
+              _getTitle(),
+              style: _styleLoading,
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Column(children: _getContentBelow()),
+          ],
+        ),
       ),
     );
   }
@@ -33,9 +53,16 @@ class LoadingScreen extends StatelessWidget {
 
   List<Widget> _getContentBelow() {
     if (below == null) {
-      return [
-        Text("Please, wait a moment."),
-      ];
+      if (stringBelow == null) {
+        return [
+          Text(
+            "Please, wait a moment.",
+          ),
+          Text("Please, try again later."),
+        ];
+      } else {
+        return stringBelow.map((e) => Text(e)).toList();
+      }
     } else {
       return below;
     }

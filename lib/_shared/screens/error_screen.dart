@@ -7,18 +7,18 @@ class ErrorScreen extends StatelessWidget {
   final List<Widget> below;
   final List<String> stringBelow;
   final bool collapsed;
+  final bool safeArea;
 
   ErrorScreen({
     Key key,
     this.title,
     this.below,
     this.stringBelow,
+    this.safeArea,
     this.collapsed = false,
   }) : super(key: key);
-  
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildContent(BuildContext context) {
     if (collapsed) {
       return CustomListTile(
         key: GlobalKey(),
@@ -40,28 +40,44 @@ class ErrorScreen extends StatelessWidget {
         ],
       );
     } else {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '🥺',
-              style: _styleErrorIconBig,
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              _getTitle(),
-              style: _styleErrorTitle,
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Column(children: _getContentBelow()),
-          ],
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '🥺',
+                style: _styleErrorIconBig,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Text(
+                _getTitle(),
+                style: _styleErrorTitle,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Column(children: _getContentBelow()),
+            ],
+          ),
         ),
       );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (safeArea != null && safeArea) {
+      return Scaffold(
+        body: SafeArea(
+          child: _buildContent(context),
+        ),
+      );
+    } else {
+      return _buildContent(context);
     }
   }
 
@@ -78,7 +94,9 @@ class ErrorScreen extends StatelessWidget {
           Text("Please, try again later.", style: _styleErrorBellow),
         ];
       } else {
-        return stringBelow.map((e) => Text(e, style: _styleErrorBellow)).toList();
+        return stringBelow
+            .map((e) => Text(e, style: _styleErrorBellow))
+            .toList();
       }
     } else {
       return below;

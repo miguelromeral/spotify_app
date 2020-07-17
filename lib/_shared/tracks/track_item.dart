@@ -1,4 +1,6 @@
+import 'package:ShareTheMusic/_shared/tracks/track_duration.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -87,13 +89,29 @@ class _TrackItemState extends State<TrackItem> {
     return Container(
       height: 60.0,
       padding: EdgeInsets.all(8.0),
-      child: Hero(
-        tag: widget.track.hashCode.toString(),
-        child: AlbumPicture(
-          track: widget.track,
-          size: 25.0,
-        ),
+      child: Stack(
+        alignment: AlignmentDirectional.bottomEnd,
+        children: [
+          Hero(
+            tag: widget.track.hashCode.toString(),
+            child: AlbumPicture(
+              track: widget.track,
+              size: 25.0,
+            ),
+          ),
+          _showDurationWidget(),
+        ],
       ),
     );
+  }
+
+  Widget _showDurationWidget() {
+    if (Settings.getValue<bool>(settings_track_duration, true)) {
+      return TrackDuration(
+        duration: widget.track.durationMs,
+      );
+    } else {
+      return Container();
+    }
   }
 }

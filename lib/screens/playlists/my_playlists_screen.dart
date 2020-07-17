@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,7 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
   Widget build(BuildContext context) {
     if (_bloc == null) {
       _bloc = BlocProvider.of<SpotifyBloc>(context);
-      _getData();
+      //_getData();
     }
 
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
@@ -50,24 +51,42 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
         builder: (context, snp) {
           if (snp.hasData) {
             List<PlaylistSimple> liked = snp.data;
-            return NotificationListener<RefreshListNotification>(
-              onNotification: (notification) {
-                _getData();
-                return true;
-              },
-              child: PlaylistsScreen(
-                list: liked,
-                title: 'My Playlists',
-              ),
-            );
+            if (liked.isNotEmpty) {
+              return NotificationListener<RefreshListNotification>(
+                onNotification: (notification) {
+                  _getData();
+                  return true;
+                },
+                child: PlaylistsScreen(
+                  list: liked,
+                  title: 'My Playlists',
+                ),
+              );
+            } else {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text('My Playlists'),
+                  centerTitle: true,
+                ),
+                body: ErrorScreen(
+                  title: "There's no playlist we could find",
+                  stringBelow: [
+                    "We couldn't find any playlists own by you.",
+                    "Please, try again later."
+                  ],
+                ),
+              );
+            }
           } else {
-            BlocProvider.of<SpotifyBloc>(context).add(UpdateSaved());
+            _getData();
             return Scaffold(
               appBar: AppBar(
                 title: Text('My Playlists'),
                 centerTitle: true,
               ),
-              body: LoadingScreen(),
+              body: LoadingScreen(
+                title: 'Loading Your Playlists...',
+              ),
             );
           }
         },

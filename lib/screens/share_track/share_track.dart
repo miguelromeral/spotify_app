@@ -63,6 +63,7 @@ class _ShareTrackState extends State<ShareTrack> {
               child: Hero(
                 tag: widget.track.hashCode.toString(),
                 child: AlbumPicture(
+                  showDuration: false,
                   track: widget.track,
                   size: 25.0,
                 ),
@@ -86,7 +87,7 @@ class _ShareTrackState extends State<ShareTrack> {
             SizedBox(
               height: 8.0,
             ),
-            Text('Duration: ${printDuration(Duration(milliseconds: widget.track.durationMs))}'),
+            Text('Duration: ${printDuration(widget.track.durationMs)}'),
             Text('Explicit: ${widget.track.explicit}'),
             Text('Popularity: ${widget.track.popularity}'),
 
