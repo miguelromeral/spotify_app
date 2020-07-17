@@ -62,7 +62,7 @@ class _AuthenticateState extends State<Authenticate> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Login to FriendHits!'),
+        title: Text('Login to ShareTheTrack!'),
       ),
       body: BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) {

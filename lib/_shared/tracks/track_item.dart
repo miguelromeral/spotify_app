@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_duration.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
@@ -80,6 +81,11 @@ class _TrackItemState extends State<TrackItem> {
         "${widget.track.popularity}% pop.",
         style: styleFeedAgo,
       ));
+    }
+
+    if (widget.track.explicit) {
+      list.add(SizedBox(height: 4.0));
+      list.add(ExplicitBadge());
     }
 
     return list;

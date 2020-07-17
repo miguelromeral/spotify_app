@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
@@ -28,9 +29,10 @@ class _ShareTrackState extends State<ShareTrack> {
   final _formKey = GlobalKey<FormState>();
 
   //String _description = "Ey! Listen to this amazing track.";
-  String _description = 
-    (Settings.getValue<bool>(settings_suggestion_message_enabled, false) ?
-    Settings.getValue<String>(settings_suggestion_message, '') : '');
+  String _description =
+      (Settings.getValue<bool>(settings_suggestion_message_enabled, false)
+          ? Settings.getValue<String>(settings_suggestion_message, '')
+          : '');
 
   @override
   Widget build(BuildContext context) {
@@ -58,39 +60,84 @@ class _ShareTrackState extends State<ShareTrack> {
       return Center(
         child: Column(
           children: [
-            Container(
-              height: 125.0,
-              child: Hero(
-                tag: widget.track.hashCode.toString(),
-                child: AlbumPicture(
-                  showDuration: false,
-                  track: widget.track,
-                  size: 25.0,
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 125.0,
+                    child: Hero(
+                      tag: widget.track.hashCode.toString(),
+                      child: AlbumPicture(
+                        showDuration: false,
+                        track: widget.track,
+                        size: 25.0,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(widget.track.name, style: styleFeedTitle),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        _createRowData(
+                          'Artist',
+                          Text(
+                            widget.track.artists
+                                .map((e) => e.name)
+                                .toString()
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''),
+                            style: styleFeedTrack,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        _createRowData(
+                          'Album',
+                          Text(widget.track.album.name),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        _createRowData(
+                          'Duration',
+                          Text('${printDuration(widget.track.durationMs)}'),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        _createRowData(
+                          'Popularity',
+                          Text('${widget.track.popularity} %'),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        (widget.track.explicit
+                            ? _createRowData(
+                                '',
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [ExplicitBadge()]),
+                              )
+                            : Container()),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Text(widget.track.name, style: styleFeedTitle),
-            SizedBox(
-              height: 8.0,
-            ),
-            Text(
-                widget.track.artists
-                    .map((e) => e.name)
-                    .toString()
-                    .replaceAll('(', '')
-                    .replaceAll(')', ''),
-                style: styleFeedTrack),
-            Text(widget.track.album.name),
-            SizedBox(
-              height: 8.0,
-            ),
-            Text('Duration: ${printDuration(widget.track.durationMs)}'),
-            Text('Explicit: ${widget.track.explicit}'),
-            Text('Popularity: ${widget.track.popularity}'),
-
             Form(
                 key: _formKey,
                 child: Column(children: <Widget>[
@@ -151,5 +198,31 @@ class _ShareTrackState extends State<ShareTrack> {
       BlocProvider.of<LocalDbBloc>(context).add(InitLocalDbEvent());
       return LoadingScreen();
     }
+  }
+
+  Widget _createRowData(String title, Widget content) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+            flex: 8,
+            child: (title.isNotEmpty
+                ? Text(
+                    title,
+                    style: styleCardHeader,
+                    textAlign: TextAlign.right,
+                  )
+                : Container())),
+        Expanded(
+          flex: 1,
+          child: Container(),
+        ),
+        Expanded(
+          flex: 8,
+          child: content,
+        ),
+      ],
+    );
   }
 }

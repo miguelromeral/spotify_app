@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
@@ -191,6 +192,8 @@ class _SuggestionItemState extends State<SuggestionItem> {
         //color: Colors.yellow[100],
         child: _createSubtitle(),
       ),
+      (widget.track.explicit ? SizedBox(height: 4.0) : Container()),
+      (widget.track.explicit ? ExplicitBadge() : Container()),
       SizedBox(height: 4.0),
       Container(
         //color: Colors.yellow[200],
