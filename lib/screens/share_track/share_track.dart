@@ -182,17 +182,21 @@ class _ShareTrackState extends State<ShareTrack> {
                           var sug = await state.updateUserData(
                               spUser.id, widget.track.id, _description);
 
-                          await localdb.insertSuggestion(sug);
+                          var res = await localdb.insertSuggestion(sug);
+                          if (res) {
+                            var bloc = BlocProvider.of<SpotifyBloc>(context);
+                            bloc.add(UpdateFeed());
+                            bloc.add(UpdateMySuggestion());
+                            UpdatedFeedNotification().dispatch(context);
 
-                          var bloc = BlocProvider.of<SpotifyBloc>(context);
-                          bloc.add(UpdateFeed());
-                          bloc.add(UpdateMySuggestion());
-                          UpdatedFeedNotification().dispatch(context);
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text('Updated Suggestion!')));
 
-                          Scaffold.of(context).showSnackBar(
-                              SnackBar(content: Text('Updated Suggestion!')));
-
-                          Navigator.pop(context);
+                            Navigator.pop(context);
+                          }else{
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text('Error while updating your suggestion.')));
+                          }
                         }
                       }
                     },

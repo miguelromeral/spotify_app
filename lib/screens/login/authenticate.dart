@@ -95,76 +95,90 @@ class _AuthenticateState extends State<Authenticate> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: [
-                                Text('Welcome to'),
-                                ScalingText(
-                                  'ShareTheTrack',
-                                  style: TextStyle(fontSize: 28.0),
-                                ),
-                              ],
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.all(16.0),
+                              child: ListView(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text('Welcome to'),
+                                      ScalingText(
+                                        'ShareTheTrack',
+                                        style: TextStyle(fontSize: 28.0),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Expanded(
                             flex: 5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: ListView(
                               children: [
-                                GlowingProgressIndicator(
-                                  child: AppLogo(),
-                                  duration: Duration(seconds: 5),
-                                ),
-                                SizedBox(
-                                  height: 16.0,
-                                ),
-                                _loginButton(context),
-                                SizedBox(
-                                  height: 16.0,
-                                ),
-                                RaisedButton(
-                                    child: Text("Try the app's DEMO version"),
-                                    textColor: Colors.white,
-                                    color: colorThirdBackground,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side: BorderSide(color: colorPrimary)),
-                                    onPressed: () async {
-                                      context
-                                          .bloc<SpotifyBloc>()
-                                          .add(LoginAnonymousEvent());
-                                    }),
-                                Row(
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Checkbox(
-                                      value: _acceptPolicy,
-                                      onChanged: (bool value) {
-                                        setState(() {
-                                          _acceptPolicy = value;
-                                        });
-                                      },
+                                    GlowingProgressIndicator(
+                                      child: AppLogo(),
+                                      duration: Duration(seconds: 5),
                                     ),
-                                    Text(
-                                        "By enabling this option, you agree with the app's Privacy Policy"),
+                                    SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    _loginButton(context),
+                                    SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    RaisedButton(
+                                        child:
+                                            Text("Try the app's DEMO version"),
+                                        textColor: Colors.white,
+                                        color: colorThirdBackground,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                                color: colorPrimary)),
+                                        onPressed: () async {
+                                          context
+                                              .bloc<SpotifyBloc>()
+                                              .add(LoginAnonymousEvent());
+                                        }),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Checkbox(
+                                          value: _acceptPolicy,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              _acceptPolicy = value;
+                                            });
+                                          },
+                                        ),
+                                        Text(
+                                            "By enabling this option, you agree with the app's Privacy Policy"),
+                                      ],
+                                    ),
+                                    FlatButton(
+                                        child: Text(
+                                            'Click here to read the Privacy Policy'),
+                                        textColor: Colors.white70,
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => WebViewContainer(
+                                                    'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
+                                                    "ShareTheTrack's Privacy Policy",
+                                                    (_) => NavigationDecision
+                                                        .navigate)),
+                                          );
+                                        }),
                                   ],
                                 ),
-                                FlatButton(
-                                    child: Text(
-                                        'Click here to read the Privacy Policy'),
-                                    textColor: Colors.white70,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => WebViewContainer(
-                                                'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
-                                                "ShareTheTrack's Privacy Policy",
-                                                (_) => NavigationDecision
-                                                    .navigate)),
-                                      );
-                                    }),
                               ],
                             ),
                           ),

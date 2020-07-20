@@ -5,10 +5,13 @@ import 'package:sqflite/sqlite_api.dart';
 
 class LocalDB {
   bool isInit = false;
-  Future<Database> database;
+  static Future<Database> database;
 
   LocalDB() {
     //init();
+    if (database == null) {
+      init();
+    }
   }
 
   Future init() async {
@@ -23,7 +26,7 @@ class LocalDB {
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
-          "CREATE TABLE suggestions(id INTEGER PRIMARY KEY, trackid TEXT, suserid TEXT, fuserid TEXT, text TEXT, date TEXT)",
+          Suggestion.database_create_query,
         );
       },
       // Set the version. This executes the onCreate function and provides a
@@ -34,29 +37,36 @@ class LocalDB {
   }
 
 // Define a function that inserts dogs into the database
-  Future<void> insertSuggestion(Suggestion sug) async {
-    // Get a reference to the database.
-    final Database db = await database;
-    // Insert the Dog into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same dog is inserted twice.
-    //
-    // In this case, replace any previous data.
-    await db.insert(
-      'suggestions',
-      sug.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<bool> insertSuggestion(Suggestion sug) async {
+    try {
+      // Get a reference to the database.
+      final Database db = await database;
+      // Insert the Dog into the correct table. You might also specify the
+      // `conflictAlgorithm` to use in case the same dog is inserted twice.
+      //
+      // In this case, replace any previous data.
+      await db.insert(
+        Suggestion.database_name,
+        sug.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return true;
+    } catch (e) {
+      print("Exception while inserting suggestion: $e");
+      return false;
+    }
   }
-
 
   // A method that retrieves all the dogs from the dogs table.
   Future<List<Suggestion>> suggestions(String mySpotifyUserId) async {
     // Get a reference to the database.
     final Database db = await database;
     // Query the table for all The Dogs.
-    String whereString = 'suserid = ?';
-    final List<Map<String, dynamic>> maps = await db
-        .query('suggestions', where: whereString, whereArgs: [mySpotifyUserId]);
+    String whereString = '${Suggestion.fsuserid} = ?';
+    final List<Map<String, dynamic>> maps = await db.query(
+        Suggestion.database_name,
+        where: whereString,
+        whereArgs: [mySpotifyUserId]);
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       return Suggestion(
