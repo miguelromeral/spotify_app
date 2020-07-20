@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/screens/demo/home_demo.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
@@ -34,7 +35,9 @@ class TabNavigationItem {
           title: Text("Saved Songs"),
         ),
         TabNavigationItem(
-          page: UserProfileScreen(user: state.myUser,),
+          page: UserProfileScreen(
+            user: state.myUser,
+          ),
           icon: Icon(Icons.face),
           title: Text("Profile"),
         ),
@@ -42,6 +45,24 @@ class TabNavigationItem {
           page: MySettingsScreen(),
           icon: Icon(Icons.settings),
           title: Text("Settings"),
+        ),
+      ];
+
+  static List<TabNavigationItem> itemsDemo() => [
+        TabNavigationItem(
+          page: HomeScreenDemo(),
+          icon: Icon(Icons.home),
+          title: Text("Home"),
+        ),
+        TabNavigationItem(
+          page: Text("Saved Tracks"),
+          icon: Icon(Icons.music_note),
+          title: Text("Saved Songs"),
+        ),
+        TabNavigationItem(
+          page: Text("More"),
+          icon: Icon(Icons.add),
+          title: Text("More"),
         ),
       ];
 }

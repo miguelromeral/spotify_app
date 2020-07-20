@@ -13,6 +13,8 @@ class Suggestion {
   static const String fdate = 'date';
   int likes;
   static const String flikes = 'likes';
+  bool private;
+  static const String fprivate = 'private';
   DocumentReference reference;
 
   //Suggestion({ this.trackid, this.suserid, this.fuserid });
@@ -23,6 +25,7 @@ class Suggestion {
       this.text,
       this.date,
       this.likes,
+      this.private,
       this.reference});
 
   Suggestion.fromDocumentSnapshot(DocumentSnapshot doc) {
@@ -32,6 +35,7 @@ class Suggestion {
     text = doc.data[ftext] ?? '';
     date = DateTime.parse(doc.data[fdate]) ?? '';
     likes = doc.data[flikes] ?? 0;
+    private = doc.data[fprivate] ?? false;
     reference = doc.reference;
   }
 
@@ -41,6 +45,7 @@ class Suggestion {
       fsuserid: suserid,
       ffuserid: fuserid,
       ftext: text,
+      fprivate: private,
       fdate: date.toString(),
     };
   }

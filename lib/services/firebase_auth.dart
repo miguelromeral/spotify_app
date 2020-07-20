@@ -7,16 +7,15 @@ class FirebaseAuthService {
     return _auth.onAuthStateChanged;
   }
 
-  /*Future signInAnon() async {
+  Future<FirebaseUser> signInAnon() async {
     try {
       AuthResult result = await _auth.signInAnonymously();
-      FirebaseUser user = result.user;
-      return user;
+      return result.user;
     } catch (e) {
       print(e.toString());
       return null;
     }
-  }*/
+  }
 
   Future<FirebaseUser> signInWithEmailAndPassword(String email, String password) async {
     //try {

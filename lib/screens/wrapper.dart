@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/screens/demo/tabs_page_demo.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,13 +32,19 @@ class _WrapperState extends State<Wrapper> {
           transitionBuilder: (Widget child, Animation<double> animation) {
             return ScaleTransition(child: child, scale: animation);
           },
-          child: (state.logedin ? _buildScreen() : Authenticate()),
+          child: (state.logedin ? _buildScreen(state) : Authenticate()),
         );
       },
     );
   }
 
-  Widget _buildScreen() {
+  Widget _buildScreen(SpotifyService state) {
+    if (state.demo) {
+      /*return Scaffold(
+        body: Center(child: Text("Demo")),
+      );*/
+      return TabsPageDemo();
+    }
     if (firstLogin) {
       return Scaffold(
         body: FancyOnBoarding(
@@ -56,10 +63,9 @@ class _WrapperState extends State<Wrapper> {
   }
 
   Future endOnboarding() async {
-    // TODO: add prefs value to avoid seing the onboarding screen everytime.
-    /*final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     prefs.setBool('pref_first_login', false);
-    */
+
     setState(() {
       firstLogin = false;
     });

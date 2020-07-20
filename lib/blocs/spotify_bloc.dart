@@ -95,6 +95,30 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       //state.logout();
       SpotifyService newone = SpotifyService();
       yield newone;
+    } else if (event is LoginAnonymousEvent) {
+      SpotifyService demo = SpotifyService.demo();
+
+      try {
+        FirebaseAuthService _auth = FirebaseAuthService();
+        var user = await _auth.signInAnon();
+        if (user == null) {
+          throw Exception("No anonymous user loged.");
+        }
+        demo.auth = _auth;
+
+        var mycredentials = await SpotifyService.readCredentialsFile();
+        final spotify = SpotifyApi(mycredentials);
+        demo.api = spotify;
+        FirestoreService _db = FirestoreService();
+        print("Logged anonymously");
+      } catch (ae) {
+        print("Error while login: $ae");
+        yield SpotifyService.errorLogin();
+        return;
+      }
+      demo.login();
+      demo.updateDB(FirestoreService());
+      yield demo;
     } else {
       throw Exception('oops');
     }
@@ -163,17 +187,13 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   }
 }
 
-
-
-
 class SpotifyEventBase {}
 
 class LoginEvent extends SpotifyEventBase {
-  
   bool saveCredentials;
   SpotifyService service;
 
-  LoginEvent(SpotifyApi api, bool remember){
+  LoginEvent(SpotifyApi api, bool remember) {
     service = SpotifyService.withApi(api);
     service.login();
     saveCredentials = remember;
@@ -189,3 +209,5 @@ class UpdateSaved extends SpotifyEventBase {}
 class UpdatePlaylists extends SpotifyEventBase {}
 
 class LogoutEvent extends SpotifyEventBase {}
+
+class LoginAnonymousEvent extends SpotifyEventBase {}

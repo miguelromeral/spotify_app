@@ -94,6 +94,20 @@ class _AuthenticateState extends State<Authenticate> {
                         onPressed: () async {
                           login(context);
                         }),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    FlatButton(
+                        child: Text("Try the app in it's DEMO version."),
+                        textColor: Colors.grey,
+                        /*shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.white)),*/
+                        onPressed: () async {
+                          context
+                              .bloc<SpotifyBloc>()
+                              .add(LoginAnonymousEvent());
+                        }),
                   ],
                 ),
               );

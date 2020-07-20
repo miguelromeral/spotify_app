@@ -11,13 +11,19 @@ class PopupItemVote extends PopupItemBase {
   Track track;
   SpotifyService state;
 
-  PopupItemVote({this.suggestion, this.track, this.state}) : super(
-    icon: 'vote',
-    text: 'Vote!',
-  );
+  PopupItemVote({this.suggestion, this.track, this.state})
+      : super(
+          icon: 'vote',
+          text: 'Vote!',
+        );
 
   @override
   void execute(BuildContext context) async {
-    await vote(context, state, suggestion, track);
+    if (state.demo) {
+      showMyDialog(context, "You can't Vote Songs in DEMO", "Please, log in with Spotify if you want to vote for this song.");
+
+    } else {
+      await vote(context, state, suggestion, track);
+    }
   }
 }

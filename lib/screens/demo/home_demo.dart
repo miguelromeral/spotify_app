@@ -16,18 +16,19 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 import '../styles.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreenDemo extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenDemoState createState() => _HomeScreenDemoState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenDemoState extends State<HomeScreenDemo> {
   SpotifyBloc _bloc;
 
   Widget _createScaffold(Widget content) {
     return Scaffold(
-      appBar: CustomAppBar(
-        titleText: 'My Friends Suggestions',
+      appBar: AppBar(
+        title: Text('My DEMO Suggestions'),
+        centerTitle: true,
       ),
       body: content,
     );
@@ -41,22 +42,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       return Center(
-        child: StreamBuilder(
-          stream: state.feed,
-          builder: (context, snp) {
-            if (snp.hasData) {
-              List<Suggestion> list = snp.data;
+        child: FutureBuilder(
+          future: state.getPublicSuggestions(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Suggestion> list = snapshot.data;
               list.sort((a, b) => b.date.compareTo(a.date));
               return _createList(list, state);
-            } else if (snp.hasError) {
-              return _createScaffold(ErrorScreen(
-                title: 'Error while retrieving your feed.',
-              ));
+            } else if (snapshot.hasError) {
+              return ErrorScreen();
             } else {
-              _getData();
-              return _createScaffold(LoadingScreen(
-                title: 'Loading Feed...',
-              ));
+              return LoadingScreen();
             }
           },
         ),
@@ -66,58 +62,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _createList(List<Suggestion> sugs, SpotifyService state) {
     return SafeArea(
-          child: NestedScrollView(
+      child: NestedScrollView(
         headerSliverBuilder: (context, innerBoxScrolled) => [
           CustomSliverAppBar(title: 'My Firends Suggestion', state: state),
         ],
-        body: NotificationListener<UpdatedFeedNotification>(
-          onNotification: (notification) {
-            _getData();
-            return true;
-          },
-          child: Flexible(
-              child: RefreshIndicator(
-            onRefresh: _getData,
-            child: ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                      color: colorSeprator,
-                    ),
-                itemCount: sugs.length,
-                itemBuilder: (context, index) =>
-                    _createListElement(sugs[index], state)),
-          )),
-        ),
-      ),
-    );
-
-    /*return CustomScrollView(slivers: <Widget>[
-      CustomSliverAppBar(title: 'My Firends Suggestion', state: state),
-      SliverList(
-        delegate: SliverChildBuilderDelegate((_, int index) {
-          if (index < sugs.length)
-            return _createListElement(sugs[index], state);
-        }),
-      ),
-    ]);*/
-
-    /*
-    return NotificationListener<UpdatedFeedNotification>(
-      onNotification: (notification) {
-        _getData();
-        return true;
-      },
-      child: Flexible(
-          child: RefreshIndicator(
-        onRefresh: _getData,
-        child: ListView.separated(
+        body: ListView.separated(
             separatorBuilder: (context, index) => Divider(
                   color: colorSeprator,
                 ),
             itemCount: sugs.length,
             itemBuilder: (context, index) =>
                 _createListElement(sugs[index], state)),
-      )),
-    );*/
+      ),
+    );
   }
 
   Widget _createListElement(Suggestion item, SpotifyService state) {
@@ -163,13 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
           });
-    }
-  }
-
-  Future<void> _getData() async {
-    if (_bloc != null) {
-      _bloc.add(UpdateFeed());
-      await Future.delayed(Duration(seconds: 2));
     }
   }
 }

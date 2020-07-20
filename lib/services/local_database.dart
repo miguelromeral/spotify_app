@@ -60,11 +60,12 @@ class LocalDB {
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       return Suggestion(
-        trackid: maps[i]['trackid'],
-        fuserid: maps[i]['fuserid'],
-        suserid: maps[i]['suserid'],
-        text: maps[i]['text'],
-        date: DateTime.parse(maps[i]['date']),
+        trackid: maps[i][Suggestion.ftrackid],
+        fuserid: maps[i][Suggestion.fsuserid],
+        suserid: maps[i][Suggestion.fsuserid],
+        text: maps[i][Suggestion.ftext],
+        private: maps[i][Suggestion.fprivate],
+        date: DateTime.parse(maps[i][Suggestion.fdate]),
       );
     });
   }

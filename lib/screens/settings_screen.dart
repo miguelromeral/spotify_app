@@ -66,6 +66,16 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                   ),
                 ],
               ),
+              SwitchSettingsTile(
+                settingKey: settings_suggestion_private,
+                title: 'Allow anonymous users to see your suggestions',
+                enabledLabel:
+                    'Your next suggestions will be visible to any other anonymous users who try the demo of the app.',
+                disabledLabel: "Anonymous users won't see your suggestions. By enabling this option, you'll contribute "
+                "other users who wan't to join the ShareTrackCommunity but they're not sure about singing in.",
+                leading: Icon(Icons.settings_input_antenna),
+                defaultValue: false,
+              ),
             ],
           ),
           SettingsGroup(
@@ -464,3 +474,4 @@ final String settings_track_duration = 'set_track_duration';
 final String settings_suggestion_message = 'set_suggestion_message';
 final String settings_suggestion_message_enabled =
     'set_suggestion_message_enabled';
+final String settings_suggestion_private = 'set_suggestion_private';

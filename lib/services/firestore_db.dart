@@ -1,4 +1,6 @@
+import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
@@ -35,6 +37,8 @@ class FirestoreService {
       Suggestion.fsuserid: spotifyuserid,
       Suggestion.ffuserid: firebaseUserID,
       Suggestion.ftext: text,
+      Suggestion.fprivate:
+          Settings.getValue<bool>(settings_suggestion_private, false),
       Suggestion.fdate: now.toString(),
       Suggestion.flikes: 0,
     });
@@ -80,6 +84,23 @@ class FirestoreService {
           print(element.suserid);
         });*/
 
+        return _suggestionListFromSnapshot(value);
+      }).catchError((onError) {
+        print("Error: $onError");
+        return null;
+      });
+    } catch (err) {
+      print("error while getting stream: $err");
+      return null;
+    }
+  }
+
+  Future<List<Suggestion>> getPublicSuggestions() async {
+    try {
+      return cSuggestions
+          .where(Suggestion.fprivate, isEqualTo: true)
+          .getDocuments()
+          .then((QuerySnapshot value) {
         return _suggestionListFromSnapshot(value);
       }).catchError((onError) {
         print("Error: $onError");

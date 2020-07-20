@@ -64,7 +64,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
             shareContent: _getShareContent(), title: 'Share Suggestion')
         .create());
 
-    if (user != null) {
+    if (user != null && !state.demo) {
       list.add(PopupItemOpenProfile(user: user).create());
     }
 
@@ -161,7 +161,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
           leadingIcon: _createLeadingIcon(user, track),
           trailingIcon: _createTrailingIcon(user, track),
           content: _content(),
-          bottomIcons: _createBottomBar(state),
+          bottomIcons: _createBottomBar(context, state),
           menuItems: _getActions(widget.track, widget.user, widget.suggestion,
               state.mySpotifyUserId, state),
         );
@@ -205,7 +205,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
     ];
   }
 
-  List<Widget> _createBottomBar(SpotifyService state) {
+  List<Widget> _createBottomBar(BuildContext context, SpotifyService state) {
     List<Widget> list = List();
 
     if (widget.suggestion.likes != null) {
@@ -213,11 +213,16 @@ class _SuggestionItemState extends State<SuggestionItem> {
         child: Row(
           children: [
             MyIcon(
-              icon: 'vote',
-              size: 20.0,
-              callback: () =>
-                  vote(context, state, widget.suggestion, widget.track),
-            ),
+                icon: 'vote',
+                size: 20.0,
+                callback: () async {
+                  if (state.demo) {
+                    showMyDialog(context, "You can't Vote Songs in DEMO",
+                        "Please, log in with Spotify if you want to vote for this song.");
+                  } else {
+                    vote(context, state, widget.suggestion, widget.track);
+                  }
+                }),
             SizedBox(
               width: 4.0,
             ),

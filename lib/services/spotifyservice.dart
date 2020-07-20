@@ -19,6 +19,7 @@ class SpotifyService {
   FirestoreService _db;
   LocalDB _localDB;
   bool logedin = false;
+  bool demo = false;
   Track toShare;
   bool errorInLogin = false;
   //Following following;
@@ -77,6 +78,10 @@ class SpotifyService {
 
   SpotifyService.errorLogin() {
     errorInLogin = true;
+  }
+
+  SpotifyService.demo(){
+    demo = true;
   }
 
   bool isInit = false;
@@ -215,4 +220,7 @@ class SpotifyService {
   Stream<List<Following>> get allFollowings => _db.following;
 
   Future<List<Suggestion>> getsuggestions() async => await _db.getsuggestions();
+
+  Future<List<Suggestion>> getPublicSuggestions() async => await _db.getPublicSuggestions();
+
 }

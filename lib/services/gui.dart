@@ -20,6 +20,27 @@ Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
   }
 }
 
+void showMyDialog(BuildContext context, String title, String subtitle) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text(title),
+        content: new Text(subtitle),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text("OK"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Future openTrackSpotify(Track track) async {
   openUrl(track.uri);
 }
