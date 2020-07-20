@@ -1,4 +1,6 @@
 import 'package:ShareTheMusic/screens/demo/home_demo.dart';
+import 'package:ShareTheMusic/screens/demo/more_screen.dart';
+import 'package:ShareTheMusic/screens/demo/tracks_demo.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
@@ -48,19 +50,19 @@ class TabNavigationItem {
         ),
       ];
 
-  static List<TabNavigationItem> itemsDemo() => [
+  static List<TabNavigationItem> itemsDemo(SpotifyService state) => [
         TabNavigationItem(
           page: HomeScreenDemo(),
           icon: Icon(Icons.home),
           title: Text("Home"),
         ),
         TabNavigationItem(
-          page: Text("Saved Tracks"),
+          page: SavedTracksDemo(api: state.api),
           icon: Icon(Icons.music_note),
           title: Text("Saved Songs"),
         ),
         TabNavigationItem(
-          page: Text("More"),
+          page: DemoMoreScreen(),
           icon: Icon(Icons.add),
           title: Text("More"),
         ),

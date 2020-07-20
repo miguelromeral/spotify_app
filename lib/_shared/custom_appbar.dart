@@ -22,29 +22,36 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var state = BlocProvider.of<SpotifyBloc>(context).state;
 
-    return AppBar(
-      leading: Container(
-        padding: EdgeInsets.all(8.0),
-        child: BlocBuilder<SpotifyBloc, SpotifyService>(
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                OpenDrawerNotification().dispatch(context);
-              },
-              child: _buildContent(state.myUser, context),
-            );
-          },
+    if (state.demo) {
+      return AppBar(
+        title: Text(titleText),
+        centerTitle: true,
+      );
+    } else {
+      return AppBar(
+        leading: Container(
+          padding: EdgeInsets.all(8.0),
+          child: BlocBuilder<SpotifyBloc, SpotifyService>(
+            builder: (context, state) {
+              return GestureDetector(
+                onTap: () {
+                  OpenDrawerNotification().dispatch(context);
+                },
+                child: _buildContent(state, context),
+              );
+            },
+          ),
         ),
-      ),
-      title: Text(titleText),
-      centerTitle: true,
-    );
+        title: Text(titleText),
+        centerTitle: true,
+      );
+    }
   }
 
-  Widget _buildContent(User state, BuildContext context) {
-    if (state != null) {
+  Widget _buildContent(SpotifyService state, BuildContext context) {
+    if (state.myUser != null) {
       return ProfilePicture(
-        user: state,
+        user: state.myUser,
         size: 40.0,
       );
     } else {

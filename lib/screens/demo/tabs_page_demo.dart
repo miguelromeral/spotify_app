@@ -43,7 +43,7 @@ class _TabsPageDemoState extends State<TabsPageDemo> {
   }
 
   Widget _fullTree(SpotifyService state) {
-    var items = TabNavigationItem.itemsDemo();
+    var items = TabNavigationItem.itemsDemo(state);
     return Scaffold(
       key: _scaffoldKey,
       body: IndexedStack(

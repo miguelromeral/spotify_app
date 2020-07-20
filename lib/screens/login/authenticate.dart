@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/_shared/app_logo.dart';
+import 'package:ShareTheMusic/_shared/myicon.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
@@ -61,78 +65,133 @@ class _AuthenticateState extends State<Authenticate> {
   Widget build(BuildContext buildContext) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Login to ShareTheTrack!'),
-      ),
-      body: BlocBuilder<SpotifyBloc, SpotifyService>(
-        builder: (context, state) {
-          errorInLogin = state.errorInLogin;
-          switch (_state) {
-            case _loginState.waitingUser:
-            case _loginState.tokenRevoked:
-              if (_state == _loginState.tokenRevoked) {
-                //print("Snackbar");
-                /*var sb = SnackBar(
-                    content: Text(
-                        ));
-                _scaffoldKey.currentState.showSnackBar(sb);*/
-                _showSnackBar(
-                    'Your session has expired. Please, log in manually.',
-                    context);
-                //Scaffold.of(context).showSnackBar(sb);
-              }
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RaisedButton(
-                        child: Text('Log In'),
-                        textColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.white)),
-                        onPressed: () async {
-                          login(context);
-                        }),
-                    SizedBox(
-                      height: 16.0,
+      body: Center(
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [colorThirdBackground, Colors.black, colorPrimary])),
+          child: BlocBuilder<SpotifyBloc, SpotifyService>(
+            builder: (context, state) {
+              errorInLogin = state.errorInLogin;
+              switch (_state) {
+                case _loginState.waitingUser:
+                case _loginState.tokenRevoked:
+                  if (_state == _loginState.tokenRevoked) {
+                    //print("Snackbar");
+                    /*var sb = SnackBar(
+                        content: Text(
+                            ));
+                    _scaffoldKey.currentState.showSnackBar(sb);*/
+                    _showSnackBar(
+                        'Your session has expired. Please, log in manually.',
+                        context);
+                    //Scaffold.of(context).showSnackBar(sb);
+                  }
+                  return SafeArea(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: [
+                                Text('Welcome to'),
+                                ScalingText(
+                                  'ShareTheTrack',
+                                  style: TextStyle(fontSize: 28.0),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            // TODO: ADD PRIVACY POLICY CHECK
+                            flex: 5,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GlowingProgressIndicator(
+                                  child: AppLogo(),
+                                  duration: Duration(seconds: 5),
+                                ),
+                                SizedBox(
+                                  height: 16.0,
+                                ),
+                                RaisedButton(
+                                    child: Text('Log In with Spotify Account'),
+                                    textColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        side: BorderSide(color: colorPrimary)),
+                                    onPressed: () async {
+                                      login(context);
+                                    }),
+                                SizedBox(
+                                  height: 16.0,
+                                ),
+                                RaisedButton(
+                                    child: Text("Try the app's DEMO version"),
+                                    textColor: Colors.grey,
+                                    color: colorThirdBackground,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        side: BorderSide(color: Colors.grey)),
+                                    onPressed: () async {
+                                      context
+                                          .bloc<SpotifyBloc>()
+                                          .add(LoginAnonymousEvent());
+                                    }),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                MyIcon(
+                                  icon: 'spotify',
+                                  size: 24.0,
+                                ),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text("With the colaboration of Spotify"),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    FlatButton(
-                        child: Text("Try the app in it's DEMO version."),
-                        textColor: Colors.grey,
-                        /*shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.white)),*/
-                        onPressed: () async {
-                          context
-                              .bloc<SpotifyBloc>()
-                              .add(LoginAnonymousEvent());
-                        }),
-                  ],
-                ),
-              );
-            case _loginState.loadingSaved:
-              return LoadingScreen();
-            case _loginState.loading:
-              if (_api != null) {
-                context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
+                  );
+                case _loginState.loadingSaved:
+                  return LoadingScreen();
+                case _loginState.loading:
+                  if (_api != null) {
+                    context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
+                  }
+                  return LoadingScreen(
+                    below: [
+                      Text("Please, wait until you've been loged in."),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      Text("This may take a few seconds."),
+                    ],
+                  );
+                default:
+                  return ErrorScreen(
+                    title: 'Error while Login.',
+                    stringBelow: ['Please, try again later.'],
+                  );
               }
-              return LoadingScreen(
-                below: [
-                  Text("Please, wait until you've been loged in."),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text("This may take a few seconds."),
-                ],
-              );
-            default:
-              return ErrorScreen(
-                title: 'Error while Login.',
-                stringBelow: ['Please, try again later.'],
-              );
-          }
-        },
+            },
+          ),
+        ),
       ),
     );
   }

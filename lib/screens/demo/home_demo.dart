@@ -61,10 +61,14 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   }
 
   Widget _createList(List<Suggestion> sugs, SpotifyService state) {
+    if (!state.logedin) {
+      return ErrorScreen();
+    }
+
     return SafeArea(
       child: NestedScrollView(
         headerSliverBuilder: (context, innerBoxScrolled) => [
-          CustomSliverAppBar(title: 'My Firends Suggestion', state: state),
+          CustomSliverAppBar(title: 'My DEMO Suggestion', state: state),
         ],
         body: ListView.separated(
             separatorBuilder: (context, index) => Divider(

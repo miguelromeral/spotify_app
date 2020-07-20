@@ -20,12 +20,16 @@ class CustomSliverAppBar extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: BlocBuilder<SpotifyBloc, SpotifyService>(
           builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                OpenDrawerNotification().dispatch(context);
-              },
-              child: _buildContent(context, state.myUser),
-            );
+            if (state.demo) {
+              return Container();
+            } else {
+              return GestureDetector(
+                onTap: () {
+                  OpenDrawerNotification().dispatch(context);
+                },
+                child: _buildContent(context, state.myUser),
+              );
+            }
           },
         ),
       ),

@@ -171,21 +171,29 @@ class _ShareTrackState extends State<ShareTrack> {
                         // If the form is valid, display a snackbar. In the real world,
                         // you'd often call a server or save the information in a database.
 
-                        var spUser = state.myUser;
-                        var sug = await state.updateUserData(
-                            spUser.id, widget.track.id, _description);
+                        if (state.demo) {
+                          showMyDialog(
+                              context,
+                              'Log In For Full Access!',
+                              "Would you like to share this track with your followers?\n"
+                                  "Please, log in with your spotify account to share it with the community.");
+                        } else {
+                          var spUser = state.myUser;
+                          var sug = await state.updateUserData(
+                              spUser.id, widget.track.id, _description);
 
-                        await localdb.insertSuggestion(sug);
+                          await localdb.insertSuggestion(sug);
 
-                        var bloc = BlocProvider.of<SpotifyBloc>(context);
-                        bloc.add(UpdateFeed());
-                        bloc.add(UpdateMySuggestion());
-                        UpdatedFeedNotification().dispatch(context);
+                          var bloc = BlocProvider.of<SpotifyBloc>(context);
+                          bloc.add(UpdateFeed());
+                          bloc.add(UpdateMySuggestion());
+                          UpdatedFeedNotification().dispatch(context);
 
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text('Updated Suggestion!')));
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text('Updated Suggestion!')));
 
-                        Navigator.pop(context);
+                          Navigator.pop(context);
+                        }
                       }
                     },
                     child: Text('SUBMIT'),
