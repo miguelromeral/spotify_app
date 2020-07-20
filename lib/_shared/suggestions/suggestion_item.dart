@@ -122,7 +122,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         ),
       );
     } else {
-      return null;
+      return Container();
     }
   }
 
@@ -173,20 +173,9 @@ class _SuggestionItemState extends State<SuggestionItem> {
     return [
       Container(
         //color: Colors.green,
-        child: Row(
-          children: [
-            Text(
-              _createTitle(widget.track, widget.user),
-              style: styleFeedTitle,
-            ),
-            SizedBox(width: 8.0),
-            Text(
-              "(${timeago.format(widget.suggestion.date, locale: 'en_short')})",
-              style: styleFeedAgo,
-            ),
-          ],
-        ),
+        child: _getFirstTitle(),
       ),
+      _getSecondTitle(),
       SizedBox(height: 4.0),
       Container(
         //color: Colors.yellow[100],
@@ -203,6 +192,40 @@ class _SuggestionItemState extends State<SuggestionItem> {
         ),
       )
     ];
+  }
+
+  Widget _getFirstTitle() {
+    if (widget.user != null) {
+      return Row(
+        children: [
+          Text(
+            _createTitle(widget.track, widget.user),
+            style: styleFeedTitle,
+          ),
+          SizedBox(width: 8.0),
+          Text(
+            "(${timeago.format(widget.suggestion.date, locale: 'en_short')})",
+            style: styleFeedAgo,
+          ),
+        ],
+      );
+    } else {
+      return Text(
+        _createTitle(widget.track, widget.user),
+        style: styleFeedTitle,
+      );
+    }
+  }
+
+  Widget _getSecondTitle() {
+    if (widget.user != null) {
+      return Container();
+    } else {
+      return Text(
+        "(${timeago.format(widget.suggestion.date, locale: 'en_short')})",
+        style: styleFeedAgo,
+      );
+    }
   }
 
   List<Widget> _createBottomBar(BuildContext context, SpotifyService state) {

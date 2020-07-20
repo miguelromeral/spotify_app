@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/following/following_button.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/_shared/custom_listtile.dart';
@@ -60,7 +61,12 @@ class _FollowingItemState extends State<FollowingItem> {
                       user: user,
                       size: 50.0,
                     ),
-                    trailingIcon: _followingIcon(fol, user, state),
+                    trailingIcon: FollowingButton(
+                      key: new GlobalKey(),
+                      myFollowings: widget.myFollowings,
+                      user: user,
+                      userFollowing: fol,
+                    ),
                     content: _createContent(user),
                     bottomIcons: _createBottomBar(fol, context, state, user),
                     menuItems: _getActions(state, user),
@@ -125,62 +131,6 @@ class _FollowingItemState extends State<FollowingItem> {
       ],
     ));*/
     return list;
-  }
-
-  Widget _followingIcon(Following fol, UserPublic user, SpotifyService state) {
-    var size = 27.0;
-    if (currentlyFollowing) {
-      return RaisedButton.icon(
-        textColor: Colors.black,
-        shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.white)),
-        onPressed: () async {
-          _followUnfollow(fol, user, state);
-        },
-        icon: MyIcon(
-          icon: 'heart_filled',
-          size: size,
-        ),
-        label: Text('Unfollow'),
-      );
-    } else {
-      return RaisedButton.icon(
-      
-        color: colorPrimary,
-        shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.white)),
-        onPressed: () async {
-          _followUnfollow(fol, user, state);
-        },
-        icon: MyIcon(
-          icon: 'heart_empty',
-          size: size,
-        ),
-        label: Text('Follow!'),
-      );
-    }
-  }
-
-  Future _followUnfollow(
-      Following fol, UserPublic user, SpotifyService state) async {
-    if (!state.firebaseUserIdEquals(fol.fuserid)) {
-      if (currentlyFollowing) {
-        await state.removeFollowing(widget.myFollowings, widget.suserid);
-        Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('You no longer follow ${user.displayName}!')));
-      } else {
-        await state.addFollowing(widget.myFollowings, widget.suserid);
-        Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text('You followed ${user.displayName}!')));
-      }
-
-      BlocProvider.of<SpotifyBloc>(context).add(UpdateFeed());
-    } else {
-      Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text('You Can Not Unfollow Yourself!')));
-    }
   }
 
   List<PopupMenuItem<PopupItemBase>> _getActions(

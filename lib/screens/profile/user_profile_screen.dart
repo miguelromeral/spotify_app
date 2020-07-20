@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/_shared/following/following_button.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:flutter/material.dart';
@@ -79,28 +80,60 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           title: 'Spotify ID',
                           content: user.id,
                         ),
-                        FutureBuilder(
-                          future: state.getFollowers(widget.user.id),
+                        StreamBuilder(
+                          stream: state.following,
                           builder: (context, snp) {
                             if (snp.hasData) {
-                              List<Following> list = snp.data;
-                              /*String text = '';
+                              Following mine = snp.data;
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FutureBuilder(
+                                    future: state.getFollowers(widget.user.id),
+                                    builder: (context, snp) {
+                                      if (snp.hasData) {
+                                        List<Following> list = snp.data;
+                                        /*String text = '';
                               for(var f in list){
                                 text += '${f.name},\n';
                               }*/
-                              return CardInfo(
-                                title: 'ShareTheTrack followers',
-                                content: '${list.length}',
-                                //content: text,
+                                        return CardInfo(
+                                          title: 'ShareTheTrack followers',
+                                          content: '${list.length}',
+                                          //content: text,
+                                        );
+                                      } else {
+                                        return CardInfo(
+                                          title: 'ShareTheTrack followers',
+                                          content: 'Unknown',
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  FutureBuilder(
+                                    future: state
+                                        .getFollowingBySpotifyUserID(user.id),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        Following userFollowing = snapshot.data;
+                                        return FollowingButton(
+                                          myFollowings: mine,
+                                          user: user,
+                                          userFollowing: userFollowing,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ],
                               );
                             } else {
-                              return CardInfo(
-                                title: 'ShareTheTrack followers',
-                                content: 'Unknown',
-                              );
+                              return Container();
                             }
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),

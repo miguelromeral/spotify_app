@@ -71,8 +71,9 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 title: 'Allow anonymous users to see your suggestions',
                 enabledLabel:
                     'Your next suggestions will be visible to any other anonymous users who try the demo of the app.',
-                disabledLabel: "Anonymous users won't see your suggestions. By enabling this option, you'll contribute "
-                "other users who wan't to join the ShareTrackCommunity but they're not sure about singing in.",
+                disabledLabel:
+                    "Anonymous users won't see your suggestions. By enabling this option, you'll contribute "
+                    "other users who wan't to join the ShareTrackCommunity but they're not sure about singing in.",
                 leading: Icon(Icons.settings_input_antenna),
                 defaultValue: false,
               ),
@@ -98,21 +99,19 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 },
               ),
               ListTile(
-                title: Text('Read Privacy Policy'),
-                //TODO: Add Privacy Policy link
-                subtitle: Text('TODO'),
+                title: Text('Privacy Policy'),
+                subtitle: Text("Read the app's Privacy Policy"),
                 onTap: () {
-                  //  openUrl('https://github.com/miguelromeral/spotify_app/issues');
+                  openUrl(
+                      'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md');
                 },
               ),
               ListTile(
                 title: Text('Additional Thanks To'),
-                subtitle: Text(
-                    'Data: Spotify\n'
+                subtitle: Text('Data: Spotify\n'
                     'Backend: Firebase (Firestore)\n'
                     'Icons: app.streamlineicons.com\n'
-                    'And last but not least: You for using the app 🙂\n'
-                    ),
+                    'And last but not least: You for using the app 🙂\n'),
                 /*: () {
                   //  openUrl('https://github.com/miguelromeral/spotify_app/issues');
                 },*/
