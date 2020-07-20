@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ShareTheMusic/_shared/app_logo.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -27,6 +28,8 @@ class _AuthenticateState extends State<Authenticate> {
   bool errorInLogin = false;
   //  TODO: ARREGLAR QUE SI EL TOKEN SE REVOCA, SE VUELVA A ESTA PANTALLA DE FORMA SEGURA
   _loginState _state = _loginState.loadingSaved;
+
+  bool _acceptPolicy = false;
 
   @override
   void initState() {
@@ -107,7 +110,6 @@ class _AuthenticateState extends State<Authenticate> {
                             ),
                           ),
                           Expanded(
-                            // TODO: ADD PRIVACY POLICY CHECK
                             flex: 5,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -119,31 +121,43 @@ class _AuthenticateState extends State<Authenticate> {
                                 SizedBox(
                                   height: 16.0,
                                 ),
-                                RaisedButton(
-                                    child: Text('Log In with Spotify Account'),
-                                    textColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side: BorderSide(color: colorPrimary)),
-                                    onPressed: () async {
-                                      login(context);
-                                    }),
+                                _loginButton(context),
                                 SizedBox(
                                   height: 16.0,
                                 ),
                                 RaisedButton(
                                     child: Text("Try the app's DEMO version"),
-                                    textColor: Colors.grey,
+                                    textColor: Colors.white,
                                     color: colorThirdBackground,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(18.0),
-                                        side: BorderSide(color: Colors.grey)),
+                                        side: BorderSide(color: colorPrimary)),
                                     onPressed: () async {
                                       context
                                           .bloc<SpotifyBloc>()
                                           .add(LoginAnonymousEvent());
+                                    }),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Checkbox(
+                                      value: _acceptPolicy,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _acceptPolicy = value;
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                        'By enabling this option, you agree the app Privacy Policy'),
+                                  ],
+                                ),
+                                FlatButton(
+                                    child: Text('Click here to read Privacy Policy'),
+                                    textColor: Colors.white70,
+                                    onPressed: () {
+                                      openUrl('https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md');
                                     }),
                               ],
                             ),
@@ -194,6 +208,33 @@ class _AuthenticateState extends State<Authenticate> {
         ),
       ),
     );
+  }
+
+  Widget _loginButton(BuildContext context) {
+    if (_acceptPolicy) {
+      return RaisedButton(
+          child: Text('Log In with Spotify Account'),
+          textColor: Colors.black,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              side: BorderSide(color: colorPrimary)),
+          onPressed: () async {
+            login(context);
+          });
+    } else {
+      return RaisedButton(
+          child: Text('Log In with Spotify Account'),
+          textColor: Colors.grey,
+          color: colorThirdBackground,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.grey)),
+          onPressed: () async {
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text("Please, accept Privacy Policy first"),
+            ));
+          });
+    }
   }
 
   Future automaticLogin() async {
