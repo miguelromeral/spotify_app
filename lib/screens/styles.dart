@@ -29,6 +29,12 @@ final ThemeData appTheme = _buildAppTheme();
 
 //const backgroundColor = const Colors;
 
+BoxDecoration backgroundGradient = BoxDecoration(
+    gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [colorThirdBackground, Colors.black, colorPrimary]));
+
 ThemeData _buildAppTheme() {
   final ThemeData base = ThemeData.dark();
   //return base;

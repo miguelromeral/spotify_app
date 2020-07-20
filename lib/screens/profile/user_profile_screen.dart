@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,62 +56,87 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget _createBody(
       BuildContext context, UserPublic user, SpotifyService state) {
     return Center(
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
+      child: Container(
+        decoration: backgroundGradient,
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CardInfo(
+                          title: 'Display Name',
+                          content: user.displayName,
+                        ),
+                        CardInfo(
+                          title: 'Spotify ID',
+                          content: user.id,
+                        ),
+                        FutureBuilder(
+                          future: state.getFollowers(widget.user.id),
+                          builder: (context, snp) {
+                            if (snp.hasData) {
+                              List<Following> list = snp.data;
+                              /*String text = '';
+                              for(var f in list){
+                                text += '${f.name},\n';
+                              }*/
+                              return CardInfo(
+                                title: 'ShareTheTrack followers',
+                                content: '${list.length}',
+                                //content: text,
+                              );
+                            } else {
+                              return CardInfo(
+                                title: 'ShareTheTrack followers',
+                                content: 'Unknown',
+                              );
+                            }
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CardInfo(
-                        title: 'Display Name',
-                        content: user.displayName,
-                      ),
-                      CardInfo(
-                        title: 'Spotify ID',
-                        content: user.id,
+                      ProfilePicture(
+                        user: user,
+                        size: 100.0,
                       ),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    ProfilePicture(
-                      user: user,
-                      size: 100.0,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          /*CustomCard(content: [
-            Text(
-              'My Last Suggestion',
-              style: styleCardHeader,
-            ),*/
-          Text('My Last Suggestion'),
-          SizedBox(
-            height: 8.0,
-          ),
-          NotificationListener<UpdatedFeedNotification>(
-            onNotification: (notification) {
-              _getData();
-              return true;
-            },
-            child: _buildContent(state),
-          ),
-          //     ]),
-        ],
+              ],
+            ),
+            /*CustomCard(content: [
+              Text(
+                'My Last Suggestion',
+                style: styleCardHeader,
+              ),*/
+            Text('My Last Suggestion'),
+            SizedBox(
+              height: 8.0,
+            ),
+            NotificationListener<UpdatedFeedNotification>(
+              onNotification: (notification) {
+                _getData();
+                return true;
+              },
+              child: _buildContent(state),
+            ),
+            //     ]),
+          ],
+        ),
       ),
     );
   }

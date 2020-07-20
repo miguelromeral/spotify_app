@@ -223,4 +223,6 @@ class SpotifyService {
 
   Future<List<Suggestion>> getPublicSuggestions() async => await _db.getPublicSuggestions();
 
+  Future<List<Following>> getFollowers(String suserid) async => await _db.getFollowers(suserid);
+
 }

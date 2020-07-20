@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
@@ -30,6 +31,7 @@ class LoadingScreen extends StatelessWidget {
 
   Widget _buildContent(BuildContext context) {
     return Container(
+      decoration: backgroundGradient,
       padding: EdgeInsets.all(16.0),
       child: Center(
         child: Column(

@@ -15,6 +15,7 @@ import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/screens/login/webview_container.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -70,11 +71,7 @@ class _AuthenticateState extends State<Authenticate> {
       key: _scaffoldKey,
       body: Center(
         child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [colorThirdBackground, Colors.black, colorPrimary])),
+          decoration: backgroundGradient,
           child: BlocBuilder<SpotifyBloc, SpotifyService>(
             builder: (context, state) {
               errorInLogin = state.errorInLogin;
@@ -150,14 +147,23 @@ class _AuthenticateState extends State<Authenticate> {
                                       },
                                     ),
                                     Text(
-                                        'By enabling this option, you agree the app Privacy Policy'),
+                                        "By enabling this option, you agree with the app's Privacy Policy"),
                                   ],
                                 ),
                                 FlatButton(
-                                    child: Text('Click here to read Privacy Policy'),
+                                    child: Text(
+                                        'Click here to read the Privacy Policy'),
                                     textColor: Colors.white70,
                                     onPressed: () {
-                                      openUrl('https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => WebViewContainer(
+                                                'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
+                                                "ShareTheTrack's Privacy Policy",
+                                                (_) => NavigationDecision
+                                                    .navigate)),
+                                      );
                                     }),
                               ],
                             ),
@@ -279,7 +285,32 @@ class _AuthenticateState extends State<Authenticate> {
         MaterialPageRoute(
             builder: (context) => WebViewContainer(
                   authUri.toString(),
-                  grant,
+                  'Log in with Spotify',
+                  (navReq) {
+                    print("Nav Req: ${navReq.url}");
+
+                    if (navReq.url.startsWith(SpotifyService.redirectUri)) {
+                      if (navReq.url
+                          .toString()
+                          .contains("?error=access_denied")) {
+                        Navigator.pop(context, null);
+                      }
+                      try {
+                        final spotify =
+                            SpotifyApi.fromAuthCodeGrant(grant, navReq.url);
+
+                        //   BlocProvider.of<SpotifyBloc>(context).add(LoginEvent(spotify, widget.remember));
+
+                        Navigator.pop(context, spotify);
+                      } catch (e) {
+                        print("Error while redirecting: $e");
+                      }
+
+                      return NavigationDecision.prevent;
+                    }
+
+                    return NavigationDecision.navigate;
+                  },
                 )));
     if (res != null) {
       setState(() {

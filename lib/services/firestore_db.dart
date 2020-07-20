@@ -199,12 +199,14 @@ class FirestoreService {
     return cFollowing.snapshots().map(_followingListFromSnapshot);
   }
 
-  int getFollowers(Following me, List<Following> all) {
-    int total = 0;
+  Future<List<Following>> getFollowers(String spotifyUserId) async {
+    var me = getFollowingBySpotifyUserID(spotifyUserId);
+    var all = await cFollowing.getDocuments().then(_followingListFromSnapshot);
+    List<Following> total = List();
     for (var f in all) {
       //if(f.users.contains(me.suserid)){
-      if (f.suserid != me.suserid && f.users.contains(me.suserid)) {
-        total++;
+      if (f.suserid != spotifyUserId && f.users.contains(spotifyUserId)) {
+        total.add(f);
       }
     }
     return total;
