@@ -1,5 +1,6 @@
 import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
@@ -188,14 +189,19 @@ class _ShareTrackState extends State<ShareTrack> {
                             bloc.add(UpdateFeed());
                             bloc.add(UpdateMySuggestion());
                             UpdatedFeedNotification().dispatch(context);
+                            
+                            BlocProvider.of<HomeBloc>(context).add(
+                                UpdateFeedHomeEvent(
+                                    suggestions: await state.getsuggestions()));
 
                             Scaffold.of(context).showSnackBar(
                                 SnackBar(content: Text('Updated Suggestion!')));
 
                             Navigator.pop(context);
-                          }else{
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Error while updating your suggestion.')));
+                          } else {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Error while updating your suggestion.')));
                           }
                         }
                       }

@@ -8,6 +8,8 @@ import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/screens/wrapper.dart';
 import 'package:ShareTheMusic/services/firebase_auth.dart';
 
+import 'blocs/home_bloc.dart';
+
 Future<void> main() async {
   await initSettings();
   runApp(MyApp());
@@ -32,6 +34,9 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<SpotifyBloc>(
               create: (BuildContext context) => SpotifyBloc(),
+            ),
+            BlocProvider<HomeBloc>(
+              create: (BuildContext context) => HomeBloc(),
             ),
           ],
           child: MaterialApp(

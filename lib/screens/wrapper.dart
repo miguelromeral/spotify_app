@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/screens/demo/tabs_page_demo.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 import 'package:flutter/material.dart';
