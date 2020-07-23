@@ -85,9 +85,9 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       //state.updateSaved(await _updateSaved(state, event.api));
       //yield state;
     } else if (event is UpdatePlaylists) {
-      print("Updating My Playlists in BLOC...");
-      state.updatePlaylists(await _updatePlaylists(state, event.api));
-      yield state;
+      //print("Updating My Playlists in BLOC...");
+      //state.updatePlaylists(await _updatePlaylists(state, event.api));
+      //yield state;
     } else if (event is LogoutEvent) {
       print("Login out in BLOC...");
       _clearCredentials();
@@ -139,7 +139,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   Future<Suggestion> _updateMySuggestion(SpotifyService state) async {
     return await state.getMySuggestion();
   }
-
+/*
   Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
     state.updateFollowing(await _updateFollowing(state));
     return await state.getsuggestions();
@@ -157,7 +157,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
     print("Updated playlists, (${list.length})!");
     return list;
   }
-
+*/
   Future<FirestoreService> _login(FirebaseAuthService _auth, String email,
       String pwd, String suserid) async {
     var user = await _auth.signInWithEmailAndPassword(email, pwd);

@@ -32,6 +32,10 @@ class MyApi {
     return (await _api.tracks.me.saved.all()).map((e) => e.track).toList();
   }
 
+  Future<List<PlaylistSimple>> getMyPlaylists() async {
+    return (await _api.playlists.me.all()).toList();
+  }
+
   Widget showErrorIfNull(Widget widget) {
     if (!init || _api == null)
       return ErrorScreen(

@@ -1,5 +1,6 @@
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
+import 'package:ShareTheMusic/blocs/playlists_bloc.dart';
 import 'package:ShareTheMusic/blocs/saved_tracks_bloc.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,9 @@ class _MyAppState extends State<MyApp> {
             ),
             BlocProvider<SavedTracksBloc>(
               create: (context) => SavedTracksBloc(),
+            ),
+            BlocProvider<PlaylistsBloc>(
+              create: (context) => PlaylistsBloc(),
             )
           ],
           child: MaterialApp(
