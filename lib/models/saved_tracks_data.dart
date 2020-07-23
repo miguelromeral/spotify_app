@@ -13,6 +13,7 @@ class SavedTracksData {
   void updateSaved(List<Track> newFeed) {
     _scSaved.add(newFeed);
     _last = newFeed;
+    print("Updated: #${newFeed.length} - last: ${newFeed.first.name}");
   }
 
   void dispose() {

@@ -62,6 +62,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
         return true;
       },
       child: TrackListScreen(
+        key: Key(liked.hashCode.toString()),
         list: liked,
         title: 'My Saved Songs',
       ),

@@ -44,7 +44,8 @@ class _TrackListState extends State<TrackList> {
             ),
         itemCount: list == null ? 0 : list.length,
         itemBuilder: (_, index) {
-          return TrackItem(track: list[index]);
+          return TrackItem(
+            track: list[index]);
         });
     /*return DraggableScrollbar.arrows(
       backgroundColor: colorAccent,

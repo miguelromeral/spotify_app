@@ -57,7 +57,9 @@ class PlaylistItem extends StatelessWidget {
                   ),
                 ),
                 content: [
-                  Text(playlist.name, style: styleFeedTitle),
+                  Text(
+                      '${(playlist.collaborative ? '🔘 ' : '')}${playlist.name}',
+                      style: styleFeedTitle),
                   SizedBox(
                     height: 4.0,
                   ),

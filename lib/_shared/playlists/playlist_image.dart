@@ -27,15 +27,8 @@ class PlaylistImage extends StatelessWidget {
     } else {
       return ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: CachedNetworkImage(
-          placeholder: (context, url) => SpinKitCubeGrid(
-            color: colorAccent,
-            duration: Duration(seconds: 1),
-            //size: size,
-          ),
-          imageUrl:
-              'https://e7.pngegg.com/pngimages/158/639/png-clipart-spotify-streaming-media-logo-playlist-spotify-app-icon-logo-music-download.png',
-        ),
+        child: Container(
+            color: colorThirdBackground, child: Icon(Icons.library_music)),
       );
     }
   }

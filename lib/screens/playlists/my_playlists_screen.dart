@@ -71,6 +71,7 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
           return true;
         },
         child: PlaylistsScreen(
+          key: Key(liked.hashCode.toString()),
           list: liked,
           title: 'My Playlists',
         ),
@@ -84,7 +85,7 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
         body: ErrorScreen(
           title: "There's no playlist we could find",
           stringBelow: [
-            "We couldn't find any playlists own by you.",
+            "We couldn't find any playlists in your library.",
             "Please, try again later."
           ],
         ),
