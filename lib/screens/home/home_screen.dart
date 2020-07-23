@@ -126,7 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
       return Container();
     } else {
       return SuggestionLoader(
-        key: Key(item.hashCode.toString()),
+        // Si añadimos esta key, se actualiza todo el item, no solo los likes.
+        //key: Key('${item.suserid}-${item.likes}'),
         suggestion: item,
         api: api,
       );

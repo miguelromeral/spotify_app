@@ -299,7 +299,7 @@ class _AuthenticateState extends State<Authenticate> {
   void login(BuildContext context) async {
     var credentials = await SpotifyService.readCredentialsFile();
     final grant = SpotifyApi.authorizationCodeGrant(credentials);
-    final scopes = ['user-read-email', 'user-library-read'];
+    final scopes = ['user-read-email', 'user-library-read', 'playlist-read-private', 'playlist-read-collaborative'];
 
     final authUri = grant.getAuthorizationUrl(
       Uri.parse(SpotifyService.redirectUri),

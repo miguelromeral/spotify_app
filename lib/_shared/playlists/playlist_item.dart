@@ -58,7 +58,16 @@ class PlaylistItem extends StatelessWidget {
                 ),
                 content: [
                   Text(playlist.name, style: styleFeedTitle),
-                  Text('ID: ${playlist.id}', style: styleFeedTrack),
+                  SizedBox(
+                    height: 4.0,
+                  ),
+                  Text('by ${playlist.owner.displayName}',
+                      style: styleFeedTrack),
+                  SizedBox(
+                    height: 4.0,
+                  ),
+                  Text(playlist.public ? 'Public' : '🔒 Private',
+                      style: styleFeedTrack),
                 ],
                 menuItems: _getActions(),
               ),
