@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ShareTheMusic/_shared/app_logo.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
@@ -142,6 +143,15 @@ class _AuthenticateState extends State<Authenticate> {
                                             side: BorderSide(
                                                 color: colorPrimary)),
                                         onPressed: () async {
+                                          var mycredentials =
+                                              await SpotifyService
+                                                  .readCredentialsFile();
+                                          final spotify =
+                                              SpotifyApi(mycredentials);
+
+                                          BlocProvider.of<ApiBloc>(context).add(
+                                              UpdateApiEvent(newOne: spotify));
+
                                           context
                                               .bloc<SpotifyBloc>()
                                               .add(LoginAnonymousEvent());
@@ -267,8 +277,10 @@ class _AuthenticateState extends State<Authenticate> {
     if (credentials != null) {
       print("automatically logining in");
       //context.bloc<SpotifyBloc>().add(LoginEvent(SpotifyApi(credentials), true));
+      var api = SpotifyApi(credentials); 
+      BlocProvider.of<ApiBloc>(context).add(UpdateApiEvent(newOne: api));
       setState(() {
-        _api = SpotifyApi(credentials);
+        _api = api;
         _state = _loginState.loading;
       });
       await Future.delayed(Duration(seconds: 3));
@@ -331,6 +343,7 @@ class _AuthenticateState extends State<Authenticate> {
         _api = res;
         _state = _loginState.loading;
       });
+      BlocProvider.of<ApiBloc>(context).add(UpdateApiEvent(newOne: res));
     } else {
       setState(() {
         _state = _loginState.waitingUser;

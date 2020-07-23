@@ -1,4 +1,7 @@
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
+import 'package:ShareTheMusic/blocs/saved_tracks_bloc.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -7,6 +10,7 @@ import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/screens/wrapper.dart';
 import 'package:ShareTheMusic/services/firebase_auth.dart';
+import 'package:spotify/spotify.dart';
 
 import 'blocs/home_bloc.dart';
 
@@ -22,7 +26,14 @@ Future<void> initSettings() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // TODO: Manage dispose of blocs with streams. How?
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider.value(
@@ -38,6 +49,12 @@ class MyApp extends StatelessWidget {
             BlocProvider<HomeBloc>(
               create: (BuildContext context) => HomeBloc(),
             ),
+            BlocProvider<ApiBloc>(
+              create: (BuildContext context) => ApiBloc(),
+            ),
+            BlocProvider<SavedTracksBloc>(
+              create: (context) => SavedTracksBloc(),
+            )
           ],
           child: MaterialApp(
             home: Wrapper(),
@@ -46,99 +63,3 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-
-
-/*
-
-  Widget _buildPreferenceSwitch(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Text('Shared Pref'),
-        Switch(
-            value: _isUsingHive,
-            onChanged: (newVal) {
-              if (kIsWeb) {
-                return;
-              }
-              _isUsingHive = newVal;
-              setState(() {
-                initSettings();
-              });
-            }),
-        Text('Hive Storage'),
-      ],
-    );
-  }
-
-  Widget _buildThemeSwitch(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Text('Light Theme'),
-        Switch(
-            value: _isDarkTheme,
-            onChanged: (newVal) {
-              _isDarkTheme = newVal;
-              setState(() {});
-            }),
-        Text('Dark Theme'),
-      ],
-    );
-  }
-}
-
-class AppBody extends StatefulWidget {
-  @override
-  _AppBodyState createState() => _AppBodyState();
-}
-
-class _AppBodyState extends State<AppBody> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        _buildClearCacheButton(context),
-        RaisedButton(
-          child: Text('open settings'),
-          onPressed: () {
-            openAppSettings(context);
-          },
-        ),
-      ],
-    );
-  }
-
-  void openAppSettings(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => AppSettings(),
-    ));
-  }
-
-  Widget _buildClearCacheButton(BuildContext context) {
-    return RaisedButton(
-      child: Text('Clear selected Cache'),
-      onPressed: () {
-        Settings.clearCache();
-        showSnackBar(
-          context,
-          'Cache cleared for selected cache.',
-        );
-      },
-    );
-  }
-}
-
-void showSnackBar(BuildContext context, String message) {
-  Scaffold.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        message,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: Theme.of(context).primaryColor,
-    ),
-  );
-}*/

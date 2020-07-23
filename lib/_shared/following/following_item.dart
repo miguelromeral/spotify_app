@@ -1,5 +1,7 @@
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/_shared/custom_listtile.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
@@ -43,43 +45,45 @@ class _FollowingItemState extends State<FollowingItem> {
   }
 
   Widget _newListTile(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      return FutureBuilder(
-        future: state.getFollowingBySpotifyUserID(widget.suserid),
-        builder: (context, snp) {
-          // TODO: check if null
-          Following fol = snp.data;
-          if (fol == null) return Text('Fol null in FollowingItem');
-          return FutureBuilder(
-              future: state.api.users.get(widget.suserid),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  UserPublic user = snapshot.data;
-                  return CustomListTile(
-                    key: Key(widget.suserid),
-                    leadingIcon: ProfilePicture(
-                      user: user,
-                      size: 50.0,
-                    ),
-                    trailingIcon: FollowingButton(
-                      key: new GlobalKey(),
-                      myFollowings: widget.myFollowings,
-                      user: user,
-                      userFollowing: fol,
-                    ),
-                    content: _createContent(user),
-                    bottomIcons: _createBottomBar(fol, context, state, user),
-                    menuItems: _getActions(state, user),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              });
-        },
-      );
-    });
+    return BlocBuilder<ApiBloc, MyApi>(
+      builder: (context, api) =>
+          BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
+        return FutureBuilder(
+          future: state.getFollowingBySpotifyUserID(widget.suserid),
+          builder: (context, snp) {
+            Following fol = snp.data;
+            if (fol == null) return Text('Fol null in FollowingItem');
+            return FutureBuilder(
+                future: api.getUser(widget.suserid),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    UserPublic user = snapshot.data;
+                    return CustomListTile(
+                      key: Key(widget.suserid),
+                      leadingIcon: ProfilePicture(
+                        user: user,
+                        size: 50.0,
+                      ),
+                      trailingIcon: FollowingButton(
+                        key: new GlobalKey(),
+                        myFollowings: widget.myFollowings,
+                        user: user,
+                        userFollowing: fol,
+                      ),
+                      content: _createContent(user),
+                      bottomIcons: _createBottomBar(fol, context, state, user),
+                      menuItems: _getActions(state, user),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                });
+          },
+        );
+      }),
+    );
   }
 
   List<Widget> _createContent(UserPublic user) {

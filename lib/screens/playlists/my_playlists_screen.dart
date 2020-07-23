@@ -1,4 +1,5 @@
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +26,12 @@ class MyPlaylistsScreen extends StatefulWidget {
 
 class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
   SpotifyBloc _bloc;
+  SpotifyApi _api;
 
   Future<void> _getData() async {
     print("pulling to refresh in playslist!");
-    if (_bloc != null) {
-      _bloc.add(UpdatePlaylists());
+    if (_bloc != null && _api != null) {
+      _bloc.add(UpdatePlaylists(api: _api));
     }
   }
 
@@ -40,8 +42,9 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_bloc == null) {
+    if (_bloc == null || _api == null) {
       _bloc = BlocProvider.of<SpotifyBloc>(context);
+      _api = BlocProvider.of<ApiBloc>(context).state.get();
       //_getData();
     }
 
