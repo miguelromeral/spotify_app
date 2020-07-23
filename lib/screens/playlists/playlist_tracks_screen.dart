@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_app_bar.dart';
 import 'package:spotify/spotify.dart';
@@ -14,6 +15,8 @@ import 'package:ShareTheMusic/_shared/tracks/track_list_screen.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_list.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
+
+import '../settings_screen.dart';
 
 class PlaylistTrackScreen extends StatefulWidget {
   final SpotifyApi api;
@@ -62,10 +65,18 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
         },
         child: TrackListScreen(
           key: Key(tracks.length.toString()),
-          list: tracks,
+          list: filterLocalFiles(tracks),
           title: widget.playlist.name,
         ),
       );
+    }
+  }
+
+  List<Track> filterLocalFiles(List<Track> original) {
+    if (Settings.getValue<bool>(settings_track_hide_local, false)) {
+      return original.where((element) => element.id != null).toList();
+    }else{
+      return original;
     }
   }
 }

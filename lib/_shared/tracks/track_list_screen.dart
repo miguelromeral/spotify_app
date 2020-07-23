@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_app_bar.dart';
@@ -32,6 +33,17 @@ class _TrackListScreenState extends State<TrackListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.list.isEmpty) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            centerTitle: true,
+          ),
+          body: ErrorScreen(
+            title: "There's no tracks.",
+            safeArea: true,
+          ));
+    }
     return Scaffold(
       appBar: SearchAppBar<Track>(
         title: Text(widget.title),

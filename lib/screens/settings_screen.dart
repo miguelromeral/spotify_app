@@ -37,6 +37,15 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 leading: Icon(Icons.timer),
                 defaultValue: true,
               ),
+              SwitchSettingsTile(
+                settingKey: settings_track_hide_local,
+                title: 'Hide Local Files',
+                enabledLabel:
+                    'The tracks that are not in Spotify will be hidden',
+                disabledLabel: 'You will see the local files too',
+                leading: Icon(Icons.cloud_off),
+                defaultValue: false,
+              ),
             ],
           ),
           SettingsGroup(
@@ -470,6 +479,8 @@ class _SettingsScreenState extends State<MySettingsScreen> {
 
 final String settings_track_popularity = 'set_track_popularity';
 final String settings_track_duration = 'set_track_duration';
+final String settings_track_hide_local = 'set_track_hide_local';
+
 final String settings_suggestion_message = 'set_suggestion_message';
 final String settings_suggestion_message_enabled =
     'set_suggestion_message_enabled';
