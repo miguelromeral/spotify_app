@@ -14,42 +14,24 @@ import 'package:ShareTheMusic/services/firebase_auth.dart';
 import 'local_database.dart';
 
 class SpotifyService {
-  SpotifyApi api;
+  //SpotifyApi _api;
   FirebaseAuthService auth;
   FirestoreService _db;
-  LocalDB _localDB;
   bool logedin = false;
   bool demo = false;
   Track toShare;
   bool errorInLogin = false;
   //Following following;
 
-  StreamController<List<Track>> _scSaved = new StreamController.broadcast();
-  Stream<List<Track>> get saved => _scSaved.stream;
-
-  StreamController<List<Suggestion>> _scFeed = new StreamController.broadcast();
-  Stream<List<Suggestion>> get feed => _scFeed.stream;
-
+  
   StreamController<Suggestion> _scMySuggestion =
       new StreamController.broadcast();
   Stream<Suggestion> get mySuggestion => _scMySuggestion.stream;
-
-  StreamController<List<PlaylistSimple>> _scPlaylists =
-      new StreamController.broadcast();
-  Stream<List<PlaylistSimple>> get playlists => _scPlaylists.stream;
 
   StreamController<Following> _scFollowing = new StreamController.broadcast();
   Stream<Following> get following => _scFollowing.stream;
 
   User myUser;
-
-  void updateFeed(List<Suggestion> newFeed) {
-    _scFeed.add(newFeed);
-  }
-
-  void updateSaved(List<Track> newSaved) {
-    _scSaved.add(newSaved);
-  }
 
   void updateMySuggestion(Suggestion newOne) {
     _scMySuggestion.add(newOne);
@@ -57,10 +39,6 @@ class SpotifyService {
 
   void updateFollowing(Following newone) {
     _scFollowing.add(newone);
-  }
-
-  void updatePlaylists(List<PlaylistSimple> list) {
-    _scPlaylists.add(list);
   }
 
   void updateMyUser(User me) {
@@ -72,7 +50,7 @@ class SpotifyService {
   SpotifyService();
 
   SpotifyService.withApi(SpotifyApi miapi) {
-    api = miapi;
+    //_api = miapi;
     errorInLogin = false;
   }
 
@@ -86,18 +64,8 @@ class SpotifyService {
 
   bool isInit = false;
 
-  void init() {
-    if (!isInit) {
-      _localDB = LocalDB();
-      isInit = true;
-    }
-  }
-
   void dispose() {
-    _scFeed.close();
-    _scSaved.close();
     _scMySuggestion.close();
-    _scPlaylists.close();
   }
 
   void shareTrack(Track track) {
@@ -114,10 +82,9 @@ class SpotifyService {
 
   void logout() {
     logedin = false;
-    api = null;
+    //_api = null;
     auth = null;
     _db = null;
-    _localDB = null;
     toShare = null;
   }
 
@@ -130,6 +97,11 @@ class SpotifyService {
       print(e);
       return null;
     }
+  }
+  
+  static Future<SpotifyApi> getSpotifyClient() async {
+    var mycredentials = await SpotifyService.readCredentialsFile();
+    return SpotifyApi(mycredentials);
   }
 
   /// ****************************************

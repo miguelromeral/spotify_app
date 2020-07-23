@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
@@ -102,6 +103,9 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     BlocProvider.of<SpotifyBloc>(context).add(LogoutEvent());
+
+                    BlocProvider.of<ApiBloc>(context)
+                        .add(UpdateApiEvent(newOne: null));
                   },
                 ),
               ),

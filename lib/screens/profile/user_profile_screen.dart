@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +32,15 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   SpotifyBloc _bloc;
+  SpotifyApi _api;
   Suggestion suggestion;
   Track track;
 
   @override
   Widget build(BuildContext context) {
-    if (_bloc == null) {
+    if (_bloc == null || _api == null) {
       _bloc = BlocProvider.of<SpotifyBloc>(context);
+      _api = BlocProvider.of<ApiBloc>(context).state.get();
       _getData();
     }
 
@@ -197,12 +200,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future<void> _getData() async {
-    if (_bloc != null) {
+    if (_bloc != null && _api != null) {
       var res = await _bloc.state.getSuggestion(widget.user.id);
       _bloc.add(UpdateFeed());
       Track tr;
       if (track == null) {
-        tr = await _bloc.state.api.tracks.get(res.trackid);
+        tr = await _api.tracks.get(res.trackid);
       }
       setState(() {
         suggestion = res;

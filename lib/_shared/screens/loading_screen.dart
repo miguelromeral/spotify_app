@@ -60,7 +60,7 @@ class LoadingScreen extends StatelessWidget {
           Text(
             "Please, wait a moment.",
           ),
-          Text("Please, try again later."),
+          //Text("Please, try again later."),
         ];
       } else {
         return stringBelow.map((e) => Text(e)).toList();

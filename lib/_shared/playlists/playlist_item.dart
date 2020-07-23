@@ -1,3 +1,5 @@
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
+import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,44 +25,47 @@ class PlaylistItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: () async {
-            try {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      PlaylistTrackScreen(api: state.api, playlist: playlist),
+    return BlocBuilder<ApiBloc, MyApi>(
+      builder: (context, api) => BlocBuilder<SpotifyBloc, SpotifyService>(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () async {
+              try {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlaylistTrackScreen(api: api.get(), playlist: playlist),
+                  ),
+                );
+              } catch (err) {
+                print('Error when navigating from playlist: $err');
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text("Couldn't open the playlist.")));
+              }
+            },
+            child: Container(
+              color: colorBackground,
+              child: CustomListTile(
+                key: Key(playlist.id),
+                leadingIcon: Container(
+                  width: 60.0,
+                  height: 60.0,
+                  child: PlaylistImage(
+                    playlist: playlist,
+                    size: 25.0,
+                  ),
                 ),
-              );
-            } catch (err) {
-              print('Error when navigating from playlist: $err');
-              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Couldn't open the playlist.")));
-            }
-          },
-          child: Container(
-            color: colorBackground,
-            child: CustomListTile(
-              key: Key(playlist.id),
-              leadingIcon: Container(
-                width: 60.0,
-                height: 60.0,
-                child: PlaylistImage(
-                  playlist: playlist,
-                  size: 25.0,
-                ),
+                content: [
+                  Text(playlist.name, style: styleFeedTitle),
+                  Text('ID: ${playlist.id}', style: styleFeedTrack),
+                ],
+                menuItems: _getActions(),
               ),
-              content: [
-                Text(playlist.name, style: styleFeedTitle),
-                Text('ID: ${playlist.id}', style: styleFeedTrack),
-              ],
-              menuItems: _getActions(),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

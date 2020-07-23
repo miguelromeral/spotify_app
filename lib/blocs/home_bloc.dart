@@ -15,6 +15,10 @@ class HomeBloc extends Bloc<HomeEventBase, HomeData> {
       yield state;
     }
   }
+
+  dipose(){
+    state.dispose();
+  }
 }
 
 class HomeEventBase {}

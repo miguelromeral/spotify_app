@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,13 +26,13 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       String pwd = "";
       User user;
       try {
-        var cred = await event.service.api.getCredentials();
+        var cred = await event.api.getCredentials();
         //if (event.saveCredentials) {
         _saveCredentials(cred);
         //} else {
         //  _clearCredentials();
         //}
-        user = await event.service.api.me.get();
+        user = await event.api.me.get();
         email = user.email;
         pwd = PasswordGenerator.generatePassword(user);
         _db = await _login(_auth, email, pwd, user.id);
@@ -68,26 +69,25 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         return;
       }
       event.service.updateDB(_db);
-      event.service.init();
       event.service.auth = _auth;
       _load(event.service);
       yield event.service;
     } else if (event is UpdateFeed) {
-      print("Updating My Feed in BLOC...");
-      state.updateFeed(await _updateFeed(state));
-      yield state;
+      //print("Updating My Feed in BLOC...");
+      //state.updateFeed(await _updateFeed(state));
+      //yield state;
     } else if (event is UpdateMySuggestion) {
       print("Updating My Suggestion in BLOC...");
       state.updateMySuggestion(await _updateMySuggestion(state));
       yield state;
     } else if (event is UpdateSaved) {
-      print("Updating My Saved Tracks in BLOC...");
-      state.updateSaved(await _updateSaved(state));
-      yield state;
+      //print("Updating My Saved Tracks in BLOC...");
+      //state.updateSaved(await _updateSaved(state, event.api));
+      //yield state;
     } else if (event is UpdatePlaylists) {
-      print("Updating My Playlists in BLOC...");
-      state.updatePlaylists(await _updatePlaylists(state));
-      yield state;
+      //print("Updating My Playlists in BLOC...");
+      //state.updatePlaylists(await _updatePlaylists(state, event.api));
+      //yield state;
     } else if (event is LogoutEvent) {
       print("Login out in BLOC...");
       _clearCredentials();
@@ -106,9 +106,9 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         }
         demo.auth = _auth;
 
-        var mycredentials = await SpotifyService.readCredentialsFile();
-        final spotify = SpotifyApi(mycredentials);
-        demo.api = spotify;
+        //var mycredentials = await SpotifyService.readCredentialsFile();
+        //final spotify = SpotifyApi(mycredentials);
+        //demo.api = spotify;
         FirestoreService _db = FirestoreService();
         print("Logged anonymously");
       } catch (ae) {
@@ -127,7 +127,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   Future _load(SpotifyService service) async {
     service.updateFollowing(await _updateFollowing(service));
     service.updateMySuggestion(await _updateMySuggestion(service));
-    service.updateFeed(await _updateFeed(service));
+    //service.updateFeed(await _updateFeed(service));
     //service.updateSaved(await _updateSaved(service));
     //service.updatePlaylists(await _updatePlaylists(service));
   }
@@ -139,25 +139,25 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   Future<Suggestion> _updateMySuggestion(SpotifyService state) async {
     return await state.getMySuggestion();
   }
-
+/*
   Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
     state.updateFollowing(await _updateFollowing(state));
     return await state.getsuggestions();
   }
 
-  Future<List<Track>> _updateSaved(SpotifyService state) async {
+  Future<List<Track>> _updateSaved(SpotifyService state, SpotifyApi api) async {
     List<Track> list =
-        (await state.api.tracks.me.saved.all()).map((e) => e.track).toList();
+        (await api.tracks.me.saved.all()).map((e) => e.track).toList();
     print("Updated Saved, last: ${list.first.name} (${list.length})!");
     return list;
   }
 
-  Future<List<PlaylistSimple>> _updatePlaylists(SpotifyService state) async {
-    List<PlaylistSimple> list = (await state.api.playlists.me.all()).toList();
+  Future<List<PlaylistSimple>> _updatePlaylists(SpotifyService state, SpotifyApi api) async {
+    List<PlaylistSimple> list = (await api.playlists.me.all()).toList();
     print("Updated playlists, (${list.length})!");
     return list;
   }
-
+*/
   Future<FirestoreService> _login(FirebaseAuthService _auth, String email,
       String pwd, String suserid) async {
     var user = await _auth.signInWithEmailAndPassword(email, pwd);
@@ -191,10 +191,12 @@ class SpotifyEventBase {}
 
 class LoginEvent extends SpotifyEventBase {
   bool saveCredentials;
+  SpotifyApi api;
   SpotifyService service;
 
-  LoginEvent(SpotifyApi api, bool remember) {
-    service = SpotifyService.withApi(api);
+  LoginEvent(SpotifyApi sapi, bool remember) {
+    service = SpotifyService.withApi(sapi);
+    api = sapi;
     service.login();
     saveCredentials = remember;
   }
@@ -204,9 +206,17 @@ class UpdateFeed extends SpotifyEventBase {}
 
 class UpdateMySuggestion extends SpotifyEventBase {}
 
-class UpdateSaved extends SpotifyEventBase {}
+class UpdateSaved extends SpotifyEventBase {
+  SpotifyApi api;
 
-class UpdatePlaylists extends SpotifyEventBase {}
+  UpdateSaved({@required this.api});
+}
+
+class UpdatePlaylists extends SpotifyEventBase {
+  SpotifyApi api;
+
+  UpdatePlaylists({@required this.api});
+}
 
 class LogoutEvent extends SpotifyEventBase {}
 

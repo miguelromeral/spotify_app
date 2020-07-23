@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ShareTheMusic/screens/home/home_screen.dart';
 import 'package:ShareTheMusic/screens/savedtracks/savedtracks_screen.dart';
+import 'package:spotify/spotify.dart';
 
 class TabNavigationItem {
   final Widget page;
@@ -21,49 +22,61 @@ class TabNavigationItem {
     @required this.icon,
   });
 
-  static List<TabNavigationItem> items(SpotifyService state) => [
-        TabNavigationItem(
-          page: HomeScreen(),
-          icon: Icon(Icons.home),
-          title: Text("Home"),
+  static List<TabNavigationItem> items() {
+    var k1 = new PageStorageKey("homescreen");
+    return [
+      TabNavigationItem(
+        page: PageStorage(
+          child: new HomeScreen(key: k1),
+          bucket: new PageStorageBucket(),
+          key: k1,
         ),
-        /*TabNavigationItem(
+        icon: Icon(Icons.home),
+        title: Text("Home"),
+      ),
+      /*TabNavigationItem(
           page: SearchUserScreen(),
           icon: Icon(Icons.tag_faces),
           title: Text("Users"),
         ),*/
-        TabNavigationItem(
-          page: SavedTracksScreen(),
-          icon: Icon(Icons.music_note),
-          title: Text("Saved Songs"),
-        ),
-        /*TabNavigationItem(
+      TabNavigationItem(
+        page: SavedTracksScreen(),
+        icon: Icon(Icons.music_note),
+        title: Text("Saved Songs"),
+      ),
+      /*TabNavigationItem(
           page: UserProfileScreen(
             user: state.myUser,
           ),
           icon: Icon(Icons.face),
           title: Text("Profile"),
         ),*/
-        TabNavigationItem(
-          page: MyPlaylistsScreen(),
-          icon: Icon(Icons.library_music),
-          title: Text("Playlists"),
-        ),
-     /*   TabNavigationItem(
+      TabNavigationItem(
+        page: MyPlaylistsScreen(),
+        icon: Icon(Icons.library_music),
+        title: Text("Playlists"),
+      ),
+      /*   TabNavigationItem(
           page: MySettingsScreen(),
           icon: Icon(Icons.settings),
           title: Text("Settings"),
         ),*/
-      ];
+    ];
+  }
 
-  static List<TabNavigationItem> itemsDemo(SpotifyService state) => [
+  static List<TabNavigationItem> itemsDemo(SpotifyApi api) => [
         TabNavigationItem(
+          page: Text('Test'),
+          icon: Icon(Icons.home),
+          title: Text("Home"),
+        ),
+        /*TabNavigationItem(
           page: HomeScreenDemo(),
           icon: Icon(Icons.home),
           title: Text("Home"),
         ),
         TabNavigationItem(
-          page: SavedTracksDemo(api: state.api),
+          page: SavedTracksDemo(api: api),
           icon: Icon(Icons.music_note),
           title: Text("Saved Songs"),
         ),
@@ -71,6 +84,6 @@ class TabNavigationItem {
           page: DemoMoreScreen(),
           icon: Icon(Icons.add),
           title: Text("More"),
-        ),
+        ),*/
       ];
 }
