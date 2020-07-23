@@ -20,9 +20,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
       return BlocBuilder<LocalDbBloc, LocalDB>(
-        condition: (previous, current) {
-          return previous.isInit != current.isInit;
-        },
+        //condition: (pre, cur) => pre.isInit != cur.isInit,
         builder: (context, localdb) => _buildBody(localdb, state),
       );
     });

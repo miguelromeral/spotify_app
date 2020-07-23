@@ -7,7 +7,10 @@ import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/_shared/custom_appbar.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
+import 'package:path/path.dart';
 import 'package:spotify/spotify.dart';
+
+import '../styles.dart';
 
 class SuggestionsList extends StatefulWidget {
   final List<Suggestion> suggestions;
@@ -30,7 +33,10 @@ class _SuggestionsListState extends State<SuggestionsList> {
         body: BlocBuilder<ApiBloc, MyApi>(
           builder: (context, api) => BlocBuilder<SpotifyBloc, SpotifyService>(
             builder: (context, state) {
-              return ListView.builder(
+              return ListView.separated(
+                  separatorBuilder: (context, index) => Divider(
+                        color: colorSeprator,
+                      ),
                   itemCount: widget.suggestions == null
                       ? 0
                       : widget.suggestions.length,

@@ -128,7 +128,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
             ],
           ),
           ///////////////////////////////////////////////////////////////////
-          SettingsGroup(
+          /*SettingsGroup(
             title: 'Single Choice Settings',
             children: <Widget>[
               SwitchSettingsTile(
@@ -470,7 +470,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 },
               )
             ],
-          )
+          )*/
         ],
       ),
     );

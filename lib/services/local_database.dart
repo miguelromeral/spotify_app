@@ -6,11 +6,14 @@ import 'package:sqflite/sqlite_api.dart';
 class LocalDB {
   bool isInit = false;
   static Future<Database> database;
+  
 
   LocalDB() {
     //init();
-    if (database == null) {
+    if (database == null || !isInit) {
       init();
+    }else{
+      isInit = true;
     }
   }
 
