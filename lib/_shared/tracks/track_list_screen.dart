@@ -1,6 +1,7 @@
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/custom_card.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_app_bar.dart';
@@ -60,70 +61,55 @@ class _TrackListScreenState extends State<TrackListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.list.isEmpty) {
-      return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-            centerTitle: true,
-          ),
-          body: ErrorScreen(
-            title: "There's no tracks.",
-            safeArea: true,
-          ));
-    }
+    /*return Scaffold(
+      body: Center(child: widget.widget),
+    );*/
+
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Center(
-        child: StreamBuilder<List<Track>>(
-          stream: tlb.filteredData,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return Container();
-            final list = snapshot.data;
-            /*return TrackList(
-              key: Key(list.hashCode.toString()),
-              tracks: list,
-              title: widget.title,
-              refresh: true,
-            );*/
-
-            return CustomScrollView(slivers: <Widget>[
-              SliverAppBar(
-                backgroundColor: Colors.transparent,
-                //expandedHeight: MediaQuery.of(context).size.height / 3,
-                expandedHeight: 300.0,
-                floating: false,
-                pinned: false,
-                snap: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: _buildAppBar(context),
-                ),
-                // actions: [],
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (index < list.length) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 8.0),
-                        decoration: BoxDecoration(
-                          color: colorThirdBackground.withAlpha(150),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: TrackItem(
-                          track: list[index],
-                        ),
-                      );
-                    }
-                  },
-                  // Or, uncomment the following line:
-                  // childCount: 3,
-                ),
-              )
-            ]);
-          },
+      body: CustomScrollView(slivers: <Widget>[
+        SliverAppBar(
+          backgroundColor: Colors.transparent,
+          //expandedHeight: MediaQuery.of(context).size.height / 3,
+          expandedHeight: 240.0,
+          floating: false,
+          pinned: false,
+          snap: false,
+          flexibleSpace: FlexibleSpaceBar(
+            background: _buildAppBar(context),
+          ),
         ),
-      ),
+        _buildBody(),
+      ]),
+    );
+  }
+
+  Widget _buildBody() {
+    return StreamBuilder<List<Track>>(
+      stream: tlb.filteredData,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || widget.list == null || widget.list.isEmpty) {
+          return SliverToBoxAdapter(
+            child: LoadingScreen(),
+          );
+        }
+        final list = snapshot.data;
+        return SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          if (index < list.length) {
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              decoration: BoxDecoration(
+                color: colorThirdBackground.withAlpha(150),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: TrackItem(
+                track: list[index],
+              ),
+            );
+          }
+        }, childCount: list.length));
+      },
     );
   }
 
@@ -133,72 +119,78 @@ class _TrackListScreenState extends State<TrackListScreen> {
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: TextField(
-                    controller: _textController,
-                    showCursor: true,
-                    onChanged: sb.onSearchQueryChanged,
-                    decoration: new InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(100.0),
+            (widget.list != null || widget.list.isNotEmpty
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
+                          child: TextField(
+                            controller: _textController,
+                            showCursor: true,
+                            onChanged: sb.onSearchQueryChanged,
+                            decoration: new InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
+                              filled: false,
+                              hintStyle: new TextStyle(color: Colors.grey[800]),
+                              hintText: "Search tracks by name, album or artist",
+                            ),
+                          ),
+                        ),
                       ),
-                      filled: false,
-                      hintStyle: new TextStyle(color: Colors.grey[800]),
-                      hintText: "Search tracks by name, album or artist",
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 0,
-                  child: (_textEmpty
-                      ? Container()
-                      : IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () {
-                            _textController.clear();
-                            sb.onSearchQueryChanged('');
-                          },
-                        )),
-                ),
-                Expanded(
-                  flex: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
-                    child: PopupMenuButton<String>(
-                      onSelected: (String value) {
-                        choiceAction(value);
-                      },
-                      child: Icon(Icons.sort),
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: ConstantsOrderOptions.TrackName,
-                          child: Text(ConstantsOrderOptions.TrackName),
+                      Expanded(
+                        flex: 0,
+                        child: (_textEmpty
+                            ? Container()
+                            : IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  _textController.clear();
+                                  sb.onSearchQueryChanged('');
+                                },
+                              )),
+                      ),
+                      Expanded(
+                        flex: 0,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(8.0, 0.0, 4.0, 0.0),
+                          child: PopupMenuButton<String>(
+                            onSelected: (String value) {
+                              choiceAction(value);
+                            },
+                            child: Icon(Icons.sort),
+                            itemBuilder: (BuildContext context) =>
+                                <PopupMenuEntry<String>>[
+                              const PopupMenuItem<String>(
+                                value: ConstantsOrderOptions.TrackName,
+                                child: Text(ConstantsOrderOptions.TrackName),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: ConstantsOrderOptions.Artist,
+                                child: Text(ConstantsOrderOptions.Artist),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: ConstantsOrderOptions.Album,
+                                child: Text(ConstantsOrderOptions.Album),
+                              ),
+                              const PopupMenuItem<String>(
+                                value: ConstantsOrderOptions.ByDefault,
+                                child: Text(ConstantsOrderOptions.ByDefault),
+                              ),
+                            ],
+                          ),
                         ),
-                        const PopupMenuItem<String>(
-                          value: ConstantsOrderOptions.Artist,
-                          child: Text(ConstantsOrderOptions.Artist),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: ConstantsOrderOptions.Album,
-                          child: Text(ConstantsOrderOptions.Album),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: ConstantsOrderOptions.ByDefault,
-                          child: Text(ConstantsOrderOptions.ByDefault),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  )
+                : Container()),
             (widget.widget ?? Container()),
           ],
         ),

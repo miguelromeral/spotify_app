@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/_shared/animated_background.dart';
+import 'package:ShareTheMusic/_shared/playlists/playlist_image.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -51,34 +54,57 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
   @override
   Widget build(BuildContext context) {
     if (tracks == null || tracks.isEmpty) {
-      return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(widget.playlist.name),
-          ),
-          body: LoadingScreen(
-            title: "Retrieving ${widget.playlist.name}'s tracks",
-            safeArea: true,
-          ));
+      return TrackListScreen(
+        list: List(),
+        title: widget.playlist.name,
+        widget: _createWidgetHeader(),
+      );
     } else {
       return NotificationListener<RefreshListNotification>(
-        onNotification: (notification) {
-          _getData();
-          return true;
-        },
-        child: TrackListScreen(
-          key: Key(tracks.length.toString()),
-          list: filterLocalFiles(tracks),
-          title: widget.playlist.name,
-        ),
-      );
+          onNotification: (notification) {
+            _getData();
+            return true;
+          },
+          child: FancyBackgroundApp(
+            child: TrackListScreen(
+              key: Key(tracks.length.toString()),
+              list: filterLocalFiles(tracks),
+              title: widget.playlist.name,
+              widget: _createWidgetHeader(),
+            ),
+          ));
     }
+  }
+
+  Widget _createWidgetHeader() {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Hero(
+            tag: widget.playlist.id,
+            child: SizedBox(
+              height: 100.0,
+              width: 100.0,
+              child: PlaylistImage(
+                playlist: widget.playlist,
+                size: 25.0,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Text(widget.playlist.name, style: styleCardContent),
+        ],
+      ),
+    );
   }
 
   List<Track> filterLocalFiles(List<Track> original) {
     if (Settings.getValue<bool>(settings_track_hide_local, false)) {
       return original.where((element) => element.id != null).toList();
-    }else{
+    } else {
       return original;
     }
   }

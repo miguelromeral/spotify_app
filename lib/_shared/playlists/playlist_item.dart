@@ -51,9 +51,12 @@ class PlaylistItem extends StatelessWidget {
                 leadingIcon: Container(
                   width: 60.0,
                   height: 60.0,
-                  child: PlaylistImage(
-                    playlist: playlist,
-                    size: 25.0,
+                  child: Hero(
+                    tag: playlist.id,
+                    child: PlaylistImage(
+                      playlist: playlist,
+                      size: 25.0,
+                    ),
                   ),
                 ),
                 content: [

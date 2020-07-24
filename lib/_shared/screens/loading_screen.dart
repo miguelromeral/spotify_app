@@ -21,10 +21,9 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (safeArea != null && safeArea) {
       return Scaffold(
+        backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: FancyBackgroundApp(
-            child: _buildContent(context),
-          ),
+          child: _buildContent(context),
           //child: _buildContent(context),
         ),
       );

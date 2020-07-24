@@ -70,10 +70,10 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext buildContext) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       key: _scaffoldKey,
       body: Center(
         child: Container(
-          decoration: backgroundGradient,
           child: BlocBuilder<SpotifyBloc, SpotifyService>(
             builder: (context, state) {
               errorInLogin = state.errorInLogin;
@@ -91,130 +91,129 @@ class _AuthenticateState extends State<Authenticate> {
                         context);
                     //Scaffold.of(context).showSnackBar(sb);
                   }
-                  return FancyBackgroundApp(
-                    child: SafeArea(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                padding: EdgeInsets.all(16.0),
-                                child: ListView(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text('Welcome to'),
-                                        ScalingText(
-                                          'ShareTheTrack',
-                                          style: TextStyle(fontSize: 28.0),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 5,
+                  return Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.all(16.0),
                               child: ListView(
                                 children: [
                                   Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      GlowingProgressIndicator(
-                                        child: AppLogo(),
-                                        duration: Duration(seconds: 5),
+                                      Text('Welcome to'),
+                                      ScalingText(
+                                        'ShareTheTrack',
+                                        style: TextStyle(fontSize: 28.0),
                                       ),
-                                      SizedBox(
-                                        height: 16.0,
-                                      ),
-                                      _loginButton(context),
-                                      SizedBox(
-                                        height: 16.0,
-                                      ),
-                                      RaisedButton(
-                                          child: Text(
-                                              "Try the app's DEMO version"),
-                                          textColor: Colors.white,
-                                          color: colorThirdBackground,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                              side: BorderSide(
-                                                  color: colorPrimary)),
-                                          onPressed: () async {
-                                            var mycredentials =
-                                                await SpotifyService
-                                                    .readCredentialsFile();
-                                            final spotify =
-                                                SpotifyApi(mycredentials);
-
-                                            BlocProvider.of<ApiBloc>(context)
-                                                .add(UpdateApiEvent(
-                                                    newOne: spotify));
-
-                                            context
-                                                .bloc<SpotifyBloc>()
-                                                .add(LoginAnonymousEvent());
-                                          }),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Checkbox(
-                                            value: _acceptPolicy,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                _acceptPolicy = value;
-                                              });
-                                            },
-                                          ),
-                                          Text(
-                                              "By enabling this option, you agree with the app's Privacy Policy"),
-                                        ],
-                                      ),
-                                      FlatButton(
-                                          child: Text(
-                                              'Click here to read the Privacy Policy'),
-                                          textColor: Colors.white70,
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WebViewContainer(
-                                                          'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
-                                                          "ShareTheTrack's Privacy Policy",
-                                                          (_) =>
-                                                              NavigationDecision
-                                                                  .navigate)),
-                                            );
-                                          }),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  MyIcon(
-                                    icon: 'spotify',
-                                    size: 24.0,
-                                  ),
-                                  SizedBox(
-                                    width: 8.0,
-                                  ),
-                                  Text("With the colaboration of Spotify"),
-                                ],
-                              ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: ListView(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GlowingProgressIndicator(
+                                      child: AppLogo(),
+                                      duration: Duration(seconds: 5),
+                                    ),
+                                    SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    _loginButton(context),
+                                    SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    RaisedButton(
+                                        child: Text(
+                                            "Try the app's DEMO version"),
+                                        textColor: Colors.white,
+                                        color: colorThirdBackground,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: BorderSide(
+                                                color: colorPrimary)),
+                                        onPressed: () async {
+                                          var mycredentials =
+                                              await SpotifyService
+                                                  .readCredentialsFile();
+                                          final spotify =
+                                              SpotifyApi(mycredentials);
+
+                                          BlocProvider.of<ApiBloc>(context)
+                                              .add(UpdateApiEvent(
+                                                  newOne: spotify));
+
+                                          context
+                                              .bloc<SpotifyBloc>()
+                                              .add(LoginAnonymousEvent());
+                                        }),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Checkbox(
+                                          value: _acceptPolicy,
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              _acceptPolicy = value;
+                                            });
+                                          },
+                                        ),
+                                        Text(
+                                            "By enabling this option, you agree with the app's Privacy Policy"),
+                                      ],
+                                    ),
+                                    FlatButton(
+                                        child: Text(
+                                            'Click here to read the Privacy Policy'),
+                                        textColor: Colors.white70,
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    WebViewContainer(
+                                                        'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
+                                                        "ShareTheTrack's Privacy Policy",
+                                                        (_) =>
+                                                            NavigationDecision
+                                                                .navigate)),
+                                          );
+                                        }),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                MyIcon(
+                                  icon: 'spotify',
+                                  size: 24.0,
+                                ),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text("With the colaboration of Spotify"),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );

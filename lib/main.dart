@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
 import 'package:ShareTheMusic/blocs/playlists_bloc.dart';
@@ -61,7 +62,7 @@ class _MyAppState extends State<MyApp> {
             )
           ],
           child: MaterialApp(
-            home: Wrapper(),
+            home: FancyBackgroundApp(child: Wrapper()),
             theme: appTheme,
           ),
         ));

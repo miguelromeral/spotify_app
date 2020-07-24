@@ -72,6 +72,7 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (safeArea != null && safeArea) {
       return Scaffold(
+        backgroundColor: Colors.transparent,
         body: SafeArea(
           child: _buildContent(context),
         ),
