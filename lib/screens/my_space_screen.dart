@@ -24,11 +24,10 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FancyBackgroundApp(
-        content: SafeArea(
-            child: Container(
-                padding: EdgeInsets.all(20.0), child: _buildBody(context))),
-      ),
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+          child: Container(
+              padding: EdgeInsets.all(20.0), child: _buildBody(context))),
     );
   }
 

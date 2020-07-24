@@ -92,7 +92,7 @@ class _AuthenticateState extends State<Authenticate> {
                     //Scaffold.of(context).showSnackBar(sb);
                   }
                   return FancyBackgroundApp(
-                    content: SafeArea(
+                    child: SafeArea(
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

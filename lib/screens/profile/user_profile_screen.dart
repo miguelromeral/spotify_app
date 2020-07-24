@@ -62,7 +62,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget _createBody(
       BuildContext context, UserPublic user, SpotifyService state) {
     return FancyBackgroundApp(
-      content: Padding(
+      child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [

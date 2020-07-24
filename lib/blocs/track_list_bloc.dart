@@ -15,6 +15,7 @@ import 'package:rxdart/subjects.dart';
 
 class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     implements Searcher<Track> {
+
   List<Track> initialList;
   List<Track> originalList = new List();
   final _filteredData = BehaviorSubject<List<Track>>();

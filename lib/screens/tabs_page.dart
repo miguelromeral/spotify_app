@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
@@ -36,15 +37,17 @@ class _TabsPageState extends State<TabsPage> {
   );
 
   Widget buildPageView() {
-    return PageView.builder(
-      controller: pageController,
-      onPageChanged: (index) {
-        pageChanged(index);
-      },
-      itemCount: _pages.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _pages[index].page;
-      },
+    return FancyBackgroundApp(
+      child: PageView.builder(
+        controller: pageController,
+        onPageChanged: (index) {
+          pageChanged(index);
+        },
+        itemCount: _pages.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _pages[index].page;
+        },
+      ),
     );
   }
 

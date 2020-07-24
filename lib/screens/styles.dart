@@ -42,6 +42,7 @@ ThemeData _buildAppTheme() {
     brightness: Brightness.dark,
     primaryColor: colorPrimary,
     accentColor: colorAccent,
+    backgroundColor: Colors.transparent,
     scaffoldBackgroundColor: colorBackground,
     buttonTheme: base.buttonTheme.copyWith(
       buttonColor: colorAccent,

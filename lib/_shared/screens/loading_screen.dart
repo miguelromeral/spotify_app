@@ -23,7 +23,7 @@ class LoadingScreen extends StatelessWidget {
       return Scaffold(
         body: SafeArea(
           child: FancyBackgroundApp(
-            content: _buildContent(context),
+            child: _buildContent(context),
           ),
           //child: _buildContent(context),
         ),

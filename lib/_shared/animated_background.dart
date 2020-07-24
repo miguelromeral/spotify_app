@@ -11,9 +11,9 @@ import 'package:supercharged/supercharged.dart';
 
 class FancyBackgroundApp extends StatelessWidget {
 
-  Widget content;
+  Widget child;
 
-  FancyBackgroundApp({this.content});
+  FancyBackgroundApp({this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class FancyBackgroundApp extends StatelessWidget {
           speed: 1.2,
           offset: pi / 2,
         )),
-        Positioned.fill(child: content),
+        Positioned.fill(child: child),
       ],
     );
   }

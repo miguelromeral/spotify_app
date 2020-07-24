@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
@@ -42,12 +43,14 @@ class _ShareTrackState extends State<ShareTrack> {
       appBar: CustomAppBar(
         titleText: 'Share Track',
       ),
-      body: BlocBuilder<SpotifyBloc, SpotifyService>(
-        builder: (context, state) => BlocBuilder<LocalDbBloc, LocalDB>(
-          condition: (pre, cur) => pre.isInit != cur.isInit,
-          builder: (context, localdb) {
-            return _buildBody(state, localdb, context);
-          },
+      body: FancyBackgroundApp(
+        child: BlocBuilder<SpotifyBloc, SpotifyService>(
+          builder: (context, state) => BlocBuilder<LocalDbBloc, LocalDB>(
+            condition: (pre, cur) => pre.isInit != cur.isInit,
+            builder: (context, localdb) {
+              return _buildBody(state, localdb, context);
+            },
+          ),
         ),
       ),
     );
@@ -195,7 +198,6 @@ class _ShareTrackState extends State<ShareTrack> {
 
                               BlocProvider.of<HomeBloc>(context).add(
                                   UpdateFeedHomeEvent(suggestions: others));
-
 
                               Scaffold.of(context).showSnackBar(SnackBar(
                                   content: Text('Updated Suggestion!')));
