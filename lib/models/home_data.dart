@@ -9,6 +9,7 @@ class HomeData {
   List<Suggestion> get last => _last ?? List();
 
   void updateFeed(List<Suggestion> newFeed) {
+    newFeed.sort((a, b) => b.date.compareTo(a.date));
     _scFeed.add(newFeed);
     _last = newFeed;
   }

@@ -2,6 +2,7 @@ import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
+import 'package:ShareTheMusic/screens/home/home_screen.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
@@ -185,14 +186,16 @@ class _ShareTrackState extends State<ShareTrack> {
                             var res = await localdb.insertSuggestion(sug);
                             if (res) {
                               var bloc = BlocProvider.of<SpotifyBloc>(context);
-                              bloc.add(UpdateFeed());
+                              //bloc.add(UpdateFeed());
                               bloc.add(UpdateMySuggestion());
-                              UpdatedFeedNotification().dispatch(context);
+
+                              //UpdatedFeedNotification().dispatch(context);
+
+                              var others = await state.getsuggestions();
 
                               BlocProvider.of<HomeBloc>(context).add(
-                                  UpdateFeedHomeEvent(
-                                      suggestions:
-                                          await state.getsuggestions()));
+                                  UpdateFeedHomeEvent(suggestions: others));
+
 
                               Scaffold.of(context).showSnackBar(SnackBar(
                                   content: Text('Updated Suggestion!')));

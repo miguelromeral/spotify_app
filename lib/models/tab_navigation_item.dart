@@ -27,9 +27,9 @@ class TabNavigationItem {
     return [
       TabNavigationItem(
         page: PageStorage(
-          child: new HomeScreen(key: k1),
+          child: new HomeScreen(),
           bucket: new PageStorageBucket(),
-          key: k1,
+          key: HomeScreen.pageKey,
         ),
         icon: Icon(Icons.home),
         title: Text("Home"),

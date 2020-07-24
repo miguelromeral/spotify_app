@@ -22,16 +22,16 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 import '../styles.dart';
 
 class HomeScreen extends StatefulWidget {
-  final key;
+  static Key pageKey = new PageStorageKey("homescreen");
 
-  HomeScreen({this.key}) : super(key: key);
+  HomeScreen() : super(key: pageKey);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Suggestion> _storage;
+  //List<Suggestion> _storage;
 
   Widget _createScaffold(Widget content) {
     return Scaffold(
@@ -46,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    _storage = PageStorage.of(context)
-            .readState(context, identifier: ValueKey(widget.key)) ??
-        List();
+    /*_storage = PageStorage.of(context)
+            .readState(context, identifier: ValueKey(HomeScreen.pageKey)) ??
+        List();*/
   }
 
   @override
@@ -64,15 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         stream: data.feed,
                         builder: (context, snp) {
                           if (snp.hasData) {
-                            List<Suggestion> list = snp.data;
-                            list.sort((a, b) => b.date.compareTo(a.date));
-                            PageStorage.of(context).writeState(context, list,
-                                identifier: ValueKey(widget.key));
-                            return _createList(list, state, api);
-                          } else if (_storage.length != 0) {
-                            List<Suggestion> list = _storage;
-                            list.sort((a, b) => b.date.compareTo(a.date));
-                            return _createList(list, state, api);
+                            return _createList(snp.data, state, api);
+                          } else if (data.last.isNotEmpty) {
+                            return _createList(data.last, state, api);
                           } else if (snp.hasError) {
                             return _createScaffold(ErrorScreen(
                               title: 'Error while retrieving your feed.',
