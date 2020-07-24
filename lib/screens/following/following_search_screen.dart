@@ -135,7 +135,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                   resizeToAvoidBottomPadding: false,
                 );
               } else {
-                _bloc.add(UpdateFeed());
+                _bloc.add(UpdateFollowing());
                 return Scaffold(
                   appBar: _buildBar(context),
                   body: LoadingScreen(),

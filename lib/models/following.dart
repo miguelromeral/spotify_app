@@ -15,6 +15,11 @@ class Following {
   //Suggestion({ this.trackid, this.suserid, this.fuserid });
   Following({this.suserid, this.fuserid, this.reference, this.users});
 
+
+  bool containsUser(String suserid){
+    return usersList.contains(suserid);
+  }
+
   Following.fromMap(Map<String, dynamic> data){
     suserid = data[fsuserid] ?? '';
     fuserid = data[ffuserid] ?? '';
@@ -29,6 +34,7 @@ class Following {
     name = doc.data[fname] ?? '';
     reference = doc.reference;
   }
+  
 
   Map<String, dynamic> toMap() {
     return {

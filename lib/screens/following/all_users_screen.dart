@@ -11,7 +11,7 @@ class AllUsersScreen extends StatefulWidget {
   _AllUsersScreenState createState() => _AllUsersScreenState();
 }
 
-class _AllUsersScreenState extends State<AllUsersScreen> {
+class _AllUsersScreenState extends State<AllUsersScreen>  {
   TextEditingController _textFieldController = TextEditingController();
 
   @override

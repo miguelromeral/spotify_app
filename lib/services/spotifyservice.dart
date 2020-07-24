@@ -28,6 +28,8 @@ class SpotifyService {
       new StreamController.broadcast();
   Stream<Suggestion> get mySuggestion => _scMySuggestion.stream;
 
+  Following lastFollowing;
+
   StreamController<Following> _scFollowing = new StreamController.broadcast();
   Stream<Following> get following => _scFollowing.stream;
 
@@ -39,6 +41,7 @@ class SpotifyService {
 
   void updateFollowing(Following newone) {
     _scFollowing.add(newone);
+    lastFollowing = newone;
   }
 
   void updateMyUser(User me) {

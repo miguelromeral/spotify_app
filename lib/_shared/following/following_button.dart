@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 
 import '../myicon.dart';
+import '../showup.dart';
 
 class FollowingButton extends StatefulWidget {
   final Key key;
@@ -80,7 +82,9 @@ class _FollowingButtonState extends State<FollowingButton> {
             content: Text('You followed ${widget.user.displayName}!')));
       }
 
-      BlocProvider.of<SpotifyBloc>(context).add(UpdateFeed());
+      BlocProvider.of<SpotifyBloc>(context).add(UpdateFollowing());
+      BlocProvider.of<HomeBloc>(context)
+          .add(UpdateFeedHomeEvent(suggestions: await state.getsuggestions()));
     } else {
       Scaffold.of(context).showSnackBar(
           SnackBar(content: Text('You Can Not Unfollow Yourself!')));

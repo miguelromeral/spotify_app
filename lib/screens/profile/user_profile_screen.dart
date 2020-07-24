@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
+import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
@@ -59,9 +61,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _createBody(
       BuildContext context, UserPublic user, SpotifyService state) {
-    return Center(
-      child: Container(
-        decoration: backgroundGradient,
+    return FancyBackgroundApp(
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Row(
@@ -86,8 +88,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         StreamBuilder(
                           stream: state.following,
                           builder: (context, snp) {
-                            if (snp.hasData) {
-                              Following mine = snp.data;
+                            if (snp.hasData || state.lastFollowing != null) {
+                              Following mine =
+                                  (snp.data ?? state.lastFollowing);
 
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +112,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       } else {
                                         return CardInfo(
                                           title: 'ShareTheTrack followers',
-                                          content: 'Unknown',
+                                          content: '?',
                                         );
                                       }
                                     },
@@ -120,10 +123,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         Following userFollowing = snapshot.data;
-                                        return FollowingButton(
-                                          myFollowings: mine,
-                                          user: user,
-                                          userFollowing: userFollowing,
+                                        return ShowUp(
+                                          delay: 350,
+                                          key: Key(
+                                              '${userFollowing.suserid}-${mine.containsUser(userFollowing.suserid)}'),
+                                          child: FollowingButton(
+                                            myFollowings: mine,
+                                            user: user,
+                                            userFollowing: userFollowing,
+                                          ),
                                         );
                                       } else {
                                         return Container();

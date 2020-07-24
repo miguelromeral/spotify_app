@@ -80,10 +80,9 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       print("Updating My Suggestion in BLOC...");
       state.updateMySuggestion(await _updateMySuggestion(state));
       yield state;
-    } else if (event is UpdateSaved) {
-      //print("Updating My Saved Tracks in BLOC...");
-      //state.updateSaved(await _updateSaved(state, event.api));
-      //yield state;
+    } else if (event is UpdateFollowing) {
+      state.updateFollowing(await _updateFollowing(state));
+      yield state;
     } else if (event is UpdatePlaylists) {
       //print("Updating My Playlists in BLOC...");
       //state.updatePlaylists(await _updatePlaylists(state, event.api));
@@ -139,6 +138,7 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   Future<Suggestion> _updateMySuggestion(SpotifyService state) async {
     return await state.getMySuggestion();
   }
+
 /*
   Future<List<Suggestion>> _updateFeed(SpotifyService state) async {
     state.updateFollowing(await _updateFollowing(state));
@@ -211,6 +211,8 @@ class UpdateSaved extends SpotifyEventBase {
 
   UpdateSaved({@required this.api});
 }
+
+class UpdateFollowing extends SpotifyEventBase {}
 
 class UpdatePlaylists extends SpotifyEventBase {
   SpotifyApi api;
