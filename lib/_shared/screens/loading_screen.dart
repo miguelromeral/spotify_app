@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -21,7 +22,10 @@ class LoadingScreen extends StatelessWidget {
     if (safeArea != null && safeArea) {
       return Scaffold(
         body: SafeArea(
-          child: _buildContent(context),
+          child: FancyBackgroundApp(
+            content: _buildContent(context),
+          ),
+          //child: _buildContent(context),
         ),
       );
     } else {
@@ -30,23 +34,19 @@ class LoadingScreen extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    return Container(
-      decoration: backgroundGradient,
-      padding: EdgeInsets.all(16.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FadingText(
-              _getTitle(),
-              style: _styleLoading,
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Column(children: _getContentBelow()),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FadingText(
+            _getTitle(),
+            style: _styleLoading,
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Column(children: _getContentBelow()),
+        ],
       ),
     );
   }

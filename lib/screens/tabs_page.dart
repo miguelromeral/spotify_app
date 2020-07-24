@@ -142,7 +142,7 @@ class _TabsPageState extends State<TabsPage> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: MyDrawer(context: context),
+        //drawer: MyDrawer(context: context),
         /*body: IndexedStack(
           index: _currentIndex,
           children: [
@@ -152,13 +152,11 @@ class _TabsPageState extends State<TabsPage> {
         body: buildPageView(),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
-            canvasColor: colorSemiBackground,
-            /*textTheme: Theme.of(context).textTheme.copyWith(
+              canvasColor: colorSemiBackground,
+              textTheme: Theme.of(context).textTheme.copyWith(
                   caption: new TextStyle(
                       color: Colors
-                          .yellow))
-                          */
-          ), // sets the inactive color of the `BottomNavigationBar`
+                          .yellow))), // sets the inactive color of the `BottomNavigationBar`
 
           /*child: BottomNavigationBar(
             fixedColor: colorAccent,
@@ -174,6 +172,8 @@ class _TabsPageState extends State<TabsPage> {
             ],
           ),*/
           child: BottomNavigationBar(
+            unselectedItemColor: colorThirdBackground,
+            selectedItemColor: colorAccent,
             currentIndex: _currentIndex,
             onTap: (index) {
               bottomTapped(index);

@@ -1,6 +1,8 @@
+import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/screens/demo/home_demo.dart';
 import 'package:ShareTheMusic/screens/demo/more_screen.dart';
 import 'package:ShareTheMusic/screens/demo/tracks_demo.dart';
+import 'package:ShareTheMusic/screens/my_space_screen.dart';
 import 'package:ShareTheMusic/screens/playlists/my_playlists_screen.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
@@ -23,7 +25,6 @@ class TabNavigationItem {
   });
 
   static List<TabNavigationItem> items() {
-    var k1 = new PageStorageKey("homescreen");
     return [
       TabNavigationItem(
         page: PageStorage(
@@ -40,9 +41,19 @@ class TabNavigationItem {
           title: Text("Users"),
         ),*/
       TabNavigationItem(
+        page: MyPlaylistsScreen(),
+        icon: Icon(Icons.library_music),
+        title: Text("Playlists"),
+      ),
+      TabNavigationItem(
         page: SavedTracksScreen(),
         icon: Icon(Icons.music_note),
         title: Text("Saved Songs"),
+      ),
+      TabNavigationItem(
+        page: MySpaceScreen(),
+        icon: Icon(Icons.record_voice_over),
+        title: Text("My Space"),
       ),
       /*TabNavigationItem(
           page: UserProfileScreen(
@@ -51,11 +62,7 @@ class TabNavigationItem {
           icon: Icon(Icons.face),
           title: Text("Profile"),
         ),*/
-      TabNavigationItem(
-        page: MyPlaylistsScreen(),
-        icon: Icon(Icons.library_music),
-        title: Text("Playlists"),
-      ),
+
       /*   TabNavigationItem(
           page: MySettingsScreen(),
           icon: Icon(Icons.settings),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/app_logo.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
@@ -90,141 +91,152 @@ class _AuthenticateState extends State<Authenticate> {
                         context);
                     //Scaffold.of(context).showSnackBar(sb);
                   }
-                  return SafeArea(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              padding: EdgeInsets.all(16.0),
+                  return FancyBackgroundApp(
+                    content: SafeArea(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                padding: EdgeInsets.all(16.0),
+                                child: ListView(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text('Welcome to'),
+                                        ScalingText(
+                                          'ShareTheTrack',
+                                          style: TextStyle(fontSize: 28.0),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 5,
                               child: ListView(
                                 children: [
                                   Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('Welcome to'),
-                                      ScalingText(
-                                        'ShareTheTrack',
-                                        style: TextStyle(fontSize: 28.0),
+                                      GlowingProgressIndicator(
+                                        child: AppLogo(),
+                                        duration: Duration(seconds: 5),
                                       ),
+                                      SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      _loginButton(context),
+                                      SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      RaisedButton(
+                                          child: Text(
+                                              "Try the app's DEMO version"),
+                                          textColor: Colors.white,
+                                          color: colorThirdBackground,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: BorderSide(
+                                                  color: colorPrimary)),
+                                          onPressed: () async {
+                                            var mycredentials =
+                                                await SpotifyService
+                                                    .readCredentialsFile();
+                                            final spotify =
+                                                SpotifyApi(mycredentials);
+
+                                            BlocProvider.of<ApiBloc>(context)
+                                                .add(UpdateApiEvent(
+                                                    newOne: spotify));
+
+                                            context
+                                                .bloc<SpotifyBloc>()
+                                                .add(LoginAnonymousEvent());
+                                          }),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Checkbox(
+                                            value: _acceptPolicy,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                _acceptPolicy = value;
+                                              });
+                                            },
+                                          ),
+                                          Text(
+                                              "By enabling this option, you agree with the app's Privacy Policy"),
+                                        ],
+                                      ),
+                                      FlatButton(
+                                          child: Text(
+                                              'Click here to read the Privacy Policy'),
+                                          textColor: Colors.white70,
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      WebViewContainer(
+                                                          'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
+                                                          "ShareTheTrack's Privacy Policy",
+                                                          (_) =>
+                                                              NavigationDecision
+                                                                  .navigate)),
+                                            );
+                                          }),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: ListView(
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    GlowingProgressIndicator(
-                                      child: AppLogo(),
-                                      duration: Duration(seconds: 5),
-                                    ),
-                                    SizedBox(
-                                      height: 16.0,
-                                    ),
-                                    _loginButton(context),
-                                    SizedBox(
-                                      height: 16.0,
-                                    ),
-                                    RaisedButton(
-                                        child:
-                                            Text("Try the app's DEMO version"),
-                                        textColor: Colors.white,
-                                        color: colorThirdBackground,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                            side: BorderSide(
-                                                color: colorPrimary)),
-                                        onPressed: () async {
-                                          var mycredentials =
-                                              await SpotifyService
-                                                  .readCredentialsFile();
-                                          final spotify =
-                                              SpotifyApi(mycredentials);
-
-                                          BlocProvider.of<ApiBloc>(context).add(
-                                              UpdateApiEvent(newOne: spotify));
-
-                                          context
-                                              .bloc<SpotifyBloc>()
-                                              .add(LoginAnonymousEvent());
-                                        }),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Checkbox(
-                                          value: _acceptPolicy,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              _acceptPolicy = value;
-                                            });
-                                          },
-                                        ),
-                                        Text(
-                                            "By enabling this option, you agree with the app's Privacy Policy"),
-                                      ],
-                                    ),
-                                    FlatButton(
-                                        child: Text(
-                                            'Click here to read the Privacy Policy'),
-                                        textColor: Colors.white70,
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => WebViewContainer(
-                                                    'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
-                                                    "ShareTheTrack's Privacy Policy",
-                                                    (_) => NavigationDecision
-                                                        .navigate)),
-                                          );
-                                        }),
-                                  ],
-                                ),
-                              ],
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  MyIcon(
+                                    icon: 'spotify',
+                                    size: 24.0,
+                                  ),
+                                  SizedBox(
+                                    width: 8.0,
+                                  ),
+                                  Text("With the colaboration of Spotify"),
+                                ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                MyIcon(
-                                  icon: 'spotify',
-                                  size: 24.0,
-                                ),
-                                SizedBox(
-                                  width: 8.0,
-                                ),
-                                Text("With the colaboration of Spotify"),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );
                 case _loginState.loadingSaved:
-                  return LoadingScreen();
+                  return LoadingScreen(
+                    title: 'Singing in with your last credentials...',
+                    safeArea: true,
+                    stringBelow: [
+                      "Please, wait until you've been loged in.",
+                      "This may take a few seconds."
+                    ],
+                  );
                 case _loginState.loading:
                   if (_api != null) {
                     context.bloc<SpotifyBloc>().add(LoginEvent(_api, true));
                   }
                   return LoadingScreen(
-                    below: [
-                      Text("Please, wait until you've been loged in."),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Text("This may take a few seconds."),
+                    title: 'Singing in...',
+                    safeArea: true,
+                    stringBelow: [
+                      "Please, wait until you've been loged in.",
+                      "This may take a few seconds."
                     ],
                   );
                 default:
@@ -277,7 +289,7 @@ class _AuthenticateState extends State<Authenticate> {
     if (credentials != null) {
       print("automatically logining in");
       //context.bloc<SpotifyBloc>().add(LoginEvent(SpotifyApi(credentials), true));
-      var api = SpotifyApi(credentials); 
+      var api = SpotifyApi(credentials);
       BlocProvider.of<ApiBloc>(context).add(UpdateApiEvent(newOne: api));
       setState(() {
         _api = api;
@@ -299,7 +311,12 @@ class _AuthenticateState extends State<Authenticate> {
   void login(BuildContext context) async {
     var credentials = await SpotifyService.readCredentialsFile();
     final grant = SpotifyApi.authorizationCodeGrant(credentials);
-    final scopes = ['user-read-email', 'user-library-read', 'playlist-read-private', 'playlist-read-collaborative'];
+    final scopes = [
+      'user-read-email',
+      'user-library-read',
+      'playlist-read-private',
+      'playlist-read-collaborative'
+    ];
 
     final authUri = grant.getAuthorizationUrl(
       Uri.parse(SpotifyService.redirectUri),

@@ -51,12 +51,10 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
   @override
   Widget build(BuildContext context) {
     if (tracks == null || tracks.isEmpty) {
-      return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(widget.playlist.name),
-          ),
-          body: LoadingScreen());
+      return LoadingScreen(
+        title: "Retrieving ${widget.playlist.name}'s tracks",
+        safeArea: true,
+      );
     } else {
       return NotificationListener<RefreshListNotification>(
         onNotification: (notification) {
@@ -75,7 +73,7 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
   List<Track> filterLocalFiles(List<Track> original) {
     if (Settings.getValue<bool>(settings_track_hide_local, false)) {
       return original.where((element) => element.id != null).toList();
-    }else{
+    } else {
       return original;
     }
   }

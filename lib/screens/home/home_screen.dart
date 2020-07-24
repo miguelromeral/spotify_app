@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             _getData(context, state);
                             return _createScaffold(LoadingScreen(
                               title: 'Loading Feed...',
+                              safeArea: true,
                             ));
                           }
                         },

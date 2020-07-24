@@ -47,7 +47,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
               return buildBody(context, api, data.last);
             } else {
               _getData(context, api);
-              return LoadingScreen();
+              return LoadingScreen(title: 'Loading Your Saved Tracks', safeArea: true,);
             }
           },
         );

@@ -294,6 +294,8 @@ class _SuggestionItemState extends State<SuggestionItem> {
       int miles = (likes / 1000).truncate();
       int dec = ((likes / 100).truncate() % 10);
       return '$miles,$dec K';
+    } else if (likes == 0) {
+      return '';
     } else {
       return likes.toString();
     }

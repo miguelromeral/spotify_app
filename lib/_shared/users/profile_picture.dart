@@ -17,7 +17,7 @@ class ProfilePicture extends StatelessWidget {
         height: size,
         width: size,
         child: CircleAvatar(
-            backgroundColor: colorSemiBackground,
+            backgroundColor: colorThirdBackground,
             child: Text(
               user.displayName[0].toUpperCase(),
               style: TextStyle(
