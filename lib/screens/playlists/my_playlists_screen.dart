@@ -1,4 +1,5 @@
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/playlists_bloc.dart';
 import 'package:ShareTheMusic/models/playlists_data.dart';
@@ -40,6 +41,8 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var state = BlocProvider.of<SpotifyBloc>(context).state;
+
     return BlocBuilder<PlaylistsBloc, PlaylistsData>(
       builder: (context, data) =>
           BlocBuilder<ApiBloc, MyApi>(builder: (context, api) {
@@ -47,15 +50,12 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
           stream: data.playlists,
           builder: (context, snp) {
             if (snp.hasData) {
-              return _buildBody(snp.data, api);
+              return buildBody(context, api, snp.data, state);
             } else if (data.last.isNotEmpty) {
-              return _buildBody(data.last, api);
+              return buildBody(context, api, data.last, state);
             } else {
               _getData(context, api);
-              return LoadingScreen(
-                title: 'Loading Your Playlists...',
-                safeArea: true,
-              );
+              return buildBody(context, api, null, state);
             }
           },
         );
@@ -63,33 +63,45 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
     );
   }
 
-  Widget _buildBody(List<PlaylistSimple> liked, MyApi api) {
-    if (liked.isNotEmpty) {
-      return NotificationListener<RefreshListNotification>(
-        onNotification: (notification) {
-          _getData(context, api);
-          return true;
-        },
-        child: PlaylistsScreen(
-          key: Key(liked.hashCode.toString()),
-          list: liked,
-          title: 'My Playlists',
-        ),
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('My Playlists'),
-          centerTitle: true,
-        ),
-        body: ErrorScreen(
-          title: "There's no playlist we could find",
-          stringBelow: [
-            "We couldn't find any playlists in your library.",
-            "Please, try again later."
-          ],
-        ),
-      );
+  Widget buildBody(BuildContext context, MyApi api, List<PlaylistSimple> liked,
+      SpotifyService state) {
+    return NotificationListener<RefreshListNotification>(
+      onNotification: (notification) {
+        _getData(context, api);
+        return true;
+      },
+      child: _create(context, api, liked, state),
+    );
+  }
+
+  Widget _create(BuildContext context, MyApi api, List<PlaylistSimple> liked,
+      SpotifyService state) {
+    List<PlaylistSimple> l = liked;
+    bool loading = false;
+    if (liked == null) {
+      l = List<PlaylistSimple>();
+      loading = true;
     }
+    return PlaylistsScreen(
+      key: Key(liked.hashCode.toString()),
+      list: l,
+      title: 'My Playlists',
+      widget: _createWidgetHeader(state),
+      loading: loading,
+    );
+  }
+
+  Widget _createWidgetHeader(SpotifyService state) {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          ProfilePicture(
+            size: 100.0,
+            user: state.myUser,
+          ),
+        ],
+      ),
+    );
   }
 }

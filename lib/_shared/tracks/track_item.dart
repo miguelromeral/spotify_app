@@ -1,6 +1,7 @@
 import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_duration.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
+import 'package:ShareTheMusic/screens/share_track/share_track.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,13 +33,31 @@ class TrackItem extends StatefulWidget {
 class _TrackItemState extends State<TrackItem> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
+   return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return CustomListTile(
-          key: Key(widget.track.id),
-          leadingIcon: _leadingIcon(),
-          content: _content(),
-          menuItems: _getActions(),
+        return GestureDetector(
+          onTap: () {
+            try {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShareTrack(track: widget.track)),
+              );
+            } catch (err) {
+              print('Error when navigating from playlist: $err');
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(content: Text("Couldn't open the playlist.")));
+            }
+          },
+          child: Container(
+            color: Colors.transparent,
+            child: CustomListTile(
+              key: Key(widget.track.id),
+              leadingIcon: _leadingIcon(),
+              content: _content(),
+              menuItems: _getActions(),
+            ),
+          ),
         );
       },
     );

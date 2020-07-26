@@ -131,6 +131,8 @@ enum Order {
   albumReverse,
   byDefault,
   byDefaultReverse,
+  playlistName,
+  playlistNameReverse,
 }
 
 class ConstantsOrderOptions {
@@ -139,10 +141,18 @@ class ConstantsOrderOptions {
   static const String Album = 'By Album';
   static const String ByDefault = 'By Default';
 
+  static const String PlaylistName = 'By Playlist Name';
+
+
   static const List<String> choices = <String>[
     TrackName,
     Artist,
     Album,
+    ByDefault,
+  ];
+
+  static const List<String> choicesPL = [
+    PlaylistName,
     ByDefault,
   ];
 }

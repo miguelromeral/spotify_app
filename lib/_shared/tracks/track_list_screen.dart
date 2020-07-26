@@ -35,6 +35,7 @@ class _TrackListScreenState extends State<TrackListScreen> {
   BuildContext _context;
   TextEditingController _textController;
   bool _textEmpty = true;
+  SearchBloc<Track> sb;
 
   @override
   void initState() {
@@ -59,7 +60,6 @@ class _TrackListScreenState extends State<TrackListScreen> {
     super.initState();
   }
 
-  SearchBloc<Track> sb;
 
   @override
   Widget build(BuildContext context) {

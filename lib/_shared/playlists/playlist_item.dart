@@ -44,41 +44,43 @@ class PlaylistItem extends StatelessWidget {
                     SnackBar(content: Text("Couldn't open the playlist.")));
               }
             },
-            child: Container(
-              color: colorBackground,
-              child: CustomListTile(
-                key: Key(playlist.id),
-                leadingIcon: Container(
-                  width: 60.0,
-                  height: 60.0,
-                  child: Hero(
-                    tag: playlist.id,
-                    child: PlaylistImage(
-                      playlist: playlist,
-                      size: 25.0,
-                    ),
-                  ),
-                ),
-                content: [
-                  Text(
-                      '${(playlist.collaborative ? '🔘 ' : '')}${playlist.name}',
-                      style: styleFeedTitle),
-                  SizedBox(
-                    height: 4.0,
-                  ),
-                  Text('by ${playlist.owner.displayName}',
-                      style: styleFeedTrack),
-                  SizedBox(
-                    height: 4.0,
-                  ),
-                  Text(playlist.public ? 'Public' : '🔒 Private',
-                      style: styleFeedTrack),
-                ],
-                menuItems: _getActions(),
-              ),
-            ),
+            child: _buildTile(),
           );
         },
+      ),
+    );
+  }
+
+  Container _buildTile() {
+    return Container(
+      color: Colors.transparent,
+      child: CustomListTile(
+        key: Key(playlist.id),
+        leadingIcon: Container(
+          width: 60.0,
+          height: 60.0,
+          child: Hero(
+            tag: playlist.id,
+            child: PlaylistImage(
+              playlist: playlist,
+              size: 25.0,
+            ),
+          ),
+        ),
+        content: [
+          Text('${(playlist.collaborative ? '🔘 ' : '')}${playlist.name}',
+              style: styleFeedTitle),
+          SizedBox(
+            height: 4.0,
+          ),
+          Text('by ${playlist.owner.displayName}', style: styleFeedTrack),
+          SizedBox(
+            height: 4.0,
+          ),
+          Text(playlist.public ? 'Public' : '🔒 Private',
+              style: styleFeedTrack),
+        ],
+        menuItems: _getActions(),
       ),
     );
   }
