@@ -151,10 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return LoadingScreen();
     }
 
-    return ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-              color: colorSeprator,
-            ),
+    return ListView.builder(
         itemCount: list.length,
         itemBuilder: (context, index) =>
             _createListElement(list[index], state, api));

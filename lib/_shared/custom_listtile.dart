@@ -48,14 +48,14 @@ class _CustomListTileState extends State<CustomListTile> {
                     Expanded(
                       flex: 0,
                       child: Container(
-                        padding: EdgeInsets.all(4.0),
-                        //color: Colors.black,
+                        //color: Colors.red,
                         child: widget.leadingIcon,
                       ),
                     ),
                     Expanded(
                       flex: 1,
                       child: Container(
+                        //color: Colors.yellow,
                         padding: EdgeInsets.all(4.0),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +65,8 @@ class _CustomListTileState extends State<CustomListTile> {
                     Expanded(
                       flex: 0,
                       child: Container(
-                        padding: EdgeInsets.all(8.0),
+                        //color: Colors.green,
+                        padding: EdgeInsets.all(2.0),
                         child: _createTrailingIcon(context, state),
                       ),
                     ),

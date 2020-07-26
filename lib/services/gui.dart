@@ -51,31 +51,33 @@ Future openUrl(String uri) async {
   }
 }
 
-final TextStyle styleFeedTitle = TextStyle(
-  fontSize: 18.0,
+TextStyle styleFeedTitle = TextStyle(
+  fontSize: 14.0,
   fontWeight: FontWeight.bold,
 );
 
-final TextStyle styleFeedAgo = TextStyle(
+TextStyle styleFeedAgo = TextStyle(
   color: Colors.white38,
   fontStyle: FontStyle.italic,
+  fontSize: 10.0,
+  fontWeight: FontWeight.normal,
 );
 
-final TextStyle styleFeedTrack = TextStyle(
+TextStyle styleFeedTrack = TextStyle(
   color: Colors.green[600],
 );
 
-final TextStyle styleFeedArtist = TextStyle(
+TextStyle styleFeedArtist = TextStyle(
   color: Colors.green[900],
 );
 
-final TextStyle styleFeedContent = TextStyle(
+TextStyle styleFeedContent = TextStyle(
   fontSize: 16.0,
 );
 
-final TextStyle styleCardHeader =
+TextStyle styleCardHeader =
     TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic);
-final TextStyle styleCardContent =
+TextStyle styleCardContent =
     TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
 
 const double albumIconSize = 70.0;

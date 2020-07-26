@@ -2,6 +2,7 @@ import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
+import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:share/share.dart';
@@ -85,7 +86,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       return Container(
         width: maxsize,
         height: maxsize,
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(2.0),
         //color: Colors.red,
         child: ProfilePicture(
           user: user,
@@ -96,7 +97,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       return Container(
         width: maxsize,
         height: maxsize,
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(2.0),
         //color: Colors.red,
         child: AlbumPicture(
           showDuration: Settings.getValue<bool>(settings_track_duration, true),
@@ -113,7 +114,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       return Container(
         width: maxsize,
         height: maxsize,
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(2.0),
         //color: Colors.red,
         child: AlbumPicture(
           showDuration: Settings.getValue<bool>(settings_track_duration, true),
@@ -156,14 +157,21 @@ class _SuggestionItemState extends State<SuggestionItem> {
   Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return CustomListTile(
-          key: Key(suggestion.suserid),
-          leadingIcon: _createLeadingIcon(user, track),
-          trailingIcon: _createTrailingIcon(user, track),
-          content: _content(),
-          bottomIcons: _createBottomBar(context, state),
-          menuItems: _getActions(widget.track, widget.user, widget.suggestion,
-              state.mySpotifyUserId, state),
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          decoration: BoxDecoration(
+            color: colorBackground.withAlpha(175),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: CustomListTile(
+            key: Key(suggestion.suserid),
+            leadingIcon: _createLeadingIcon(user, track),
+            trailingIcon: _createTrailingIcon(user, track),
+            content: _content(),
+            bottomIcons: _createBottomBar(context, state),
+            menuItems: _getActions(widget.track, widget.user, widget.suggestion,
+                state.mySpotifyUserId, state),
+          ),
         );
       },
     );
@@ -196,19 +204,17 @@ class _SuggestionItemState extends State<SuggestionItem> {
 
   Widget _getFirstTitle() {
     if (widget.user != null) {
-      return Row(
-        children: [
-          Text(
-            _createTitle(widget.track, widget.user),
-            style: styleFeedTitle,
-          ),
-          SizedBox(width: 8.0),
-          Text(
-            "(${timeago.format(widget.suggestion.date, locale: 'en_short')})",
-            style: styleFeedAgo,
-          ),
-        ],
-      );
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+          style: styleFeedTitle,
+          text: _createTitle(widget.track, widget.user),
+        ),
+        TextSpan(
+            text:
+                '  (${timeago.format(widget.suggestion.date, locale: 'en_short')})',
+            style: styleFeedAgo),
+      ]));
     } else {
       return Text(
         _createTitle(widget.track, widget.user),
@@ -232,30 +238,35 @@ class _SuggestionItemState extends State<SuggestionItem> {
     List<Widget> list = List();
 
     if (widget.suggestion.likes != null) {
-      list.add(Container(
-        child: Row(
-          children: [
-            MyIcon(
-                icon: 'vote',
-                size: 20.0,
-                callback: () async {
-                  if (state.demo) {
-                    showMyDialog(context, "You can't Vote Songs in DEMO",
-                        "Please, log in with Spotify if you want to vote for this song.");
-                  } else {
-                    vote(context, state, widget.suggestion, widget.track);
-                  }
-                }),
-            SizedBox(
-              width: 4.0,
-            ),
-            ShowUp(
-              key: Key(
-                  '${widget.suggestion.suserid}-${widget.suggestion.likes}'),
-              child: Text(_likesFormatted(widget.suggestion.likes)),
-              delay: 350,
-            ),
-          ],
+      list.add(GestureDetector(
+        onTap: () async {
+          vote(context, state, widget.suggestion, widget.track);
+        },
+        child: Container(
+          child: Row(
+            children: [
+              MyIcon(
+                  icon: 'vote',
+                  size: 15.0,
+                  callback: () async {
+                    if (state.demo) {
+                      showMyDialog(context, "You can't Vote Songs in DEMO",
+                          "Please, log in with Spotify if you want to vote for this song.");
+                    } else {
+                      vote(context, state, widget.suggestion, widget.track);
+                    }
+                  }),
+              SizedBox(
+                width: 4.0,
+              ),
+              ShowUp(
+                key: Key(
+                    '${widget.suggestion.suserid}-${widget.suggestion.likes}'),
+                child: Text(_likesFormatted(widget.suggestion.likes)),
+                delay: 350,
+              ),
+            ],
+          ),
         ),
       ));
       list.add(SizedBox(
@@ -267,7 +278,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       padding: EdgeInsets.all(8.0),
       child: MyIcon(
           icon: 'spotify',
-          size: 20.0,
+          size: 15.0,
           callback: () => openTrackSpotify(widget.track)),
     ));
     list.add(SizedBox(
@@ -278,7 +289,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       padding: EdgeInsets.all(8.0),
       child: MyIcon(
           icon: 'share',
-          size: 20.0,
+          size: 15.0,
           callback: () => Share.share(_getShareContent())),
     ));
 
