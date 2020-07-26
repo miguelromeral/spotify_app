@@ -51,29 +51,34 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildBody(BuildContext) {
     if (tracks == null || tracks.isEmpty) {
       return TrackListScreen(
         list: List(),
+        loading: tracks == null,
         title: widget.playlist.name,
         widget: _createWidgetHeader(),
       );
     } else {
-      return NotificationListener<RefreshListNotification>(
-          onNotification: (notification) {
-            _getData();
-            return true;
-          },
-          child: FancyBackgroundApp(
-            child: TrackListScreen(
-              key: Key(tracks.length.toString()),
-              list: filterLocalFiles(tracks),
-              title: widget.playlist.name,
-              widget: _createWidgetHeader(),
-            ),
-          ));
+      return TrackListScreen(
+        key: Key(tracks.length.toString()),
+        list: filterLocalFiles(tracks),
+        title: widget.playlist.name,
+        widget: _createWidgetHeader(),
+      );
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener<RefreshListNotification>(
+        onNotification: (notification) {
+          _getData();
+          return true;
+        },
+        child: FancyBackgroundApp(
+          child: _buildBody(context),
+        ));
   }
 
   Widget _createWidgetHeader() {
@@ -92,10 +97,6 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Text(widget.playlist.name, style: styleCardContent),
         ],
       ),
     );

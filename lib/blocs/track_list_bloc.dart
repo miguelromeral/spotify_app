@@ -15,7 +15,6 @@ import 'package:rxdart/subjects.dart';
 
 class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     implements Searcher<Track> {
-
   List<Track> initialList;
   List<Track> originalList = new List();
   final _filteredData = BehaviorSubject<List<Track>>();
@@ -29,9 +28,11 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
   }
 
   Future copyList(List<Track> list) async {
-    originalList.clear();
-    for (var t in list) {
-      originalList.add(t);
+    if (list != null) {
+      originalList.clear();
+      for (var t in list) {
+        originalList.add(t);
+      }
     }
   }
 
@@ -75,8 +76,9 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
       _order = _order == Order.artist ? Order.artistReverse : Order.artist;
     } else if (choice == Order.album) {
       _order = _order == Order.album ? Order.albumReverse : Order.album;
-    } else if (choice == Order.byDefault){
-      _order = _order == Order.byDefault ? Order.byDefaultReverse : Order.byDefault;
+    } else if (choice == Order.byDefault) {
+      _order =
+          _order == Order.byDefault ? Order.byDefaultReverse : Order.byDefault;
     }
     //list = _setOrder(list);
 

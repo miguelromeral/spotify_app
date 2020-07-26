@@ -49,7 +49,11 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
               return buildBody(context, api, data.last, _bloc.state);
             } else {
               _getData(context, api);
-              return LoadingScreen(title: 'Loading Your Saved Tracks', safeArea: true,);
+              return buildBody(context, api, null, _bloc.state);
+              /*return LoadingScreen(
+                title: 'Loading Your Saved Tracks',
+                safeArea: true,
+              );*/
             }
           },
         );
@@ -57,18 +61,31 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
     );
   }
 
-  Widget buildBody(BuildContext context, MyApi api, List<Track> liked, SpotifyService state) {
+  Widget buildBody(BuildContext context, MyApi api, List<Track> liked,
+      SpotifyService state) {
     return NotificationListener<RefreshListNotification>(
       onNotification: (notification) {
         _getData(context, api);
         return true;
       },
-      child: TrackListScreen(
-        widget: _createWidgetHeader(state),
-        key: Key(liked.hashCode.toString()),
-        list: liked,
-        title: 'My Saved Songs',
-      ),
+      child: _create(context, api, liked, state),
+    );
+  }
+
+  Widget _create(BuildContext context, MyApi api, List<Track> liked,
+      SpotifyService state) {
+    List<Track> l = liked;
+    bool loading = false;
+    if (liked == null) {
+      l = List<Track>();
+      loading = true;
+    }
+    return TrackListScreen(
+      widget: _createWidgetHeader(state),
+      key: Key(liked.hashCode.toString()),
+      list: l,
+      loading: loading,
+      title: 'My Saved Songs',
     );
   }
 
@@ -81,10 +98,6 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
             size: 100.0,
             user: state.myUser,
           ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Text("${state.myUser.displayName}'s Saved Tracks", style: styleCardContent),
         ],
       ),
     );
