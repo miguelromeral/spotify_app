@@ -12,8 +12,7 @@ Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
 
     UpdatedFeedNotification().dispatch(context);
 
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
+    //Scaffold.of(context).showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
   } else {
     Scaffold.of(context).showSnackBar(
         SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
