@@ -1,3 +1,5 @@
+import 'package:ShareTheMusic/_shared/animated_background.dart';
+import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +13,7 @@ class AllUsersScreen extends StatefulWidget {
   _AllUsersScreenState createState() => _AllUsersScreenState();
 }
 
-class _AllUsersScreenState extends State<AllUsersScreen>  {
+class _AllUsersScreenState extends State<AllUsersScreen> {
   TextEditingController _textFieldController = TextEditingController();
 
   @override
@@ -20,21 +22,8 @@ class _AllUsersScreenState extends State<AllUsersScreen>  {
   }
 
   Widget _createBody(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('All Users'),
-      ),
-      body: _createAllUsersScreen(context),
-      floatingActionButton: FloatingActionButton.extended(
-        key: GlobalKey(),
-        onPressed: () async {
-          var bloc = BlocProvider.of<SpotifyBloc>(context);
-          await _displayDialog(context, bloc);
-          bloc.add(UpdateFeed());
-        },
-        icon: Icon(Icons.add),
-        label: Text("Follow New User"),
-      ),
+    return FancyBackgroundApp(
+      child: _createAllUsersScreen(context),
     );
   }
 
@@ -43,9 +32,18 @@ class _AllUsersScreenState extends State<AllUsersScreen>  {
       builder: (context, state) {
         return StreamProvider<List<Following>>.value(
           builder: (context, widget) {
-            return Center(
-              child: FollowingList(),
-            );
+            var list = Provider.of<List<Following>>(context);
+            if (list != null) {
+              return Center(
+                child: FollowingList(
+                  key: Key(list.hashCode.toString()),
+                  list: list,
+                  loading: list == null || list.isEmpty,
+                ),
+              );
+            } else {
+              return LoadingScreen();
+            }
           },
           value: state.allFollowings,
         );

@@ -46,7 +46,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                   height: 8.0,
                 ),
                 _buildSection(context, 'Discover Users', [
-                  _createTile(context, "Search Users", () {
+                  /*_createTile(context, "Search Users", () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -55,7 +55,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                   }, 'searchuser'),
                   SizedBox(
                     height: 8.0,
-                  ),
+                  ),*/
                   _createTile(context, "All Users", () {
                     Navigator.push(
                       context,

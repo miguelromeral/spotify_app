@@ -1,4 +1,6 @@
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
@@ -17,11 +19,13 @@ import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class FollowingItem extends StatefulWidget {
+  final Key key;
   final Following myFollowings;
   //final Following following;
   final String suserid;
 
-  FollowingItem({this.myFollowings, /*this.following,*/ this.suserid});
+  FollowingItem({this.myFollowings, /*this.following,*/ this.suserid, this.key})
+      : super(key: key);
 
   @override
   _FollowingItemState createState() => _FollowingItemState();
@@ -51,35 +55,61 @@ class _FollowingItemState extends State<FollowingItem> {
         return FutureBuilder(
           future: state.getFollowingBySpotifyUserID(widget.suserid),
           builder: (context, snp) {
-            Following fol = snp.data;
-            if (fol == null) return Text('Fol null in FollowingItem');
-            return FutureBuilder(
-                future: api.getUser(widget.suserid),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    UserPublic user = snapshot.data;
-                    return CustomListTile(
-                      key: Key(widget.suserid),
-                      leadingIcon: ProfilePicture(
-                        user: user,
-                        size: 50.0,
-                      ),
-                      trailingIcon: FollowingButton(
-                        key: new GlobalKey(),
-                        myFollowings: widget.myFollowings,
-                        user: user,
-                        userFollowing: fol,
-                      ),
-                      content: _createContent(user),
-                      bottomIcons: _createBottomBar(fol, context, state, user),
-                      menuItems: _getActions(state, user),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                });
+            if (snp.hasData) {
+              Following fol = snp.data;
+              return FutureBuilder(
+                  future: api.getUser(widget.suserid),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      UserPublic user = snapshot.data;
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        decoration: BoxDecoration(
+                          color: colorAccent.withAlpha(150),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: CustomListTile(
+                          key: Key(widget.suserid),
+                          leadingIcon: Container(
+                            padding: EdgeInsets.all(2.0),
+                            child: ProfilePicture(
+                              user: user,
+                              size: 50.0,
+                            ),
+                          ),
+                          trailingIcon: Container(
+                            padding: EdgeInsets.all(2.0),
+                            child: FollowingButton(
+                              key: new GlobalKey(),
+                              myFollowings: widget.myFollowings,
+                              user: user,
+                              userFollowing: fol,
+                            ),
+                          ),
+                          content: _createContent(user),
+                          bottomIcons:
+                              _createBottomBar(fol, context, state, user),
+                          menuItems: _getActions(state, user),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return ErrorScreen(
+                        title: "Couldn't get the user info",
+                      );
+                    } else {
+                      /*return LoadingScreen(
+                        title: 'Loading User...',
+                      );*/
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  });
+            } else {
+              /*return LoadingScreen(
+                title: 'Loading User...',
+              );*/
+              return Center(child: CircularProgressIndicator());
+            }
           },
         );
       }),
@@ -100,7 +130,7 @@ class _FollowingItemState extends State<FollowingItem> {
         //color: Colors.yellow[100],
         child: Text(
           "ID: ${widget.suserid}",
-          style: styleFeedTrack,
+          style: TextStyle(color: Colors.black),
         ),
       ),
     ];

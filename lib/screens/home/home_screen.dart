@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.transparent,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxScrolled) => [
-          _buildSliverAppBar(context),
+          _buildSliverAppBar(context, state),
         ],
         body: RefreshIndicator(
           onRefresh: () async {
@@ -129,19 +129,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSliverAppBar(BuildContext context) {
+  Widget _buildSliverAppBar(BuildContext context, SpotifyService state) {
     return SliverAppBar(
-      title: Text("My Friend's Suggestions"),
+      title: Text("My Friends Suggestions"),
       centerTitle: true,
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ProfilePicture(
+          user: state.myUser,
+        ),
+      ),
       backgroundColor: Colors.transparent,
       //expandedHeight: MediaQuery.of(context).size.height / 3,
-      expandedHeight: 300.0,
+      //expandedHeight: 300.0,
       floating: false,
       pinned: false,
       snap: false,
-      flexibleSpace: FlexibleSpaceBar(
+      /*flexibleSpace: FlexibleSpaceBar(
         background: _buildAppBar(context),
-      ),
+      ),*/
     );
   }
 
@@ -151,26 +157,26 @@ class _HomeScreenState extends State<HomeScreen> {
       return LoadingScreen();
     }
 
-    return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) =>
-            _createListElement(list[index], state, api));
+    return SafeArea(
+          child: ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, index) =>
+              _createListElement(list[index], state, api)),
+    );
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 50.0,
-            ),
-            Center(
-              child: Text("Ey!"),
-            ),
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50.0,
+          ),
+          Center(
+            child: Text("Ey!"),
+          ),
+        ],
       ),
     );
   }

@@ -126,7 +126,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                             ),
                             filled: false,
                             hintStyle: new TextStyle(color: Colors.grey[800]),
-                            hintText: "Search tracks by name, album or artist",
+                            hintText: "Search playlists by name",
                           ),
                         ),
                       ),
