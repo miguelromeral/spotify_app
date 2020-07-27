@@ -14,7 +14,7 @@ Color colorPrimary = Colors.green[900];
 Color colorBackground = Colors.black;
 Color colorSemiBackground = Colors.black38;
 Color colorThirdBackground = Colors.grey[900];
-Color colorIcon = Colors.white54;
+Color colorIcon = Colors.white;
 Color colorSeprator = Colors.white70;
 
 Color colorError = Colors.red.shade200;
