@@ -48,12 +48,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.user.displayName),
-            centerTitle: true,
+        return FancyBackgroundApp(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: Text(widget.user.displayName),
+              centerTitle: true,
+            ),
+            body: _createBody(context, widget.user, state),
           ),
-          body: _createBody(context, widget.user, state),
         );
       },
     );
@@ -61,126 +65,123 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _createBody(
       BuildContext context, UserPublic user, SpotifyService state) {
-    return FancyBackgroundApp(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CardInfo(
-                          title: 'Display Name',
-                          content: user.displayName,
-                        ),
-                        CardInfo(
-                          title: 'Spotify ID',
-                          content: user.id,
-                        ),
-                        StreamBuilder(
-                          stream: state.following,
-                          builder: (context, snp) {
-                            if (snp.hasData || state.lastFollowing != null) {
-                              Following mine =
-                                  (snp.data ?? state.lastFollowing);
-
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  FutureBuilder(
-                                    future: state.getFollowers(widget.user.id),
-                                    builder: (context, snp) {
-                                      if (snp.hasData) {
-                                        List<Following> list = snp.data;
-                                        /*String text = '';
-                              for(var f in list){
-                                text += '${f.name},\n';
-                              }*/
-                                        return CardInfo(
-                                          title: 'ShareTheTrack followers',
-                                          content: '${list.length}',
-                                          //content: text,
-                                        );
-                                      } else {
-                                        return CardInfo(
-                                          title: 'ShareTheTrack followers',
-                                          content: '?',
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  FutureBuilder(
-                                    future: state
-                                        .getFollowingBySpotifyUserID(user.id),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        Following userFollowing = snapshot.data;
-                                        return ShowUp(
-                                          delay: 350,
-                                          key: Key(
-                                              '${userFollowing.suserid}-${mine.containsUser(userFollowing.suserid)}'),
-                                          child: FollowingButton(
-                                            myFollowings: mine,
-                                            user: user,
-                                            userFollowing: userFollowing,
-                                          ),
-                                        );
-                                      } else {
-                                        return Container();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ProfilePicture(
-                        user: user,
-                        size: 100.0,
+                      CardInfo(
+                        title: 'Display Name',
+                        content: user.displayName,
+                      ),
+                      CardInfo(
+                        title: 'Spotify ID',
+                        content: user.id,
+                      ),
+                      StreamBuilder(
+                        stream: state.following,
+                        builder: (context, snp) {
+                          if (snp.hasData || state.lastFollowing != null) {
+                            Following mine = (snp.data ?? state.lastFollowing);
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FutureBuilder(
+                                  future: state.getFollowers(widget.user.id),
+                                  builder: (context, snp) {
+                                    if (snp.hasData) {
+                                      List<Following> list = snp.data;
+                                      /*String text = '';
+                            for(var f in list){
+                              text += '${f.name},\n';
+                            }*/
+                                      return CardInfo(
+                                        title: 'ShareTheTrack followers',
+                                        content: '${list.length}',
+                                        //content: text,
+                                      );
+                                    } else {
+                                      return CardInfo(
+                                        title: 'ShareTheTrack followers',
+                                        content: '?',
+                                      );
+                                    }
+                                  },
+                                ),
+                                FutureBuilder(
+                                  future: state
+                                      .getFollowingBySpotifyUserID(user.id),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      Following userFollowing = snapshot.data;
+                                      return ShowUp(
+                                        delay: 350,
+                                        key: Key(
+                                            '${userFollowing.suserid}-${mine.containsUser(userFollowing.suserid)}'),
+                                        child: FollowingButton(
+                                          myFollowings: mine,
+                                          user: user,
+                                          userFollowing: userFollowing,
+                                        ),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-            /*CustomCard(content: [
-              Text(
-                'My Last Suggestion',
-                style: styleCardHeader,
-              ),*/
-            Text('My Last Suggestion'),
-            SizedBox(
-              height: 8.0,
-            ),
-            NotificationListener<UpdatedFeedNotification>(
-              onNotification: (notification) {
-                _getData();
-                return true;
-              },
-              child: _buildContent(state),
-            ),
-            //     ]),
-          ],
-        ),
+              ),
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    ProfilePicture(
+                      user: user,
+                      size: 100.0,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          /*CustomCard(content: [
+            Text(
+              'My Last Suggestion',
+              style: styleCardHeader,
+            ),*/
+          Text('My Last Suggestion'),
+          SizedBox(
+            height: 8.0,
+          ),
+          NotificationListener<UpdatedFeedNotification>(
+            onNotification: (notification) {
+              _getData();
+              return true;
+            },
+            child: _buildContent(state),
+          ),
+          //     ]),
+        ],
       ),
     );
   }

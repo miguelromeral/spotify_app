@@ -211,4 +211,16 @@ class FirestoreService {
     }
     return total;
   }
+
+
+  Future<bool> deleteUserInfo(String suserid) async {
+    try{
+      await Future.delayed(Duration(seconds: 10));
+      print("Deleted Info ${suserid}!");
+      return true;
+    }catch(e){
+      print("Problem while deleting info: $e");
+      return false;
+    }
+  }
 }

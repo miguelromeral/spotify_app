@@ -22,6 +22,8 @@ class SpotifyService {
   Track toShare;
   bool errorInLogin = false;
   //Following following;
+  bool deletingInfo = false;
+  bool deletedInfo = false;
 
   
   StreamController<Suggestion> _scMySuggestion =
@@ -199,5 +201,7 @@ class SpotifyService {
   Future<List<Suggestion>> getPublicSuggestions() async => await _db.getPublicSuggestions();
 
   Future<List<Following>> getFollowers(String suserid) async => await _db.getFollowers(suserid);
+
+  Future<bool> deleteUserInfo(String suserid) async => await _db.deleteUserInfo(suserid);
 
 }

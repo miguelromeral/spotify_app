@@ -88,7 +88,6 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       //state.updatePlaylists(await _updatePlaylists(state, event.api));
       //yield state;
     } else if (event is LogoutEvent) {
-      print("Login out in BLOC...");
       _clearCredentials();
       state.dispose();
       //state.logout();
@@ -118,6 +117,16 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
       demo.login();
       demo.updateDB(FirestoreService());
       yield demo;
+    } else if (event is DeleteInfoEvent) {
+      state.deletingInfo = true;
+      yield state;
+      _clearCredentials();
+      SpotifyService newone = SpotifyService();
+      await state.deleteUserInfo(event.suserid);
+      newone.deletedInfo = true;
+      state.dispose();
+      //state.logout();
+      yield newone;
     } else {
       throw Exception('oops');
     }
@@ -223,3 +232,9 @@ class UpdatePlaylists extends SpotifyEventBase {
 class LogoutEvent extends SpotifyEventBase {}
 
 class LoginAnonymousEvent extends SpotifyEventBase {}
+
+class DeleteInfoEvent extends SpotifyEventBase {
+  String suserid;
+
+  DeleteInfoEvent({this.suserid});
+}

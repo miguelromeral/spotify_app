@@ -26,7 +26,10 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
-      condition: (pre, cur) => pre.logedin != cur.logedin,
+      condition: (pre, cur) =>
+          pre.logedin != cur.logedin ||
+          pre.deletingInfo != cur.deletingInfo ||
+          pre.deletedInfo != cur.deletedInfo,
       builder: (context, state) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 700),
