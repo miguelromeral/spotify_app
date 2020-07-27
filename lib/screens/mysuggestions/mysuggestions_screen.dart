@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,9 @@ import 'package:ShareTheMusic/services/local_database.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestions_screen.dart';
+import 'package:ShareTheMusic/services/my_spotify_api.dart';
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
 
 class MySuggestionsScreen extends StatefulWidget {
   @override
@@ -18,21 +22,33 @@ class MySuggestionsScreen extends StatefulWidget {
 class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      return BlocBuilder<LocalDbBloc, LocalDB>(
-        //condition: (pre, cur) => pre.isInit != cur.isInit,
-        builder: (context, localdb) => _buildBody(localdb, state),
-      );
-    });
+    return FancyBackgroundApp(
+      child:
+          BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
+        return BlocBuilder<ApiBloc, MyApi>(
+          builder: (context, api) => BlocBuilder<LocalDbBloc, LocalDB>(
+            //condition: (pre, cur) => pre.isInit != cur.isInit,
+            builder: (context, localdb) => _buildBody(localdb, state, api),
+          ),
+        );
+      }),
+    );
   }
 
-  Widget _buildBody(LocalDB localdb, SpotifyService state) {
+  Widget _buildBody(LocalDB localdb, SpotifyService state, MyApi api) {
     if (localdb != null && localdb.isInit) {
       return FutureBuilder(
         future: localdb.suggestions(state.mySpotifyUserId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Suggestion> list = snapshot.data;
+            return SuggestionsScreen(
+              title: 'My Suggestions',
+              list: list,
+              loading: false,
+              api: api,
+            );
+            /*
             if (list.isNotEmpty) {
               return SuggestionsList(
                 suggestions: list,
@@ -52,8 +68,15 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
                   ],
                 ),
               );
-            }
+            }*/
           } else {
+            return SuggestionsScreen(
+              list: List(),
+              title: 'My Suggestions',
+              loading: true,
+              api: api,
+            );
+
             return Scaffold(
               appBar: AppBar(
                 title: Text('My Suggestions'),
@@ -73,6 +96,14 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
       );
     } else {
       BlocProvider.of<LocalDbBloc>(context).add(InitLocalDbEvent());
+
+      return SuggestionsScreen(
+        list: List(),
+        title: 'My Suggestions',
+        loading: true,
+        api: api,
+      );
+
       return LoadingScreen(
         safeArea: true,
         title: 'Loading Your Suggestions',

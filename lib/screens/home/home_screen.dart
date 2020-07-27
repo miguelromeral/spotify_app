@@ -4,7 +4,7 @@ import 'package:ShareTheMusic/_shared/tracks/album_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/models/home_data.dart';
-import 'package:ShareTheMusic/screens/home/suggestions_screen.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestions_screen.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return true;
       },
       child: SuggestionsScreen(
+        title: 'My Friends Suggestions',
         //key: Key(l.hashCode.toString()),
         list: l,
         loading: loading,

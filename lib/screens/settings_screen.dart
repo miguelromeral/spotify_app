@@ -33,7 +33,7 @@ void _showDialog(BuildContext context) {
               var bloc = BlocProvider.of<SpotifyBloc>(context);
               bloc.add(DeleteInfoEvent(suserid: bloc.state.myUser.id));
 
-  // TODO: ACABAR DE IMPLEMENTAR LA ELIMINACIÓN DE USUARIOS
+              // TODO: ACABAR DE IMPLEMENTAR LA ELIMINACIÓN DE USUARIOS
 
               Navigator.of(context).pop();
               Navigator.push(
@@ -208,6 +208,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                   ListTile(
                     title: Text('Additional Thanks To'),
                     subtitle: Text('Data: Spotify\n'
+                        'Spotify API package: Max Riegler\n'
                         'Backend: Firebase (Firestore)\n'
                         'Icons: app.streamlineicons.com\n'
                         'And last but not least: You for using the app 🙂\n'),

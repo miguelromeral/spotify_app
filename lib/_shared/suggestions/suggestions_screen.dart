@@ -16,8 +16,9 @@ class SuggestionsScreen extends StatefulWidget {
   final bool loading;
   final List<Suggestion> list;
   final MyApi api;
+  final String title;
 
-  SuggestionsScreen({this.key, this.loading, this.list, this.api})
+  SuggestionsScreen({this.key, this.loading, this.list, this.api, this.title})
       : super(key: key);
 
   @override
@@ -54,7 +55,7 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
 
   Widget _buildSliverAppBar(BuildContext context, SpotifyService state) {
     return SliverAppBar(
-      title: Text("My Friends Suggestions"),
+      title: Text(widget.title),
       centerTitle: true,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
