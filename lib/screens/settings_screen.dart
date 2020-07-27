@@ -45,7 +45,6 @@ void _showDialog(BuildContext context) {
                           ),
                         )),
               );
-              if(bloc.state.deletingInfo
             },
           ),
           new FlatButton(

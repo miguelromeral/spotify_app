@@ -27,97 +27,50 @@ class SuggestionLoader extends StatefulWidget {
 }
 
 class _SuggestionLoaderState extends State<SuggestionLoader> {
-  Track _track;
-  UserPublic _user;
-  SuggestionItem _item;
+  Future<Track> _track;
+  Future<UserPublic> _user;
 
   @override
   void initState() {
     super.initState();
-
-    var r = PageStorage.of(context)
-        .readState(context, identifier: ValueKey(widget.key));
-
-    if (r == null) {
-      _load();
-    }
-  }
-
-  Future _load() async {
-    if (_user == null) {
-      print("Getting User ${widget.suggestion.suserid}");
-      var u = await widget.api.getUser(widget.suggestion.suserid);
-      setState(() {
-        _user = u;
-      });
-    }
-    if (_track == null) {
-      print("Getting Track ${widget.suggestion.suserid}");
-
-      var t = await widget.api.getTrack(widget.suggestion.trackid);
-
-      setState(() {
-        _track = t;
-      });
-    }
+    _user = widget.api.getUser(widget.suggestion.suserid);
+    _track = widget.api.getTrack(widget.suggestion.trackid);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_user == null) {
-      return LoadingScreen(
-        title: 'Loading User...',
-      );
-    }
-    if (_track == null) {
-      return LoadingScreen(
-        title: 'Loading Track...',
-      );
-    }
-    return SuggestionItem(
-      track: _track,
-      user: _user,
-      suggestion: widget.suggestion,
+    return FutureBuilder(
+      key: Key(widget.suggestion.fuserid),
+      future: _user,
+      builder: (context, user) {
+        if (user.hasData) {
+          return FutureBuilder(
+              key: Key(
+                  'sl-${widget.suggestion.suserid}-${widget.suggestion.trackid}'),
+              future: _track,
+              builder: (context, track) {
+                if (track.hasData) {
+                  return SuggestionItem(
+                    key: Key(
+                        '${widget.suggestion.suserid}-${widget.suggestion.trackid}'),
+                    track: track.data,
+                    user: user.data,
+                    suggestion: widget.suggestion,
+                  );
+                } else {
+                  //return Container();
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              });
+        } else {
+          //return Container();
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
-
-    /*return FutureBuilder(
-        future: widget.api.tracks.get(widget.suggestion.trackid),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Track track = snapshot.data;
-            return FutureBuilder(
-                future: widget.api.users.get(widget.suggestion.suserid),
-                builder: (context, snp) {
-                  if (snp.hasData) {
-                    UserPublic user = snp.data;
-                    return SuggestionItem(
-                      track: track,
-                      user: user,
-                      suggestion: widget.suggestion,
-                    );
-                  } else if (snp.hasError) {
-                    return ErrorScreen(
-                      title: 'User Not Found',
-                      stringBelow: ['Reload Feed Later'],
-                      collapsed: true,
-                    );
-                  } else {
-                    return LoadingScreen(
-                      title: 'Loading User...',
-                    );
-                  }
-                });
-          } else if (snapshot.hasError) {
-            return ErrorScreen(
-              title: 'Track Not Found',
-              stringBelow: ['Reload Feed Later'],
-              collapsed: true,
-            );
-          } else {
-            return LoadingScreen(
-              title: 'Loading Track...',
-            );
-          }
-        });*/
   }
 }

@@ -4,22 +4,28 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 
-class ProfilePicture extends StatelessWidget {
+class ProfilePicture extends StatefulWidget {
   final UserPublic user;
   final double size;
+  final key;
 
-  ProfilePicture({@required this.user, this.size});
+  ProfilePicture({@required this.user, @required this.size, this.key}) : super(key: key);
 
   @override
+  _ProfilePictureState createState() => _ProfilePictureState();
+}
+
+class _ProfilePictureState extends State<ProfilePicture> {
+  @override
   Widget build(BuildContext context) {
-    if (user.images.isEmpty) {
+    if (widget.user.images.isEmpty) {
       return Container(
-        height: size,
-        width: size,
+        height: widget.size,
+        width: widget.size,
         child: CircleAvatar(
             backgroundColor: colorThirdBackground,
             child: Text(
-              user.displayName[0].toUpperCase(),
+              widget.user.displayName[0].toUpperCase(),
               style: TextStyle(
                 fontSize: 24.0,
                 color: Colors.white,
@@ -28,17 +34,18 @@ class ProfilePicture extends StatelessWidget {
       );
     } else {
       return Container(
-        height: size,
-        width: size,
+        height: widget.size,
+        width: widget.size,
         child: CircleAvatar(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: CachedNetworkImage(
-              placeholder: (context, url) => SpinKitDoubleBounce(
+              placeholder: (context, url) => /* SpinKitDoubleBounce(
                 color: colorAccent,
-                size: size,
-              ),
-              imageUrl: user.images[0].url,
+                size: widget.size,
+              ),*/
+              CircularProgressIndicator(),
+              imageUrl: widget.user.images[0].url,
             ),
           ),
         ),

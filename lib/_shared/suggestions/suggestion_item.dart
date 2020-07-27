@@ -27,8 +27,9 @@ class SuggestionItem extends StatefulWidget {
   final Track track;
   final UserPublic user;
   final Suggestion suggestion;
+  final key;
 
-  SuggestionItem({this.track, this.user, this.suggestion});
+  SuggestionItem({this.track, this.user, this.suggestion, this.key}) : super(key: key);
 
   @override
   _SuggestionItemState createState() => _SuggestionItemState();
@@ -89,6 +90,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         padding: EdgeInsets.all(2.0),
         //color: Colors.red,
         child: ProfilePicture(
+          key: Key(user.id),
           user: user,
           size: maxsize,
         ),
@@ -100,6 +102,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         padding: EdgeInsets.all(2.0),
         //color: Colors.red,
         child: AlbumPicture(
+          key: Key(track.album.id),
           showDuration: Settings.getValue<bool>(settings_track_duration, true),
           track: track,
           size: maxsize,

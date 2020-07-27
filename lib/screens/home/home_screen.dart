@@ -1,7 +1,10 @@
+import 'package:ShareTheMusic/_shared/custom_listtile.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_loader.dart';
+import 'package:ShareTheMusic/_shared/tracks/album_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/models/home_data.dart';
+import 'package:ShareTheMusic/screens/home/suggestions_screen.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,124 +106,19 @@ class _HomeScreenState extends State<HomeScreen> {
       l = List<Suggestion>();
       loading = true;
     }
-    return _createListNew(context, l, loading, state, api);
-  }
 
-  Widget _createListNew(BuildContext context, List<Suggestion> list,
-      bool loading, SpotifyService state, MyApi api) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxScrolled) => [
-          _buildSliverAppBar(context, state),
-        ],
-        body: RefreshIndicator(
-          onRefresh: () async {
-            _getData(context, state);
-            //RefreshListNotification().dispatch(context);
-            //await Future.delayed(Duration(seconds: 10));
-          },
-          child: _buildBody(loading, list, state, api),
-        ),
-        /*slivers: <Widget>[
-            _buildBody(),
-          ],*/
-      ),
-    );
-  }
-
-  Widget _buildSliverAppBar(BuildContext context, SpotifyService state) {
-    return SliverAppBar(
-      title: Text("My Friends Suggestions"),
-      centerTitle: true,
-      leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ProfilePicture(
-          user: state.myUser,
-        ),
-      ),
-      backgroundColor: Colors.transparent,
-      //expandedHeight: MediaQuery.of(context).size.height / 3,
-      //expandedHeight: 300.0,
-      floating: false,
-      pinned: false,
-      snap: false,
-      /*flexibleSpace: FlexibleSpaceBar(
-        background: _buildAppBar(context),
-      ),*/
-    );
-  }
-
-  Widget _buildBody(
-      bool loading, List<Suggestion> list, SpotifyService state, MyApi api) {
-    if (loading == true) {
-      return LoadingScreen();
-    }
-
-    return SafeArea(
-          child: ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) =>
-              _createListElement(list[index], state, api)),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 50.0,
-          ),
-          Center(
-            child: Text("Ey!"),
-          ),
-        ],
-      ),
-    );
-  }
-/*
-  Widget _createList(List<Suggestion> sugs, SpotifyService state, MyApi api) {
-    return SafeArea(
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxScrolled) => [
-          CustomSliverAppBar(title: 'My Firends Suggestion', state: state),
-        ],
-        body: NotificationListener<UpdatedFeedNotification>(
-          onNotification: (notification) {
-            _getData(context, state);
-            return true;
-          },
-          child: Flexible(
-              child: RefreshIndicator(
-            onRefresh: () async {
-              await _getData(context, state);
-            },
-            child: ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                      color: colorSeprator,
-                    ),
-                itemCount: sugs.length,
-                itemBuilder: (context, index) =>
-                    _createListElement(sugs[index], state, api)),
-          )),
-        ),
-      ),
-    );
-  }*/
-
-  Widget _createListElement(Suggestion item, SpotifyService state, MyApi api) {
-    if (item.trackid == FirestoreService.defaultTrackId) {
-      return Container();
-    } else {
-      return SuggestionLoader(
-        // Si añadimos esta key, se actualiza todo el item, no solo los likes.
-        key: Key('${item.suserid}-${item.trackid}'),
-        suggestion: item,
+    return NotificationListener<RefreshListNotification>(
+      onNotification: (not) {
+        _getData(context, state);
+        return true;
+      },
+      child: SuggestionsScreen(
+        //key: Key(l.hashCode.toString()),
+        list: l,
+        loading: loading,
         api: api,
-      );
-    }
+      ),
+    );
   }
 
   Future<void> _getData(BuildContext context, SpotifyService state) async {

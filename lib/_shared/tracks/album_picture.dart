@@ -10,8 +10,9 @@ class AlbumPicture extends StatefulWidget {
   final Track track;
   final double size;
   final bool showDuration;
+  final key;
 
-  AlbumPicture({this.showDuration, this.track, this.size});
+  AlbumPicture({this.showDuration, this.track, this.size, this.key}) : super(key: key);
 
   @override
   _AlbumPictureState createState() => _AlbumPictureState();
