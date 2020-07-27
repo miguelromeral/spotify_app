@@ -46,3 +46,4 @@ app.*.map.json
 credentials.json
 android/app/google-services.json
 lib/services/password_generator.dart
+android/key.properties

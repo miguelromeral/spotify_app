@@ -1,4 +1,4 @@
-# <img alt='ShareTheTrack' src='https://raw.githubusercontent.com/miguelromeral/spotify_app/master/android/app/src/main/res/drawable/ic_launcher_round.png' height="35" width="auto" /> ShareTheTrack ![](https://img.shields.io/badge/android-5.0-red)  
+# <img alt='ShareTheTrack' src='https://raw.githubusercontent.com/miguelromeral/spotify_app/master/android/app/src/main/res/drawable/ic_launcher_round.png' height="35" width="auto" /> ShareTheTrack ![](https://img.shields.io/badge/android-7.0-red)  
 
 <!--<a href='https://play.google.com/store/apps/details?id=es.miguelromeral.password'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="70" width="auto" /></a>-->
 
@@ -12,7 +12,7 @@ Currently, this App is under development. The app will be available to be downlo
 
 <!-- [Google Play](https://play.google.com/store/apps/details?id=es.miguelromeral.spotifyfriends) -->
 
-This app requires Android 5.0 or higher to be downloaded and installed on your device.
+This app requires Android 7.0 or higher to be downloaded and installed on your device.
 
 ##  Integration
 
