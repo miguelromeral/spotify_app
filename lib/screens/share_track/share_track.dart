@@ -171,6 +171,7 @@ class _ShareTrackState extends State<ShareTrack> {
                 Container(
                   child: Column(
                     children: [
+                      (state.myUser != null ? 
                       Row(
                         children: [
                           Container(
@@ -183,7 +184,7 @@ class _ShareTrackState extends State<ShareTrack> {
                           Text('Recommend as ${state.myUser.displayName}:',
                               style: styleFeedTitle),
                         ],
-                      ),
+                      ) : Text('Recommend:')),
                       Form(
                           key: _formKey,
                           child: Column(

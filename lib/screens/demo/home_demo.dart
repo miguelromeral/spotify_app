@@ -1,4 +1,12 @@
-/*import 'package:flutter/material.dart';
+import 'package:ShareTheMusic/_shared/custom_listtile.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestion_loader.dart';
+import 'package:ShareTheMusic/_shared/tracks/album_picture.dart';
+import 'package:ShareTheMusic/blocs/api_bloc.dart';
+import 'package:ShareTheMusic/blocs/home_bloc.dart';
+import 'package:ShareTheMusic/models/home_data.dart';
+import 'package:ShareTheMusic/_shared/suggestions/suggestions_screen.dart';
+import 'package:ShareTheMusic/services/my_spotify_api.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/custom_sliver_appbar.dart';
@@ -22,109 +30,96 @@ class HomeScreenDemo extends StatefulWidget {
 }
 
 class _HomeScreenDemoState extends State<HomeScreenDemo> {
-  SpotifyBloc _bloc;
+  //List<Suggestion> _storage;
 
-  Widget _createScaffold(Widget content) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My DEMO Suggestions'),
-        centerTitle: true,
-      ),
-      body: content,
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_bloc == null) {
-      _bloc = BlocProvider.of<SpotifyBloc>(context);
-    }
-
-    return BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
-      return Center(
-        child: FutureBuilder(
-          future: state.getPublicSuggestions(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Suggestion> list = snapshot.data;
-              list.sort((a, b) => b.date.compareTo(a.date));
-              return _createList(list, state);
-            } else if (snapshot.hasError) {
-              return ErrorScreen();
-            } else {
-              return LoadingScreen();
-            }
-          },
-        ),
-      );
-    });
+    return BlocBuilder<ApiBloc, MyApi>(
+        builder: (context, api) =>
+            api.showErrorIfNull(BlocBuilder<HomeBloc, HomeData>(
+              builder: (context, data) {
+                return BlocBuilder<SpotifyBloc, SpotifyService>(
+                  builder: (context, state) {
+                    return Center(
+                      child: FutureBuilder(
+                        future: _getData(context, state),
+                        builder: (context, snp) {
+                          if (snp.hasData) {
+                            return buildBody(context, api, state, snp.data);
+                          } else {
+                            return LoadingScreen();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            )));
   }
 
-  Widget _createList(List<Suggestion> sugs, SpotifyService state) {
-    if (!state.logedin) {
-      return ErrorScreen();
+  Widget buildBody(BuildContext context, MyApi api, SpotifyService state,
+      List<Suggestion> list) {
+    return NotificationListener<UpdatedFeedNotification>(
+      onNotification: (notification) {
+        _getData(context, state);
+        return true;
+      },
+      child: _create(context, api, state, list),
+    );
+  }
+
+  Widget _create(BuildContext context, MyApi api, SpotifyService state,
+      List<Suggestion> list) {
+    List<Suggestion> l = list;
+    bool loading = false;
+    if (list == null) {
+      l = List<Suggestion>();
+      loading = true;
     }
 
-    return SafeArea(
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxScrolled) => [
-          CustomSliverAppBar(title: 'My DEMO Suggestion', state: state),
-        ],
-        body: ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-                  color: colorSeprator,
-                ),
-            itemCount: sugs.length,
-            itemBuilder: (context, index) =>
-                _createListElement(sugs[index], state)),
+    list.insert(
+        0,
+        Suggestion(
+          date: DateTime.now(),
+          fuserid: 'unk',
+          likes: 24,
+          private: false,
+          suserid: 'pave0j052dcrnkn9iai47wy0j',
+          trackid: '4u7EnebtmKWzUH433cf5Qv',
+          text: "Hi, there and welcome to ShareTheTrack DEMO!\n"
+          "\n"
+          "This is a DEMO suggestions.\n"
+          "\n"
+          "In the full version you can vote any of these, browse in your playlists and also choose one of them as your suggestion.\n"
+          "\n"
+          "\n"
+          "\n"
+          "Keep scrolling to take a look to the suggestions some users wanted to share with the anonimous users."
+          "\n",
+        ));
+
+    return NotificationListener<RefreshListNotification>(
+      onNotification: (not) {
+        _getData(context, state);
+        return true;
+      },
+      child: SuggestionsScreen(
+        title: 'Public Suggestions (DEMO)',
+        list: l,
+        loading: loading,
+        api: api,
       ),
     );
   }
 
-  Widget _createListElement(Suggestion item, SpotifyService state) {
-    if (item.trackid == FirestoreService.defaultTrackId) {
-      return Container();
-    } else {
-      return FutureBuilder(
-          future: state.api.tracks.get(item.trackid),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              Track track = snapshot.data;
-              return FutureBuilder(
-                  future: state.api.users.get(item.suserid),
-                  builder: (context, snp) {
-                    if (snp.hasData) {
-                      UserPublic user = snp.data;
-                      return SuggestionItem(
-                        track: track,
-                        user: user,
-                        suggestion: item,
-                      );
-                    } else if (snp.hasError) {
-                      return ErrorScreen(
-                        title: 'User Not Found',
-                        stringBelow: ['Reload Feed Later'],
-                        collapsed: true,
-                      );
-                    } else {
-                      return LoadingScreen(
-                        title: 'Loading User...',
-                      );
-                    }
-                  });
-            } else if (snapshot.hasError) {
-              return ErrorScreen(
-                title: 'Track Not Found',
-                stringBelow: ['Reload Feed Later'],
-                collapsed: true,
-              );
-            } else {
-              return LoadingScreen(
-                title: 'Loading Track...',
-              );
-            }
-          });
-    }
+  Future<List<Suggestion>> _getData(
+      BuildContext context, SpotifyService state) async {
+    return await state.getPublicSuggestions();
   }
 }
-*/

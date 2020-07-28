@@ -32,6 +32,18 @@ class MyApi {
     return (await _api.tracks.me.saved.all()).map((e) => e.track).toList();
   }
 
+  Future<PlaylistSimple> getPlaylist(String id) async {
+    return (await _api.playlists.get(id));
+  }
+
+  Future<List<Track>> getTracksByPlaylist(String id) async {
+    return (await _api.playlists
+            // TOP 50 Global
+            .getTracksByPlaylistId('37i9dQZEVXbMDoHDwVN2tF')
+            .all())
+        .toList();
+  }
+
   Future<List<PlaylistSimple>> getMyPlaylists() async {
     return (await _api.playlists.me.all()).toList();
   }

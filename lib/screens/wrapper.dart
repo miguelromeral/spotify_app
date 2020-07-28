@@ -44,10 +44,10 @@ class _WrapperState extends State<Wrapper> {
 
   Widget _buildScreen(SpotifyService state) {
     if (state.demo) {
-      return Scaffold(
+      /*return Scaffold(
         body: Center(child: Text("Demo")),
-      );
-      //return TabsPageDemo();
+      );*/
+      return TabsPageDemo();
     }
     if (firstLogin) {
       return Scaffold(

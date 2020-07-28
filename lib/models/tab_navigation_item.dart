@@ -71,19 +71,20 @@ class TabNavigationItem {
     ];
   }
 
-  static List<TabNavigationItem> itemsDemo(SpotifyApi api) => [
-        TabNavigationItem(
+  static List<TabNavigationItem> itemsDemo(/*SpotifyApi api*/) => [
+        /*TabNavigationItem(
           page: Text('Test'),
           icon: Icon(Icons.home),
           title: Text("Home"),
-        ),
-        /*TabNavigationItem(
+        ),*/
+        TabNavigationItem(
           page: HomeScreenDemo(),
           icon: Icon(Icons.home),
           title: Text("Home"),
         ),
+        
         TabNavigationItem(
-          page: SavedTracksDemo(api: api),
+          page: SavedTracksDemo(/*api: api*/),
           icon: Icon(Icons.music_note),
           title: Text("Saved Songs"),
         ),
@@ -91,6 +92,6 @@ class TabNavigationItem {
           page: DemoMoreScreen(),
           icon: Icon(Icons.add),
           title: Text("More"),
-        ),*/
+        ),
       ];
 }

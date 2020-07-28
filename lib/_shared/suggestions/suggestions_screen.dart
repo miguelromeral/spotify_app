@@ -11,6 +11,8 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../myicon.dart';
+
 class SuggestionsScreen extends StatefulWidget {
   final key;
   final bool loading;
@@ -58,11 +60,12 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
       title: Text(widget.title),
       centerTitle: true,
       leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ProfilePicture(
-          user: state.myUser,
-        ),
-      ),
+          padding: const EdgeInsets.all(8.0),
+          child: (state.myUser != null
+              ? ProfilePicture(
+                  user: state.myUser,
+                )
+              : Image(image: AssetImage('assets/icons/app.png')))),
       backgroundColor: Colors.transparent,
       //expandedHeight: MediaQuery.of(context).size.height / 3,
       //expandedHeight: 300.0,
@@ -90,7 +93,6 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
     if (item.trackid == FirestoreService.defaultTrackId) {
       return Container();
     } else {
-
       return SuggestionLoader(
         // Si añadimos esta key, se actualiza todo el item, no solo los likes.
         key: Key('${item.suserid}-${item.trackid}'),

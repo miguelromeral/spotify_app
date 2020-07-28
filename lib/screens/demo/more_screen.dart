@@ -1,4 +1,4 @@
-/*import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +14,9 @@ class _DemoMoreScreenState extends State<DemoMoreScreen> {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: Colors.transparent,
           body: SafeArea(
+            
             child: Container(
               padding: EdgeInsets.all(16.0),
               child: Center(
@@ -51,4 +53,3 @@ class _DemoMoreScreenState extends State<DemoMoreScreen> {
     );
   }
 }
-*/

@@ -74,7 +74,7 @@ Twitter: [@MiguelRomeral](https://twitter.com/MiguelRomeral)
 
 ## Privacy Policy
 
-You can read the [app Privacy Policy](https://github.com/miguelromeral/PasswordGame/blob/master/PRIVACY-POLICY.md).
+You can read the [app Privacy Policy](https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md).
 
 **Important Warning To Users**
 
