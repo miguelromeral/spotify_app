@@ -36,7 +36,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
             if (list != null) {
               return Center(
                 child: FollowingList(
-                  key: Key(list.hashCode.toString()),
+                  //key: Key(list.hashCode.toString()),
                   list: list,
                   loading: list == null || list.isEmpty,
                 ),

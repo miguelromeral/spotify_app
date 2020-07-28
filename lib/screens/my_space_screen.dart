@@ -2,6 +2,9 @@ import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
+import 'package:ShareTheMusic/blocs/home_bloc.dart';
+import 'package:ShareTheMusic/blocs/playlists_bloc.dart';
+import 'package:ShareTheMusic/blocs/saved_tracks_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
@@ -79,6 +82,15 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
               flex: 0,
               child: _createTile(context, 'Logout', () {
                 BlocProvider.of<SpotifyBloc>(context).add(LogoutEvent());
+
+                BlocProvider.of<HomeBloc>(context)
+                    .add(UpdateFeedHomeEvent(suggestions: List()));
+
+                BlocProvider.of<SavedTracksBloc>(context)
+                    .add(UpdateSavedTracksEvent(newOne: List()));
+
+                BlocProvider.of<PlaylistsBloc>(context).add(
+                    UpdatePlaylistsEvent(newOne: List()));
 
                 BlocProvider.of<ApiBloc>(context)
                     .add(UpdateApiEvent(newOne: null));

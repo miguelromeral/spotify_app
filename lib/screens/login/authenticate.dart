@@ -172,7 +172,7 @@ class _AuthenticateState extends State<Authenticate> {
                                           },
                                         ),
                                         Text(
-                                            "By enabling this option, you agree with the app's Privacy Policy"),
+                                            "I agree with the app's Privacy Policy"),
                                       ],
                                     ),
                                     FlatButton(
