@@ -34,6 +34,7 @@ The data is provided by the [Spotify API](https://developer.spotify.com/document
 
 Version|Code|Changes
 --- | --- | ---
+0.1.1|2|Demo Version Adapted
 0.1|1|Alpha Release
 
 ## TO BE DONE

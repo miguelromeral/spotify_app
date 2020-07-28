@@ -222,15 +222,21 @@ class _ShareTrackState extends State<ShareTrack> {
                                             "Would you like to share this track with your followers?\n"
                                                 "Please, log in with your spotify account to share it with the community.");
                                       } else {
-                                        var spUser = state.myUser;
-                                        var sug = await state.updateUserData(
-                                            spUser.id,
-                                            widget.track.id,
-                                            _description);
+                                        try {
+                                          var spUser = state.myUser;
 
-                                        var res =
-                                            await localdb.insertSuggestion(sug);
-                                        if (res) {
+                                          var mySug = await state.getMySuggestion();
+                                          if(mySug != null)
+                                            localdb.insertSuggestion(mySug);
+
+                                          var sug = await state.updateUserData(
+                                              spUser.id,
+                                              widget.track.id,
+                                              _description);
+
+                                          /*var res =
+                                            await localdb.insertSuggestion(sug);*/
+
                                           BlocProvider.of<SpotifyBloc>(context)
                                               .add(UpdateMySuggestion());
 
@@ -249,7 +255,8 @@ class _ShareTrackState extends State<ShareTrack> {
                                                       'Updated Suggestion!')));
 
                                           Navigator.pop(context);
-                                        } else {
+
+                                        } catch (e) {
                                           Scaffold.of(context).showSnackBar(
                                               SnackBar(
                                                   content: Text(

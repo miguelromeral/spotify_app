@@ -20,13 +20,14 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
+/*
 def flutterBuildMode = localProperties.getProperty('flutter.buildMode')
 if (flutterBuildMode == null) {
     flutterBuildMode = 'debug'
 }
-
-
+def fb = "signingConfigs.$flutterBuildMode"
+//flutterBuildMode = sb.concatenate(flutterBuildMode)
+*/
 
 def keystoreProperties = new Properties()
    def keystorePropertiesFile = rootProject.file('key.properties')
@@ -73,6 +74,7 @@ signingConfigs {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
             //signingConfig signingConfigs.release
+            //signingConfig fb
             
         }
     }

@@ -47,8 +47,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             if (firebaseuser == null) throw Exception("Error while singing up");
             _db = await _login(_auth, email, pwd, user.id);
             event.service.updateMyUser(user);
-            _db.updateDisplayName(user);
             _db.initializeFollowing();
+            _db.updateDisplayName(user);
             /*if (user != null && firebaseuser is FirebaseUser) {
               _db = DatabaseService(firebaseUserID: firebaseuser.uid);
               await _db.updateUserData(user.id, DatabaseService.defaultTrackId);

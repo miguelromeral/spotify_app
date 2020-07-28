@@ -51,6 +51,9 @@ class FirestoreService {
   }
 
   Future likeSuggestion(Suggestion suggestion) async {
+    if (firebaseUserID == suggestion.fuserid ||
+        spotifyUserID == suggestion.suserid ||
+        suggestion.reference == null) return null;
     return await suggestion.reference.updateData(<String, dynamic>{
       Suggestion.flikes: suggestion.likes + 1,
     });
@@ -186,7 +189,8 @@ class FirestoreService {
   Future initializeFollowing() async {
     Following init = Following(fuserid: firebaseUserID, suserid: spotifyUserID);
     init.concatenateUser(spotifyUserID);
-    return await cFollowing.document(spotifyUserID).setData(init.toMap());
+    var data = init.toMap();
+    return await cFollowing.document(spotifyUserID).setData(data);
   }
 
   List<Following> _followingListFromSnapshot(QuerySnapshot snapshot) {
@@ -212,13 +216,12 @@ class FirestoreService {
     return total;
   }
 
-
   Future<bool> deleteUserInfo(String suserid) async {
-    try{
+    try {
       await Future.delayed(Duration(seconds: 10));
       print("Deleted Info $suserid!");
       return true;
-    }catch(e){
+    } catch (e) {
       print("Problem while deleting info: $e");
       return false;
     }

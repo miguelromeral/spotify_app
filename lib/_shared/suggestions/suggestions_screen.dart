@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_loader.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
@@ -10,15 +11,16 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class SuggestionsScreen extends StatefulWidget {
   final key;
   final bool loading;
   final List<Suggestion> list;
   final MyApi api;
   final String title;
+  final Widget widget;
 
-  SuggestionsScreen({this.key, this.loading, this.list, this.api, this.title})
+  SuggestionsScreen(
+      {this.key, this.loading, this.list, this.api, this.title, this.widget})
       : super(key: key);
 
   @override
@@ -54,6 +56,23 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
   }
 
   Widget _buildSliverAppBar(BuildContext context, SpotifyService state) {
+    double expandedHeight = 0;
+    if (widget.widget != null) {
+      expandedHeight = 300;
+      return SliverAppBar(
+        title: Text(widget.title),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        //expandedHeight: MediaQuery.of(context).size.height / 3,
+        expandedHeight: expandedHeight,
+        flexibleSpace: FlexibleSpaceBar(
+          background: widget.widget,
+        ),
+        floating: false,
+        pinned: false,
+        snap: false,
+      );
+    }
     return SliverAppBar(
       title: Text(widget.title),
       centerTitle: true,
@@ -66,7 +85,10 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
               : Image(image: AssetImage('assets/icons/app.png')))),
       backgroundColor: Colors.transparent,
       //expandedHeight: MediaQuery.of(context).size.height / 3,
-      //expandedHeight: 300.0,
+      expandedHeight: expandedHeight,
+      flexibleSpace: FlexibleSpaceBar(
+        background: widget.widget,
+      ),
       floating: false,
       pinned: false,
       snap: false,
@@ -77,6 +99,13 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
       bool loading, List<Suggestion> list, SpotifyService state, MyApi api) {
     if (loading == true) {
       return LoadingScreen();
+    }
+
+    if (list != null && list.isEmpty) {
+      return ErrorScreen(
+        title: 'No Suggestions Found',
+        stringBelow: ["Follow any user to start seing suggestions"],
+      );
     }
 
     return SafeArea(

@@ -65,7 +65,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                   }, 'allusers'),
                 ]),
                 _buildSection(context, 'Your Activity', [
-                  _createTile(context, "My Suggestions", () {
+                  _createTile(context, "My Previous Suggestions", () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(

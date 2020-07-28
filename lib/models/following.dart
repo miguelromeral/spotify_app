@@ -15,12 +15,11 @@ class Following {
   //Suggestion({ this.trackid, this.suserid, this.fuserid });
   Following({this.suserid, this.fuserid, this.reference, this.users});
 
-
-  bool containsUser(String suserid){
+  bool containsUser(String suserid) {
     return usersList.contains(suserid);
   }
 
-  Following.fromMap(Map<String, dynamic> data){
+  Following.fromMap(Map<String, dynamic> data) {
     suserid = data[fsuserid] ?? '';
     fuserid = data[ffuserid] ?? '';
     users = data[fusers] ?? '';
@@ -34,12 +33,11 @@ class Following {
     name = doc.data[fname] ?? '';
     reference = doc.reference;
   }
-  
 
   Map<String, dynamic> toMap() {
     return {
       fsuserid: suserid,
-      ffuserid: fsuserid,
+      ffuserid: fuserid,
       fusers: users,
       fname: name,
     };
@@ -54,6 +52,10 @@ class Following {
   int get followingCount => usersList.length;
 
   String concatenateUser(String suserid) {
+    if (users == null) {
+      users = '$suserid$delimiter';
+      return users;
+    }
     users = '$users$suserid$delimiter';
     return users;
   }

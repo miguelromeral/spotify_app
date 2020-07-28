@@ -46,12 +46,13 @@ class Suggestion {
       ffuserid: fuserid,
       ftext: text,
       fdate: date.toString(),
+      flikes: likes,
       fprivate: private,
     };
   }
 
   static final String databaseCreateQuery =
-      "CREATE TABLE $databaseName(id INTEGER PRIMARY KEY, $ftrackid TEXT, $fsuserid TEXT, $ffuserid TEXT, $ftext TEXT, $fdate TEXT, $fprivate INTEGER)";
+      "CREATE TABLE $databaseName(id INTEGER PRIMARY KEY, $ftrackid TEXT, $fsuserid TEXT, $ffuserid TEXT, $ftext TEXT, $fdate TEXT, $flikes INTEGER, $fprivate INTEGER)";
 
   static final String databaseName = "suggestions";
 }

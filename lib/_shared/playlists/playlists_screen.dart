@@ -203,6 +203,8 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
           );*/
           return ErrorScreen(
             title: 'No Playlists Found Here',
+            stringBelow: ["Perhaps you don't have any Spotify playlist yet.",
+            "If you do, then unfortunately we couldn't load them."],
           );
         }
         final list = snapshot.data;

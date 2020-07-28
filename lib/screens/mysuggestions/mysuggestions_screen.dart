@@ -31,6 +31,16 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
     );
   }
 
+  Widget _buildWidgetHeader() {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Center(
+        child: Text(
+            "Here are all the suggestions you've sent by this device linked with your user."),
+      ),
+    );
+  }
+
   Widget _buildBody(LocalDB localdb, SpotifyService state, MyApi api) {
     if (localdb != null && localdb.isInit) {
       return FutureBuilder(
@@ -38,8 +48,10 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Suggestion> list = snapshot.data;
+            list.sort((one, two) => two.date.compareTo(one.date));
             return SuggestionsScreen(
-              title: 'My Suggestions',
+              widget: _buildWidgetHeader(),
+              title: 'My Previous Suggestions',
               list: list,
               loading: false,
               api: api,
@@ -67,12 +79,12 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
             }*/
           } else {
             return SuggestionsScreen(
+              widget: _buildWidgetHeader(),
+              title: 'My Previous Suggestions',
               list: List(),
-              title: 'My Suggestions',
               loading: true,
               api: api,
             );
-
           }
         },
       );
@@ -80,8 +92,9 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
       BlocProvider.of<LocalDbBloc>(context).add(InitLocalDbEvent());
 
       return SuggestionsScreen(
+        widget: _buildWidgetHeader(),
+        title: 'My Previous Suggestions',
         list: List(),
-        title: 'My Suggestions',
         loading: true,
         api: api,
       );
