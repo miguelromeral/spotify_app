@@ -29,7 +29,7 @@ class LocalDB {
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
-          Suggestion.database_create_query,
+          Suggestion.databaseCreateQuery,
         );
       },
       // Set the version. This executes the onCreate function and provides a
@@ -49,7 +49,7 @@ class LocalDB {
       //
       // In this case, replace any previous data.
       await db.insert(
-        Suggestion.database_name,
+        Suggestion.databaseName,
         sug.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
@@ -67,7 +67,7 @@ class LocalDB {
     // Query the table for all The Dogs.
     String whereString = '${Suggestion.fsuserid} = ?';
     final List<Map<String, dynamic>> maps = await db.query(
-        Suggestion.database_name,
+        Suggestion.databaseName,
         where: whereString,
         whereArgs: [mySpotifyUserId]);
     // Convert the List<Map<String, dynamic> into a List<Dog>.

@@ -50,8 +50,8 @@ class Suggestion {
     };
   }
 
-  static final String database_create_query =
-      "CREATE TABLE $database_name(id INTEGER PRIMARY KEY, $ftrackid TEXT, $fsuserid TEXT, $ffuserid TEXT, $ftext TEXT, $fdate TEXT, $fprivate INTEGER)";
+  static final String databaseCreateQuery =
+      "CREATE TABLE $databaseName(id INTEGER PRIMARY KEY, $ftrackid TEXT, $fsuserid TEXT, $ffuserid TEXT, $ftext TEXT, $fdate TEXT, $fprivate INTEGER)";
 
-  static final String database_name = "suggestions";
+  static final String databaseName = "suggestions";
 }

@@ -1,4 +1,3 @@
-import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/screens/demo/tabs_page_demo.dart';
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 import 'package:flutter/material.dart';
@@ -283,5 +282,4 @@ class _WrapperState extends State<Wrapper> {
 
   static TextStyle styleBlack = TextStyle(color: Colors.black, fontSize: 18.0);
   static TextStyle styleWhite = TextStyle(color: Colors.white, fontSize: 18.0);
-  static TextAlign align = TextAlign.center;
 }

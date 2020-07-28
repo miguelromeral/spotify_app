@@ -14,7 +14,6 @@ class AllUsersScreen extends StatefulWidget {
 }
 
 class _AllUsersScreenState extends State<AllUsersScreen> {
-  TextEditingController _textFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
       },
     );
   }
-
+/*
   _displayDialog(BuildContext fcontext, SpotifyBloc bloc) async {
     return showDialog(
         context: fcontext,
@@ -110,5 +109,5 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
         );
       },
     );
-  }
+  }*/
 }

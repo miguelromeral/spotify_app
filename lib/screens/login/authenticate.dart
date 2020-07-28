@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/app_logo.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
-import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -14,7 +12,6 @@ import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/screens/login/webview_container.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -29,7 +26,6 @@ enum _loginState { loadingSaved, waitingUser, tokenRevoked, loading }
 class _AuthenticateState extends State<Authenticate> {
   SpotifyApi _api;
   bool errorInLogin = false;
-  //  TODO: ARREGLAR QUE SI EL TOKEN SE REVOCA, SE VUELVA A ESTA PANTALLA DE FORMA SEGURA
   _loginState _state = _loginState.loadingSaved;
 
   bool _acceptPolicy = false;
@@ -47,13 +43,13 @@ class _AuthenticateState extends State<Authenticate> {
       });
     }
   }
-
+/*
   Future _answerLoginError() async {
     setState(() {
       _state = _loginState.waitingUser;
     });
   }
-
+*/
   @override
   void dispose() {
     _api = null;
@@ -388,6 +384,8 @@ class _AuthenticateState extends State<Authenticate> {
           scopes: scopes,
           expiration: expiration,
         );
+      }else{
+        return null;
       }
     } catch (e) {
       print("Error while loading credentials");

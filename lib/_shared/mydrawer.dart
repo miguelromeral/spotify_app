@@ -4,14 +4,10 @@ import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/screens/following/all_users_screen.dart';
-import 'package:ShareTheMusic/screens/following/following_search_screen.dart';
 import 'package:ShareTheMusic/screens/mysuggestions/mysuggestions_screen.dart';
-import 'package:ShareTheMusic/screens/playlists/my_playlists_screen.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -48,7 +44,7 @@ class MyDrawer extends StatelessWidget {
                     );
                   },
                 ),*/
-                  ListTile(
+                  /*ListTile(
                     title: Text('Search Users'),
                     onTap: () async {
                       Navigator.pop(context);
@@ -58,7 +54,7 @@ class MyDrawer extends StatelessWidget {
                             builder: (context) => SearchUserScreen()),
                       );
                     },
-                  ),
+                  ),*/
                   ListTile(
                     title: Text('All Users'),
                     onTap: () async {

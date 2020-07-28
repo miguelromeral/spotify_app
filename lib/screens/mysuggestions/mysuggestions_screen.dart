@@ -4,12 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
-import 'package:ShareTheMusic/screens/mysuggestions/suggestions_list.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:ShareTheMusic/services/local_database.dart';
-import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
-import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
-import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestions_screen.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
@@ -77,20 +73,6 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
               api: api,
             );
 
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('My Suggestions'),
-                centerTitle: true,
-              ),
-              body: ErrorScreen(
-                safeArea: true,
-                title: 'Error while loading your suggestions.',
-                stringBelow: [
-                  "We couldn't connect to the local database.",
-                  "Please, try again later."
-                ],
-              ),
-            );
           }
         },
       );
@@ -102,14 +84,6 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
         title: 'My Suggestions',
         loading: true,
         api: api,
-      );
-
-      return LoadingScreen(
-        safeArea: true,
-        title: 'Loading Your Suggestions',
-        stringBelow: [
-          'Openning the local database to get your suggestions sent by this device.'
-        ],
       );
     }
   }

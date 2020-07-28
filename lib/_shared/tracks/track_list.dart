@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_item.dart';
@@ -77,7 +75,7 @@ class _TrackListState extends State<TrackList> {
           }),
     );*/
   }
-
+/*
   String _getScrollThumbText(int currentItem) {
     if (currentItem != -1 && currentItem < list.length) {
       return _getTrackNameShort(currentItem);
@@ -94,7 +92,7 @@ class _TrackListState extends State<TrackList> {
         ? item.name
         : "${item.name.substring(0, 10)}...");
     return text;
-  }
+  }*/
 
   Future<void> _getData() async {
     print("pulling to refresh in list_songs!");

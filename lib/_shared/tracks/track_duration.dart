@@ -3,8 +3,6 @@ import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 
-import 'album_picture.dart';
-
 class TrackDuration extends StatelessWidget {
   
   final int duration;

@@ -1,5 +1,4 @@
 import 'package:ShareTheMusic/_shared/tracks/track_duration.dart';
-import 'package:ShareTheMusic/services/gui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

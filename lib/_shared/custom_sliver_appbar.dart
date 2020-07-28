@@ -5,7 +5,6 @@ import '../_shared/users/profile_picture.dart';
 import '../services/notifications.dart';
 import '../services/spotifyservice.dart';
 import '../blocs/spotify_bloc.dart';
-import '../blocs/spotify_events.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   final String title;

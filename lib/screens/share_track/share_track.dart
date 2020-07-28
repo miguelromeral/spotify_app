@@ -4,19 +4,14 @@ import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
-import 'package:ShareTheMusic/screens/home/home_screen.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/_shared/tracks/album_picture.dart';
-import 'package:ShareTheMusic/_shared/custom_appbar.dart';
-import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:ShareTheMusic/services/local_database.dart';
 
@@ -34,8 +29,8 @@ class _ShareTrackState extends State<ShareTrack> {
 
   //String _description = "Ey! Listen to this amazing track.";
   String _description =
-      (Settings.getValue<bool>(settings_suggestion_message_enabled, false)
-          ? Settings.getValue<String>(settings_suggestion_message, '')
+      (Settings.getValue<bool>(settingsSuggestionMessageEnabled, false)
+          ? Settings.getValue<String>(settingsSuggestionMessage, '')
           : '');
 
   @override
@@ -84,8 +79,6 @@ class _ShareTrackState extends State<ShareTrack> {
           child: Center(
             child: Column(
               children: [
-                // TODO: cambiarlos expanded o ver como podemos hacer para qu eesta parte de la pantalla
-                // se vea bien en horizontal y sin overflow
                 Container(
                   padding: EdgeInsets.all(40.0),
                   child: ConstrainedBox(
@@ -105,7 +98,8 @@ class _ShareTrackState extends State<ShareTrack> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 40.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,8 +154,7 @@ class _ShareTrackState extends State<ShareTrack> {
                           ? _createRowData(
                               '',
                               Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [ExplicitBadge()]),
                             )
                           : Container()),
@@ -171,20 +164,22 @@ class _ShareTrackState extends State<ShareTrack> {
                 Container(
                   child: Column(
                     children: [
-                      (state.myUser != null ? 
-                      Row(
-                        children: [
-                          Container(
-                            width: 40.0,
-                            child: ProfilePicture(
-                              user: state.myUser,
-                            ),
-                          ),
-                          SizedBox(width: 4.0),
-                          Text('Recommend as ${state.myUser.displayName}:',
-                              style: styleFeedTitle),
-                        ],
-                      ) : Text('Recommend:')),
+                      (state.myUser != null
+                          ? Row(
+                              children: [
+                                Container(
+                                  width: 40.0,
+                                  child: ProfilePicture(
+                                    user: state.myUser,
+                                  ),
+                                ),
+                                SizedBox(width: 4.0),
+                                Text(
+                                    'Recommend as ${state.myUser.displayName}:',
+                                    style: styleFeedTitle),
+                              ],
+                            )
+                          : Text('Recommend:')),
                       Form(
                           key: _formKey,
                           child: Column(
@@ -212,8 +207,7 @@ class _ShareTrackState extends State<ShareTrack> {
                                 ),
                                 RaisedButton(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(18.0),
+                                      borderRadius: BorderRadius.circular(18.0),
                                       side: BorderSide(color: Colors.white)),
                                   onPressed: () async {
                                     // Validate returns true if the form is valid, otherwise false.
@@ -234,14 +228,11 @@ class _ShareTrackState extends State<ShareTrack> {
                                             widget.track.id,
                                             _description);
 
-                                        var res = await localdb
-                                            .insertSuggestion(sug);
+                                        var res =
+                                            await localdb.insertSuggestion(sug);
                                         if (res) {
-                                          var bloc =
-                                              BlocProvider.of<SpotifyBloc>(
-                                                  context);
-                                          //bloc.add(UpdateFeed());
-                                          bloc.add(UpdateMySuggestion());
+                                          BlocProvider.of<SpotifyBloc>(context)
+                                              .add(UpdateMySuggestion());
 
                                           //UpdatedFeedNotification().dispatch(context);
 

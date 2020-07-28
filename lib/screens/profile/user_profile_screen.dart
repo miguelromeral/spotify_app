@@ -4,24 +4,18 @@ import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/_shared/custom_card.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/_shared/card_info.dart';
-import 'package:ShareTheMusic/_shared/custom_appbar.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
-import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final UserPublic user;

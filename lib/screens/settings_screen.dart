@@ -1,7 +1,6 @@
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ class MySettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
-
+/*
 void _showDialog(BuildContext context) {
   // flutter defined function
   showDialog(
@@ -60,7 +59,7 @@ void _showDialog(BuildContext context) {
     },
   );
 }
-
+*/
 class _SettingsScreenState extends State<MySettingsScreen> {
   @override
   Widget build(BuildContext context) {
@@ -115,7 +114,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 subtitle: 'Change how the tracks are displayed.',
                 children: [
                   SwitchSettingsTile(
-                    settingKey: settings_track_popularity,
+                    settingKey: settingsTrackPopularity,
                     title: 'Show Popularity',
                     enabledLabel:
                         'A percentage will appear in the track info. This value is calculated by Spotify according to'
@@ -125,7 +124,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                     defaultValue: true,
                   ),
                   SwitchSettingsTile(
-                    settingKey: settings_track_duration,
+                    settingKey: settingsTrackDuration,
                     title: 'Show Duration',
                     enabledLabel:
                         'Display the duration of the track in the album icon in some screens',
@@ -134,7 +133,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                     defaultValue: true,
                   ),
                   SwitchSettingsTile(
-                    settingKey: settings_track_hide_local,
+                    settingKey: settingsTrackHideLocal,
                     title: 'Hide Local Files',
                     enabledLabel:
                         'The tracks that are not in Spotify will be hidden',
@@ -150,7 +149,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                 children: [
                   SwitchSettingsTile(
                     leading: Icon(Icons.add_comment),
-                    settingKey: settings_suggestion_message_enabled,
+                    settingKey: settingsSuggestionMessageEnabled,
                     title: 'Default Text For Your Suggestions.',
                     /*onChange: (value) {
                     debugPrint('key-switch-dev-mod: $value');
@@ -159,7 +158,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                       TextInputSettingsTile(
                         title:
                             'Save a message to load when sharing a new track.',
-                        settingKey: settings_suggestion_message,
+                        settingKey: settingsSuggestionMessage,
                         initialValue: '',
                         validator: (String username) {
                           if (username != null && username.length < 140) {
@@ -173,7 +172,7 @@ class _SettingsScreenState extends State<MySettingsScreen> {
                     ],
                   ),
                   SwitchSettingsTile(
-                    settingKey: settings_suggestion_private,
+                    settingKey: settingsSuggestionPrivate,
                     title: 'Allow anonymous users to see your suggestions',
                     enabledLabel:
                         'Your next suggestions will be visible to any other anonymous users who try the demo of the app.',
@@ -595,11 +594,11 @@ class _SettingsScreenState extends State<MySettingsScreen> {
   }
 }
 
-final String settings_track_popularity = 'set_track_popularity';
-final String settings_track_duration = 'set_track_duration';
-final String settings_track_hide_local = 'set_track_hide_local';
+final String settingsTrackPopularity = 'set_track_popularity';
+final String settingsTrackDuration = 'set_track_duration';
+final String settingsTrackHideLocal = 'set_track_hide_local';
 
-final String settings_suggestion_message = 'set_suggestion_message';
-final String settings_suggestion_message_enabled =
+final String settingsSuggestionMessage = 'set_suggestion_message';
+final String settingsSuggestionMessageEnabled =
     'set_suggestion_message_enabled';
-final String settings_suggestion_private = 'set_suggestion_private';
+final String settingsSuggestionPrivate = 'set_suggestion_private';

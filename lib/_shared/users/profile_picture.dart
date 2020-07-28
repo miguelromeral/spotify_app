@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 
@@ -9,7 +8,7 @@ class ProfilePicture extends StatefulWidget {
   final double size;
   final key;
 
-  ProfilePicture({@required this.user, @required this.size, this.key}) : super(key: key);
+  ProfilePicture({@required this.user, this.size, this.key}) : super(key: key);
 
   @override
   _ProfilePictureState createState() => _ProfilePictureState();

@@ -1,17 +1,12 @@
-import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/screens/demo/home_demo.dart';
 import 'package:ShareTheMusic/screens/demo/more_screen.dart';
 import 'package:ShareTheMusic/screens/demo/tracks_demo.dart';
 import 'package:ShareTheMusic/screens/my_space_screen.dart';
 import 'package:ShareTheMusic/screens/playlists/my_playlists_screen.dart';
-import 'package:ShareTheMusic/screens/settings_screen.dart';
-import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
-import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ShareTheMusic/screens/home/home_screen.dart';
 import 'package:ShareTheMusic/screens/savedtracks/savedtracks_screen.dart';
-import 'package:spotify/spotify.dart';
 
 class TabNavigationItem {
   final Widget page;

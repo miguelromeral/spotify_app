@@ -1,4 +1,3 @@
-import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
@@ -15,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'following/all_users_screen.dart';
-import 'following/following_search_screen.dart';
 import 'mysuggestions/mysuggestions_screen.dart';
 
 class MySpaceScreen extends StatefulWidget {
@@ -89,8 +87,8 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                 BlocProvider.of<SavedTracksBloc>(context)
                     .add(UpdateSavedTracksEvent(newOne: List()));
 
-                BlocProvider.of<PlaylistsBloc>(context).add(
-                    UpdatePlaylistsEvent(newOne: List()));
+                BlocProvider.of<PlaylistsBloc>(context)
+                    .add(UpdatePlaylistsEvent(newOne: List()));
 
                 BlocProvider.of<ApiBloc>(context)
                     .add(UpdateApiEvent(newOne: null));
@@ -129,8 +127,8 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
     );
   }
 
-  Container _createTile(BuildContext context, String text, Function callback,
-      [String icon = null]) {
+  Container _createTile(
+      BuildContext context, String text, Function callback, String icon) {
     return Container(
         decoration: BoxDecoration(
           color: colorBackground.withAlpha(80),

@@ -8,7 +8,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/_shared/mydrawer.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/tab_navigation_item.dart';
 import 'package:ShareTheMusic/screens/share_track/share_track.dart';

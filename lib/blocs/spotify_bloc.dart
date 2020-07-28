@@ -3,14 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/services/firestore_db.dart';
 import 'package:ShareTheMusic/services/firebase_auth.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:ShareTheMusic/services/password_generator.dart';
-import 'spotify_events.dart';
 
 class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
   // Estado inicial
@@ -45,6 +43,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
           try {
             dynamic firebaseuser =
                 await _auth.registerWithEmailAndPassword(email, pwd);
+
+            if (firebaseuser == null) throw Exception("Error while singing up");
             _db = await _login(_auth, email, pwd, user.id);
             event.service.updateMyUser(user);
             _db.updateDisplayName(user);
@@ -56,6 +56,8 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
             print("Registered $email and loged in successfully.");
           } catch (e) {
             print("Error while registering new user and login in again: $e");
+            yield SpotifyService.errorLogin();
+            return;
           }
         }
         /*} on Authori catch (ae) {
@@ -107,7 +109,6 @@ class SpotifyBloc extends Bloc<SpotifyEventBase, SpotifyService> {
         //var mycredentials = await SpotifyService.readCredentialsFile();
         //final spotify = SpotifyApi(mycredentials);
         //demo.api = spotify;
-        FirestoreService _db = FirestoreService();
         print("Logged anonymously");
       } catch (ae) {
         print("Error while login: $ae");

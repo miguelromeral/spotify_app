@@ -1,20 +1,14 @@
-import 'package:ShareTheMusic/_shared/animated_background.dart';
-import 'package:ShareTheMusic/_shared/custom_card.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:search_app_bar/filter.dart';
-import 'package:search_app_bar/search_app_bar.dart';
 import 'package:search_app_bar/search_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_item.dart';
-import 'package:ShareTheMusic/_shared/tracks/track_list.dart';
 import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/blocs/track_list_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
-
-import '../myicon.dart';
 
 class TrackListScreen extends StatefulWidget {
   final Key key;

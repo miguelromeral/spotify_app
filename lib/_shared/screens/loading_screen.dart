@@ -1,5 +1,3 @@
-import 'package:ShareTheMusic/_shared/animated_background.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 

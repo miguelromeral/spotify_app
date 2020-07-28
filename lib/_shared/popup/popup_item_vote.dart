@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
-import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 class PopupItemVote extends PopupItemBase {

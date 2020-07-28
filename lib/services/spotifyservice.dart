@@ -5,13 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/services/firestore_db.dart';
 import 'package:ShareTheMusic/services/firebase_auth.dart';
-
-import 'local_database.dart';
 
 class SpotifyService {
   //SpotifyApi _api;

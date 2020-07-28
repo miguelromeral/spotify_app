@@ -103,7 +103,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         //color: Colors.red,
         child: AlbumPicture(
           key: Key(track.album.id),
-          showDuration: Settings.getValue<bool>(settings_track_duration, true),
+          showDuration: Settings.getValue<bool>(settingsTrackDuration, true),
           track: track,
           size: maxsize,
         ),
@@ -120,7 +120,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
         padding: EdgeInsets.all(2.0),
         //color: Colors.red,
         child: AlbumPicture(
-          showDuration: Settings.getValue<bool>(settings_track_duration, true),
+          showDuration: Settings.getValue<bool>(settingsTrackDuration, true),
           track: track,
           size: maxsize,
         ),

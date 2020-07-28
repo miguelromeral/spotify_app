@@ -1,11 +1,7 @@
-import 'package:ShareTheMusic/models/home_data.dart';
 import 'package:ShareTheMusic/models/playlists_data.dart';
-import 'package:ShareTheMusic/models/saved_tracks_data.dart';
-import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import '../services/local_database.dart';
 
 class PlaylistsBloc extends Bloc<PlaylistsEventBase, PlaylistsData> {
   @override

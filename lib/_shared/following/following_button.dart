@@ -1,7 +1,6 @@
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/following.dart';
-import 'package:ShareTheMusic/screens/profile/user_profile_screen.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 
 import '../myicon.dart';
-import '../showup.dart';
 
 class FollowingButton extends StatefulWidget {
   final Key key;

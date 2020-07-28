@@ -1,11 +1,9 @@
-import 'package:dio/dio.dart';
+/*import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/models/following.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
@@ -159,3 +157,4 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
     );
   }
 }
+*/

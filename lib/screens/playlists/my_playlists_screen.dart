@@ -1,27 +1,15 @@
-import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/playlists_bloc.dart';
 import 'package:ShareTheMusic/models/playlists_data.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/_shared/custom_listtile.dart';
-import 'package:ShareTheMusic/_shared/playlists/playlist_image.dart';
 import 'package:ShareTheMusic/_shared/playlists/playlists_screen.dart';
-import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
-import 'package:ShareTheMusic/_shared/tracks/track_list.dart';
-import 'package:ShareTheMusic/_shared/tracks/track_list_screen.dart';
-import 'package:ShareTheMusic/screens/playlists/playlist_tracks_screen.dart';
-import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
-
-import '../styles.dart';
 
 class MyPlaylistsScreen extends StatefulWidget {
   @override

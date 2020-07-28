@@ -38,7 +38,7 @@ class FirestoreService {
       Suggestion.ffuserid: firebaseUserID,
       Suggestion.ftext: text,
       Suggestion.fprivate:
-          Settings.getValue<bool>(settings_suggestion_private, false),
+          Settings.getValue<bool>(settingsSuggestionPrivate, false),
       Suggestion.fdate: now.toString(),
       Suggestion.flikes: 0,
     });
@@ -200,7 +200,7 @@ class FirestoreService {
   }
 
   Future<List<Following>> getFollowers(String spotifyUserId) async {
-    var me = getFollowingBySpotifyUserID(spotifyUserId);
+    //var me = getFollowingBySpotifyUserID(spotifyUserId);
     var all = await cFollowing.getDocuments().then(_followingListFromSnapshot);
     List<Following> total = List();
     for (var f in all) {
@@ -216,7 +216,7 @@ class FirestoreService {
   Future<bool> deleteUserInfo(String suserid) async {
     try{
       await Future.delayed(Duration(seconds: 10));
-      print("Deleted Info ${suserid}!");
+      print("Deleted Info $suserid!");
       return true;
     }catch(e){
       print("Problem while deleting info: $e");

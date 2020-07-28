@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
-import 'package:ShareTheMusic/_shared/custom_appbar.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
-import 'package:path/path.dart';
-import 'package:spotify/spotify.dart';
 
 import '../styles.dart';
 

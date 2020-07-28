@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:spotify/spotify.dart';
 
 class PlaylistsData {

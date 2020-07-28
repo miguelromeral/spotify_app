@@ -2,7 +2,6 @@ import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_duration.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/screens/share_track/share_track.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -94,7 +93,7 @@ class _TrackItemState extends State<TrackItem> {
       style: styleFeedArtist,
     ));
 
-    if (Settings.getValue<bool>(settings_track_popularity, true)) {
+    if (Settings.getValue<bool>(settingsTrackPopularity, true)) {
       list.add(SizedBox(height: 4.0));
       list.add(Text(
         "${widget.track.popularity}% pop.",
@@ -131,7 +130,7 @@ class _TrackItemState extends State<TrackItem> {
   }
 
   Widget _showDurationWidget() {
-    if (Settings.getValue<bool>(settings_track_duration, true)) {
+    if (Settings.getValue<bool>(settingsTrackDuration, true)) {
       return TrackDuration(
         duration: widget.track.durationMs,
       );

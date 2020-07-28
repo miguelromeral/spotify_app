@@ -1,5 +1,4 @@
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
-import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_loader.dart';
 import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../myicon.dart';
 
 class SuggestionsScreen extends StatefulWidget {
   final key;

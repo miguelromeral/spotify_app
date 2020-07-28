@@ -1,17 +1,11 @@
-import 'dart:async';
-
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/_shared/mydrawer.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/tab_navigation_item.dart';
-import 'package:ShareTheMusic/screens/share_track/share_track.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
@@ -22,14 +16,10 @@ class TabsPageDemo extends StatefulWidget {
 }
 
 class _TabsPageDemoState extends State<TabsPageDemo> {
-  SpotifyBloc _bloc;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int _currentIndex = 0;
   List<TabNavigationItem> _pages = TabNavigationItem.itemsDemo();
-
-  StreamSubscription _intentDataStreamSubscription;
-  String _sharedText;
 
   PageController pageController = PageController(
     initialPage: 0,
@@ -67,9 +57,6 @@ class _TabsPageDemoState extends State<TabsPageDemo> {
 
   @override
   Widget build(BuildContext context) {
-    if (_bloc == null) {
-      _bloc = BlocProvider.of<SpotifyBloc>(context);
-    }
     return BlocBuilder<ApiBloc, MyApi>(
       builder: (context, api) =>
           BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
