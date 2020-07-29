@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/playlists/playlist_image.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:spotify/spotify.dart';
@@ -45,14 +46,14 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
         list: List(),
         loading: tracks == null,
         title: widget.playlist.name,
-        widget: _createWidgetHeader(),
+        widget: _createWidgetHeader(tracks),
       );
     } else {
       return TrackListScreen(
         key: Key(tracks.length.toString()),
         list: filterLocalFiles(tracks),
         title: widget.playlist.name,
-        widget: _createWidgetHeader(),
+        widget: _createWidgetHeader(tracks),
       );
     }
   }
@@ -69,21 +70,28 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
         ));
   }
 
-  Widget _createWidgetHeader() {
+  Widget _createWidgetHeader(List<Track> list) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      child: Column(
+      child: Row(
         children: [
-          Hero(
-            tag: widget.playlist.id,
-            child: SizedBox(
-              height: 100.0,
-              width: 100.0,
-              child: PlaylistImage(
-                playlist: widget.playlist,
-                size: 25.0,
+          Expanded(
+            flex: 1,
+            child: Hero(
+              tag: widget.playlist.id,
+              child: SizedBox(
+                height: 100.0,
+                width: 100.0,
+                child: PlaylistImage(
+                  playlist: widget.playlist,
+                  size: 25.0,
+                ),
               ),
             ),
+          ),
+          Expanded(
+            flex: 2,
+            child: widgetHeaderTrackList(list),
           ),
         ],
       ),

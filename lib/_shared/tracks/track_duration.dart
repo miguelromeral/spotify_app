@@ -17,6 +17,6 @@ class TrackDuration extends StatelessWidget {
     return Container(
         padding: EdgeInsets.all(2.0),
         color: colorThirdBackground,
-        child: Text(printDuration(duration)));
+        child: Text(printDuration(duration, false)));
   }
 }

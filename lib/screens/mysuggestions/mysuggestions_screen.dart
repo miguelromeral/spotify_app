@@ -48,10 +48,16 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Suggestion> list = snapshot.data;
+
+            var last = state.lastSuggestion;
+            if (last != null) {
+              list.add(last);
+            }
+
             list.sort((one, two) => two.date.compareTo(one.date));
             return SuggestionsScreen(
               widget: _buildWidgetHeader(),
-              title: 'My Previous Suggestions',
+              title: 'My Suggestions',
               list: list,
               loading: false,
               api: api,
@@ -80,7 +86,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
           } else {
             return SuggestionsScreen(
               widget: _buildWidgetHeader(),
-              title: 'My Previous Suggestions',
+              title: 'My Suggestions',
               list: List(),
               loading: true,
               api: api,
@@ -90,10 +96,11 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
       );
     } else {
       BlocProvider.of<LocalDbBloc>(context).add(InitLocalDbEvent());
+      BlocProvider.of<SpotifyBloc>(context).add((UpdateMySuggestion()));
 
       return SuggestionsScreen(
         widget: _buildWidgetHeader(),
-        title: 'My Previous Suggestions',
+        title: 'My Suggestions',
         list: List(),
         loading: true,
         api: api,

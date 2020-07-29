@@ -108,7 +108,7 @@ class _ShareTrackState extends State<ShareTrack> {
                       SizedBox(
                         height: 8.0,
                       ),
-                      _createRowData(
+                      createRowData(
                         'Artist',
                         Text(
                           widget.track.artists
@@ -122,28 +122,28 @@ class _ShareTrackState extends State<ShareTrack> {
                       SizedBox(
                         height: 8.0,
                       ),
-                      _createRowData(
+                      createRowData(
                         'Album',
                         Text(widget.track.album.name),
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
-                      _createRowData(
+                      createRowData(
                         'Duration',
-                        Text('${printDuration(widget.track.durationMs)}'),
+                        Text('${printDuration(widget.track.durationMs, false)}'),
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
-                      _createRowData(
+                      createRowData(
                         'Popularity',
                         Text('${widget.track.popularity} %'),
                       ),
                       SizedBox(
                         height: 8.0,
                       ),
-                      _createRowData(
+                      createRowData(
                         'Track Numer',
                         Text('#${widget.track.trackNumber}'),
                       ),
@@ -151,7 +151,7 @@ class _ShareTrackState extends State<ShareTrack> {
                         height: 8.0,
                       ),
                       (widget.track.explicit
-                          ? _createRowData(
+                          ? createRowData(
                               '',
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,29 +282,4 @@ class _ShareTrackState extends State<ShareTrack> {
     }
   }
 
-  Widget _createRowData(String title, Widget content) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-            flex: 8,
-            child: (title.isNotEmpty
-                ? Text(
-                    title,
-                    style: styleCardHeader,
-                    textAlign: TextAlign.right,
-                  )
-                : Container())),
-        Expanded(
-          flex: 1,
-          child: Container(),
-        ),
-        Expanded(
-          flex: 8,
-          child: content,
-        ),
-      ],
-    );
-  }
 }

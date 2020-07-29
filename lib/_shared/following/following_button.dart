@@ -23,7 +23,7 @@ class FollowingButton extends StatefulWidget {
 
 class _FollowingButtonState extends State<FollowingButton> {
   bool get currentlyFollowing =>
-      widget.myFollowings.usersList.contains(widget.user.id);
+      widget.myFollowings.containsUser(widget.user.id);
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,12 @@ class _FollowingButtonState extends State<FollowingButton> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
                 side: BorderSide(color: Colors.white)),
-            onPressed: () async {
-              _followUnfollow(state, context);
+            onPressed: () {
+              _followUnfollow(
+                  state,
+                  context,
+                  BlocProvider.of<HomeBloc>(context),
+                  BlocProvider.of<SpotifyBloc>(context));
             },
             icon: MyIcon(
               icon: 'heart_filled',
@@ -54,8 +58,12 @@ class _FollowingButtonState extends State<FollowingButton> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
                 side: BorderSide(color: Colors.white)),
-            onPressed: () async {
-              _followUnfollow(state, context);
+            onPressed: () {
+              _followUnfollow(
+                  state,
+                  context,
+                  BlocProvider.of<HomeBloc>(context),
+                  BlocProvider.of<SpotifyBloc>(context));
             },
             icon: MyIcon(
               icon: 'heart_empty',
@@ -68,21 +76,21 @@ class _FollowingButtonState extends State<FollowingButton> {
     );
   }
 
-  Future _followUnfollow(SpotifyService state, BuildContext context) async {
+  Future _followUnfollow(SpotifyService state, BuildContext context,
+      HomeBloc hb, SpotifyBloc sb) async {
     if (!state.firebaseUserIdEquals(widget.userFollowing.fuserid)) {
       if (currentlyFollowing) {
         await state.removeFollowing(widget.myFollowings, widget.user.id);
-        Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('You no longer follow ${widget.user.displayName}!')));
+        //Scaffold.of(context).showSnackBar(SnackBar(
+        //    content: Text('You no longer follow ${widget.user.displayName}!')));
       } else {
         await state.addFollowing(widget.myFollowings, widget.user.id);
-        Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('You followed ${widget.user.displayName}!')));
+        //Scaffold.of(context).showSnackBar(SnackBar(
+        //    content: Text('You followed ${widget.user.displayName}!')));
       }
 
-      BlocProvider.of<SpotifyBloc>(context).add(UpdateFollowing());
-      BlocProvider.of<HomeBloc>(context)
-          .add(UpdateFeedHomeEvent(suggestions: await state.getsuggestions()));
+      sb.add(UpdateFollowing());
+      hb.add(UpdateFeedHomeEvent(suggestions: await state.getsuggestions()));
     } else {
       Scaffold.of(context).showSnackBar(
           SnackBar(content: Text('You Can Not Unfollow Yourself!')));

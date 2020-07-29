@@ -72,9 +72,14 @@ class _FollowingItemState extends State<FollowingItem> {
                           key: Key(widget.suserid),
                           leadingIcon: Container(
                             padding: EdgeInsets.all(2.0),
-                            child: ProfilePicture(
-                              user: user,
-                              size: 50.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                navigateProfile(context, user);
+                              },
+                              child: ProfilePicture(
+                                user: user,
+                                size: 50.0,
+                              ),
                             ),
                           ),
                           trailingIcon: Container(

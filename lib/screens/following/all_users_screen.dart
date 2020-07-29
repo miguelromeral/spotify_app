@@ -14,7 +14,6 @@ class AllUsersScreen extends StatefulWidget {
 }
 
 class _AllUsersScreenState extends State<AllUsersScreen> {
-
   @override
   Widget build(BuildContext context) {
     return _createBody(context);
@@ -22,7 +21,9 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
 
   Widget _createBody(BuildContext context) {
     return FancyBackgroundApp(
-      child: _createAllUsersScreen(context),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _createAllUsersScreen(context)),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/playlists_bloc.dart';
 import 'package:ShareTheMusic/models/playlists_data.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,19 +75,26 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
       key: Key(liked.hashCode.toString()),
       list: l,
       title: 'My Playlists',
-      widget: _createWidgetHeader(state),
+      widget: _createWidgetHeader(state, l),
       loading: loading,
     );
   }
 
-  Widget _createWidgetHeader(SpotifyService state) {
+  Widget _createWidgetHeader(SpotifyService state, List<PlaylistSimple> list) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      child: Column(
+      child: Row(
         children: [
-          ProfilePicture(
-            size: 100.0,
-            user: state.myUser,
+          Expanded(
+            flex: 1,
+            child: ProfilePicture(
+              size: 100.0,
+              user: state.myUser,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: widgetHeaderPlaylistsList(list, state.myUser),
           ),
         ],
       ),

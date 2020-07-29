@@ -22,7 +22,8 @@ class SpotifyService {
   bool deletingInfo = false;
   bool deletedInfo = false;
 
-  
+  Suggestion lastSuggestion;
+
   StreamController<Suggestion> _scMySuggestion =
       new StreamController.broadcast();
   Stream<Suggestion> get mySuggestion => _scMySuggestion.stream;
@@ -36,6 +37,7 @@ class SpotifyService {
 
   void updateMySuggestion(Suggestion newOne) {
     _scMySuggestion.add(newOne);
+    lastSuggestion = newOne;
   }
 
   void updateFollowing(Following newone) {

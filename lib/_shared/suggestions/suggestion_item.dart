@@ -29,7 +29,8 @@ class SuggestionItem extends StatefulWidget {
   final Suggestion suggestion;
   final key;
 
-  SuggestionItem({this.track, this.user, this.suggestion, this.key}) : super(key: key);
+  SuggestionItem({this.track, this.user, this.suggestion, this.key})
+      : super(key: key);
 
   @override
   _SuggestionItemState createState() => _SuggestionItemState();
@@ -89,10 +90,15 @@ class _SuggestionItemState extends State<SuggestionItem> {
         height: maxsize,
         padding: EdgeInsets.all(2.0),
         //color: Colors.red,
-        child: ProfilePicture(
-          key: Key(user.id),
-          user: user,
-          size: maxsize,
+        child: GestureDetector(
+          onTap: () {
+            navigateProfile(context, user);
+          },
+          child: ProfilePicture(
+            key: Key(user.id),
+            user: user,
+            size: maxsize,
+          ),
         ),
       );
     } else {

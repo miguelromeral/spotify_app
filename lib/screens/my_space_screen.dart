@@ -42,7 +42,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
               // Important: Remove any padding from the ListView.
               padding: EdgeInsets.zero,
               children: <Widget>[
-                _buildHeader(state),
+                _buildHeader(state, context),
                 SizedBox(
                   height: 8.0,
                 ),
@@ -58,11 +58,11 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                     height: 8.0,
                   ),*/
                   _createTile(context, "All Users", () {
-                    NavigateAllUsers(context);
+                    navigateAllUsers(context);
                   }, 'allusers'),
                 ]),
                 _buildSection(context, 'Your Activity', [
-                  _createTile(context, "My Previous Suggestions", () {
+                  _createTile(context, "My Suggestions", () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -148,20 +148,15 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
               )));
   }
 
-  Widget _buildHeader(SpotifyService state) {
+  Widget _buildHeader(SpotifyService state, BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: colorAccent.withAlpha(50),
         borderRadius: BorderRadius.circular(30.0),
       ),
       child: GestureDetector(
-        onTap: () async {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UserProfileScreen(
-                        user: state.myUser,
-                      )));
+        onTap: () {
+          navigateProfile(context, state.myUser);
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),

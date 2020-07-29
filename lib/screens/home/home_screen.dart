@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(18.0),
                             side: BorderSide(color: colorPrimary)),
                         onPressed: () {
-                          NavigateAllUsers(context);
+                          navigateAllUsers(context);
                         }),
                     SizedBox(
                       height: 8.0,

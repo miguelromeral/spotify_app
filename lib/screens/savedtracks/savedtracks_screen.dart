@@ -4,6 +4,7 @@ import 'package:ShareTheMusic/_shared/users/profile_picture.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/saved_tracks_bloc.dart';
 import 'package:ShareTheMusic/models/saved_tracks_data.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +20,13 @@ class SavedTracksScreen extends StatefulWidget {
 }
 
 class _SavedTracksScreenState extends State<SavedTracksScreen> {
-  
   //SpotifyApi _api;
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) => BlocBuilder<SavedTracksBloc, SavedTracksData>(
+      builder: (context, state) =>
+          BlocBuilder<SavedTracksBloc, SavedTracksData>(
         builder: (context, data) =>
             BlocBuilder<ApiBloc, MyApi>(builder: (context, api) {
           return StreamBuilder(
@@ -67,7 +67,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
       loading = true;
     }
     return TrackListScreen(
-      widget: _createWidgetHeader(state),
+      widget: _createWidgetHeader(state, l),
       key: Key(liked.hashCode.toString()),
       list: l,
       loading: loading,
@@ -75,14 +75,21 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
     );
   }
 
-  Widget _createWidgetHeader(SpotifyService state) {
+  Widget _createWidgetHeader(SpotifyService state, List<Track> list) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      child: Column(
+      child: Row(
         children: [
-          ProfilePicture(
-            size: 100.0,
-            user: state.myUser,
+          Expanded(
+            flex: 1,
+            child: ProfilePicture(
+              size: 100.0,
+              user: state.myUser,
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: widgetHeaderTrackList(list),
           ),
         ],
       ),
