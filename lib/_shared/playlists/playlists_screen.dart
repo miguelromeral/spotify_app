@@ -17,8 +17,9 @@ class PlaylistsScreen extends StatefulWidget {
   final List<PlaylistSimple> list;
   final Widget widget;
   final bool loading;
+  final Function callback;
 
-  PlaylistsScreen({this.key, this.list, this.title, this.widget, this.loading});
+  PlaylistsScreen({this.key, this.list, this.title, this.widget, this.loading, this.callback});
 
   @override
   _PlaylistsScreenState createState() => _PlaylistsScreenState();
@@ -46,7 +47,8 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     sb = SearchBloc(
       searcher: tlb,
       filter: (PlaylistSimple str, String query) =>
-          Filters.contains(str.name, query),
+          Filters.contains(str.name, query) ||
+          Filters.contains(str.owner.displayName, query),
     );
 
     super.initState();
@@ -122,7 +124,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                             ),
                             filled: false,
                             hintStyle: new TextStyle(color: Colors.grey[800]),
-                            hintText: "Search playlists by name",
+                            hintText: "Search playlists by name or owner",
                           ),
                         ),
                       ),
@@ -203,14 +205,23 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
           );*/
           return ErrorScreen(
             title: 'No Playlists Found Here',
-            stringBelow: ["Perhaps you don't have any Spotify playlist yet.",
-            "If you do, then unfortunately we couldn't load them."],
+            stringBelow: [
+              "Perhaps you don't have any Spotify playlist yet.",
+              "If you do, then unfortunately we couldn't load them."
+            ],
           );
         }
         final list = snapshot.data;
         if (list == null) {
           return LoadingScreen();
         }
+
+        //UpdateStatsPlaylistNotification(list: list).dispatch(context);
+
+        if(widget.callback != null){
+          widget.callback.call(list);
+        }
+        
         return ListView.builder(
           itemBuilder: (context, index) {
             return Container(

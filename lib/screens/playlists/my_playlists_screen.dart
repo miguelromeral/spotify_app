@@ -23,6 +23,8 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
         .add(UpdatePlaylistsEvent(newOne: await api.getMyPlaylists()));
   }
 
+  List<PlaylistSimple> _list = List();
+
   @override
   void initState() {
     super.initState();
@@ -35,18 +37,26 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
     return BlocBuilder<PlaylistsBloc, PlaylistsData>(
       builder: (context, data) =>
           BlocBuilder<ApiBloc, MyApi>(builder: (context, api) {
-        return StreamBuilder(
-          stream: data.playlists,
-          builder: (context, snp) {
-            if (snp.hasData) {
-              return buildBody(context, api, snp.data, state);
-            } else if (data.last.isNotEmpty) {
-              return buildBody(context, api, data.last, state);
-            } else {
-              _getData(context, api);
-              return buildBody(context, api, null, state);
-            }
+        return NotificationListener<UpdateStatsPlaylistNotification>(
+          onNotification: (not) {
+            setState(() {
+              //_list = not.list;
+              print("List: ${not.list.length}");
+            });
           },
+          child: StreamBuilder(
+            stream: data.playlists,
+            builder: (context, snp) {
+              if (snp.hasData) {
+                return buildBody(context, api, snp.data, state);
+              } else if (data.last.isNotEmpty) {
+                return buildBody(context, api, data.last, state);
+              } else {
+                _getData(context, api);
+                return buildBody(context, api, null, state);
+              }
+            },
+          ),
         );
       }),
     );
@@ -71,11 +81,19 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
       l = List<PlaylistSimple>();
       loading = true;
     }
+
     return PlaylistsScreen(
       key: Key(liked.hashCode.toString()),
       list: l,
       title: 'My Playlists',
-      widget: _createWidgetHeader(state, l),
+      callback: (list) async {
+        await Future.delayed(Duration(milliseconds: 50));
+        setState(() {
+          _list = list;
+        });
+        print("List: ${list.length}");
+      },
+      widget: _createWidgetHeader(state, _list),
       loading: loading,
     );
   }
