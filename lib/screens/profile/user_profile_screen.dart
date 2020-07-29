@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
+import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
@@ -31,6 +33,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   SpotifyApi _api;
   Suggestion suggestion;
   Track track;
+  bool _noSug = false;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +84,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       CardInfo(
                         title: 'Spotify ID',
                         content: user.id,
+                      ),
+                      CardInfo(
+                        title: 'Latest Suggestion Total Likes',
+                        content: (suggestion != null ? NumberFormat("#,###", "en_US").format(suggestion.likes) : 'None'),
                       ),
                       StreamBuilder(
                         stream: state.following,
@@ -181,6 +188,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _buildContent(SpotifyService state) {
+    if(_noSug){
+      return ErrorScreen(title: "This user hasen't sent any suggestion yet", stringBelow: [''],);
+    }
+
     if (suggestion == null) {
       _getData();
       return LoadingScreen(
@@ -205,6 +216,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<void> _getData() async {
     if (_bloc != null && _api != null) {
       var res = await _bloc.state.getSuggestion(widget.user.id);
+      if (res == null) {
+        setState(() {
+          _noSug = true;
+        });
+        return;
+      }
       _bloc.add(UpdateFeed());
       Track tr;
       if (track == null) {
@@ -212,6 +229,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       }
       setState(() {
         suggestion = res;
+        _noSug = false;
         if (tr != null) {
           track = tr;
         }

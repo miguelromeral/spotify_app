@@ -49,6 +49,7 @@ dependencies:
   flutter_settings_screens: ^0.2.0+1
   fancy_on_boarding: ^1.6.0
   simple_animations: ^2.1.0
+  intl: ^0.16.1
 
 
   # The following adds the Cupertino Icons font to your application.

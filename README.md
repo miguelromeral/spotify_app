@@ -1,6 +1,4 @@
-# <img alt='ShareTheTrack' src='https://raw.githubusercontent.com/miguelromeral/spotify_app/master/android/app/src/main/res/drawable/ic_launcher_round.png' height="35" width="auto" /> ShareTheTrack ![](https://img.shields.io/badge/android-7.0-red)  
-
-<!--<a href='https://play.google.com/store/apps/details?id=es.miguelromeral.password'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="70" width="auto" /></a>-->
+# <img alt='ShareTheTrack' src='https://raw.githubusercontent.com/miguelromeral/spotify_app/master/android/app/src/main/res/drawable/ic_launcher_round.png' height="35" width="auto" /> ShareTheTrack ![](https://img.shields.io/badge/android-7.0-green) <a href='https://play.google.com/store/apps/details?id=es.miguelromeral.spotifyfriends'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="70" width="auto" /></a>
 
 ## Introduction
 
@@ -8,9 +6,7 @@ ShareTheTrack is the perfect application for those who want to discover new amaz
 
 ## Availability
 
-Currently, this App is under development. The app will be available to be downloaded by [Google Play](https://play.google.com/store/apps/dev?id=8494694764432462089) for free in August 2020.
-
-<!-- [Google Play](https://play.google.com/store/apps/details?id=es.miguelromeral.spotifyfriends) -->
+Currently, this App is under development. You can download the Beta version in [Google Play](https://play.google.com/store/apps/details?id=es.miguelromeral.spotifyfriends) for free in August 2020.
 
 This app requires Android 7.0 or higher to be downloaded and installed on your device.
 

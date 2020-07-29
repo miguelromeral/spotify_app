@@ -11,6 +11,8 @@ import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
+import '../styles.dart';
+
 class HomeScreenDemo extends StatefulWidget {
   @override
   _HomeScreenDemoState createState() => _HomeScreenDemoState();
@@ -69,6 +71,44 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
       l = List<Suggestion>();
       loading = true;
     }
+    Widget widget = Padding(
+      padding: EdgeInsets.fromLTRB(0.0, 80.0, 0.0, 0.0),
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorAccent.withAlpha(50),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text("Hi there! and welcome to ShareTheTrack DEMO version!",
+                      textAlign: TextAlign.center),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    "In this screen you'd see the suggestions users you're following have updated. "
+                    "In this case, you are seing some users suggestions that they wanted to share with all the demo users "
+                    "so as to you be able to see how the app works.",
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                      "If you like them and you want to vote for their tracks, then log in with Spotify, follow them vote for their suggestions.",
+                      textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
     list.insert(
         0,
@@ -79,16 +119,11 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
           private: false,
           suserid: 'pave0j052dcrnkn9iai47wy0j',
           trackid: '4u7EnebtmKWzUH433cf5Qv',
-          text: "Hi, there and welcome to ShareTheTrack DEMO!\n"
-          "\n"
-          "This is a DEMO suggestions.\n"
-          "\n"
-          "In the full version you can vote any of these, browse in your playlists and also choose one of them as your suggestion.\n"
-          "\n"
-          "\n"
-          "\n"
-          "Keep scrolling to take a look to the suggestions some users wanted to share with the anonimous users."
-          "\n",
+          text: "Easy come, easy go\n"
+              "Will you let me go?\n"
+              "\n"
+              "Bismillah!\n"
+              "No, we will not let you go!\n",
         ));
 
     return NotificationListener<RefreshListNotification>(
@@ -99,6 +134,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
       child: SuggestionsScreen(
         title: 'Public Suggestions (DEMO)',
         list: l,
+        widget: widget,
         loading: loading,
         api: api,
       ),

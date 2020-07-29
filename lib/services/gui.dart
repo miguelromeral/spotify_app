@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/screens/following/all_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
@@ -17,6 +18,13 @@ Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
     Scaffold.of(context).showSnackBar(
         SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
   }
+}
+
+void NavigateAllUsers(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => AllUsersScreen()),
+  );
 }
 
 void showMyDialog(BuildContext context, String title, String subtitle) {

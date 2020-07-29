@@ -102,9 +102,15 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
     }
 
     if (list != null && list.isEmpty) {
-      return ErrorScreen(
-        title: 'No Suggestions Found',
-        stringBelow: ["Follow any user to start seing suggestions"],
+      return SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: ErrorScreen(
+          title: 'No Suggestions Found',
+          stringBelow: [
+            "Follow any user to start seing suggestions.",
+            "If you are currently following any user, pull the screen to refresh."
+          ],
+        ),
       );
     }
 

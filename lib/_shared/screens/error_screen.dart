@@ -91,12 +91,21 @@ class ErrorScreen extends StatelessWidget {
           Text(
             "We couldn't load this part of the app.",
             style: _styleErrorBellow,
+            textAlign: TextAlign.center,
           ),
-          Text("Please, try again later.", style: _styleErrorBellow),
+          Text(
+            "Please, try again later.",
+            style: _styleErrorBellow,
+            textAlign: TextAlign.center,
+          ),
         ];
       } else {
         return stringBelow
-            .map((e) => Text(e, style: _styleErrorBellow))
+            .map((e) => Text(
+                  e,
+                  style: _styleErrorBellow,
+                  textAlign: TextAlign.center,
+                ))
             .toList();
       }
     } else {

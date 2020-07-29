@@ -137,9 +137,9 @@ class _TabsPageState extends State<TabsPage> {
   }
 
   Widget _fullTree(SpotifyService state) {
-    return NotificationListener<OpenDrawerNotification>(
+    return NotificationListener<ChangePageNotification>(
       onNotification: (notification) {
-        _scaffoldKey.currentState.openDrawer();
+        bottomTapped(notification.index);
         return true;
       },
       child: Scaffold(

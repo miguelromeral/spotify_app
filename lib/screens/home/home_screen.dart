@@ -2,6 +2,8 @@ import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/models/home_data.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestions_screen.dart';
+import 'package:ShareTheMusic/screens/tabs_page.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,8 @@ import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
+
+import '../styles.dart';
 
 class HomeScreen extends StatefulWidget {
   static Key pageKey = new PageStorageKey("homescreen");
@@ -79,9 +83,65 @@ class _HomeScreenState extends State<HomeScreen> {
       SpotifyService state) {
     List<Suggestion> l = liked;
     bool loading = false;
+    Widget widget = null;
     if (liked == null) {
       l = List<Suggestion>();
       loading = true;
+    }
+    if (liked != null && liked.isEmpty) {
+      widget = Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 80.0, 0.0, 0.0),
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: colorAccent.withAlpha(50),
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Text(
+                        "It seems you have no suggestions in your feed, haven't you?", textAlign: TextAlign.center),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text("Don't worry, there are two ways to solve this:", textAlign: TextAlign.center),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    RaisedButton(
+                        child: Text("SEARCH USERS AND FOLLOW THEM"),
+                        textColor: Colors.black,
+                        color: colorAccent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: colorPrimary)),
+                        onPressed: () {
+                          NavigateAllUsers(context);
+                        }),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    RaisedButton(
+                        child: Text("GO TO LIKED SONGS AND SEND A SUGGESTION"),
+                        textColor: Colors.black,
+                        color: colorAccent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: colorPrimary)),
+                        onPressed: () {
+                          ChangePageNotification(index: 2).dispatch(context);
+                        }),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
     }
 
     return NotificationListener<RefreshListNotification>(
@@ -91,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: SuggestionsScreen(
         title: 'My Friends Suggestions',
+        widget: widget,
         //key: Key(l.hashCode.toString()),
         list: l,
         loading: loading,

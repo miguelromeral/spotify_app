@@ -54,8 +54,11 @@ class FirestoreService {
     if (firebaseUserID == suggestion.fuserid ||
         spotifyUserID == suggestion.suserid ||
         suggestion.reference == null) return null;
+
+    var latest = await getSuggestion(suggestion.suserid);
+
     return await suggestion.reference.updateData(<String, dynamic>{
-      Suggestion.flikes: suggestion.likes + 1,
+      Suggestion.flikes: latest.likes + 1,
     });
   }
 

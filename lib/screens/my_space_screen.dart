@@ -58,10 +58,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                     height: 8.0,
                   ),*/
                   _createTile(context, "All Users", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AllUsersScreen()),
-                    );
+                    NavigateAllUsers(context);
                   }, 'allusers'),
                 ]),
                 _buildSection(context, 'Your Activity', [
