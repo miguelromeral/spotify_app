@@ -7,7 +7,7 @@ class ExplicitBadge extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: colorThirdBackground,
-        border: Border.all(width: 1, color: Colors.white),
+        border: Border.all(width: 1, color: Colors.grey),
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Container(
@@ -17,6 +17,7 @@ class ExplicitBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: 10.0,
               fontStyle: FontStyle.italic,
+              color: Colors.grey,
               //fontWeight: FontWeight.bold,
             ),
           )),

@@ -18,18 +18,43 @@ The data is provided by the [Spotify API](https://developer.spotify.com/document
 
 ## Functionalities and Screenshots
 
-* TBD
+* Login page with DEMO version available
 
-<!--
-<img src="https://raw.githubusercontent.com/miguelromeral/PasswordGame/master/screenshots/home_light.png" height="400px" width="auto">
-<img src="https://raw.githubusercontent.com/miguelromeral/PasswordGame/master/screenshots/home_dark.png" height="400px" width="auto">
--->
+<img src="https://lh3.googleusercontent.com/vgK8WUyyhBuFFXkaTpcN-Czg4K--yqnqm1X1b31-fi2991QV8quqNiilSiIx3VduOGk=w1600-h734-rw" height="400px" width="auto">
+
+* Suggestions Feed
+
+<img src="https://lh3.googleusercontent.com/Of-o5LaFI2AmMLDATHI9jSCpfzwesf_U6uPEPTo5QTt8gpTL_vMswxt1gaV9Sdxmims=w1600-h734-rw" height="400px" width="auto">
+
+* DEMO Version of the app to try it (not credentials needed)
+
+* Browse through your playlists
+
+<img src="https://lh3.googleusercontent.com/7lIriI3gH3qnYIsJDrymJnak9AnQu9XkcoeE8CxuxY5_Bt8d6ChDzeFhlT3i5Mrct60E=w1600-h734-rw" height="400px" width="auto">
+
+* Filter the track list 
+
+<img src="https://lh3.googleusercontent.com/eRpjs1sXn5CIK_K87ShFB0FOytWP-fZWC5H_KK-4sGVR1L4OuMCK08PfXV-hx-fEqQ=w1600-h734-rw" height="400px" width="auto">
+
+* Update your suggestion track
+
+
+
+* Look for your Spotify friends and follow their suggestions
+
+<img src="https://lh3.googleusercontent.com/PY01AYR7lQwbJ0m7otfzR7I4wTSFDo9SBb9fSDHrl3emr7iIwY03XOlXdJcp49nQXg=w1600-h734-rw" height="400px" width="auto">
+
+* My space screen: my profile, settings, my suggestions and all users.
+
+<img src="https://lh3.googleusercontent.com/SyoJdUs_VHXNHt1SfxiczMRgh1aiuY62DXgX_5R2TpR4F2u1bI_mWM8zRqhKjV8t-Q4=w1600-h734-rw" height="400px" width="auto">
 
 
 ## Version Notes
 
 Version|Code|Changes
 --- | --- | ---
+0.1.3|4|Fixed bugs in DEMO version
+0.1.2|3|Stats added to playlist and track lists
 0.1.1|2|Demo Version Adapted
 0.1|1|Alpha Release
 
