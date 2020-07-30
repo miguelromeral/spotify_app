@@ -37,26 +37,18 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
     return BlocBuilder<PlaylistsBloc, PlaylistsData>(
       builder: (context, data) =>
           BlocBuilder<ApiBloc, MyApi>(builder: (context, api) {
-        return NotificationListener<UpdateStatsPlaylistNotification>(
-          onNotification: (not) {
-            setState(() {
-              //_list = not.list;
-              print("List: ${not.list.length}");
-            });
+        return StreamBuilder(
+          stream: data.playlists,
+          builder: (context, snp) {
+            if (snp.hasData) {
+              return buildBody(context, api, snp.data, state);
+            } else if (data.last.isNotEmpty) {
+              return buildBody(context, api, data.last, state);
+            } else {
+              _getData(context, api);
+              return buildBody(context, api, null, state);
+            }
           },
-          child: StreamBuilder(
-            stream: data.playlists,
-            builder: (context, snp) {
-              if (snp.hasData) {
-                return buildBody(context, api, snp.data, state);
-              } else if (data.last.isNotEmpty) {
-                return buildBody(context, api, data.last, state);
-              } else {
-                _getData(context, api);
-                return buildBody(context, api, null, state);
-              }
-            },
-          ),
         );
       }),
     );
@@ -86,36 +78,15 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
       key: Key(liked.hashCode.toString()),
       list: l,
       title: 'My Playlists',
-      callback: (list) async {
-        await Future.delayed(Duration(milliseconds: 50));
-        setState(() {
-          _list = list;
-        });
-        print("List: ${list.length}");
-      },
       widget: _createWidgetHeader(state, _list),
       loading: loading,
     );
   }
 
   Widget _createWidgetHeader(SpotifyService state, List<PlaylistSimple> list) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: ProfilePicture(
-              size: 100.0,
-              user: state.myUser,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: widgetHeaderPlaylistsList(list, state.myUser),
-          ),
-        ],
-      ),
+    return ProfilePicture(
+      size: 100.0,
+      user: state.myUser,
     );
   }
 }

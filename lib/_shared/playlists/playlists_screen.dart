@@ -1,7 +1,11 @@
 import 'package:ShareTheMusic/_shared/playlists/playlist_item.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_bloc.dart';
 import 'package:spotify/spotify.dart';
@@ -17,9 +21,8 @@ class PlaylistsScreen extends StatefulWidget {
   final List<PlaylistSimple> list;
   final Widget widget;
   final bool loading;
-  final Function callback;
 
-  PlaylistsScreen({this.key, this.list, this.title, this.widget, this.loading, this.callback});
+  PlaylistsScreen({this.key, this.list, this.title, this.widget, this.loading});
 
   @override
   _PlaylistsScreenState createState() => _PlaylistsScreenState();
@@ -61,7 +64,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     }
   }
 
-  Widget _buildSliverAppBar(BuildContext context) {
+  Widget _buildSliverAppBar(BuildContext context, SpotifyService state) {
     return SliverAppBar(
       title: Text(widget.title),
       centerTitle: true,
@@ -72,7 +75,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
       pinned: false,
       snap: false,
       flexibleSpace: FlexibleSpaceBar(
-        background: _buildAppBar(context),
+        background: _buildAppBar(context, state),
       ),
       actions: [
         (widget.list != null && widget.list.isNotEmpty
@@ -97,7 +100,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, SpotifyService state) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(8.0),
@@ -143,7 +146,31 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                     ],
                   )
                 : Container()),
-            (widget.widget ?? Container()),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child:
+                        (widget.widget != null ? widget.widget : Container()),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: StreamBuilder<List<PlaylistSimple>>(
+                        stream: tlb.filteredData,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return widgetHeaderPlaylistsList(
+                                snapshot.data, state.myUser);
+                          } else {
+                            return Container();
+                          }
+                        }),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -167,19 +194,21 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
       _context = context;
     }
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxScrolled) => [
-          _buildSliverAppBar(context),
-        ],
-        body: RefreshIndicator(
-          onRefresh: _getData,
-          child: _buildBody(),
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) => Scaffold(
+        backgroundColor: Colors.transparent,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxScrolled) => [
+            _buildSliverAppBar(context, state),
+          ],
+          body: RefreshIndicator(
+            onRefresh: _getData,
+            child: _buildBody(),
+          ),
+          /*slivers: <Widget>[
+              _buildBody(),
+            ],*/
         ),
-        /*slivers: <Widget>[
-            _buildBody(),
-          ],*/
       ),
     );
   }
@@ -216,12 +245,6 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
           return LoadingScreen();
         }
 
-        //UpdateStatsPlaylistNotification(list: list).dispatch(context);
-
-        if(widget.callback != null){
-          widget.callback.call(list);
-        }
-        
         return ListView.builder(
           itemBuilder: (context, index) {
             return Container(
