@@ -111,11 +111,7 @@ class _ShareTrackState extends State<ShareTrack> {
                       createRowData(
                         'Artist',
                         Text(
-                          widget.track.artists
-                              .map((e) => e.name)
-                              .toString()
-                              .replaceAll('(', '')
-                              .replaceAll(')', ''),
+                          getArtists(widget.track),
                           style: styleFeedTrack,
                         ),
                       ),
@@ -131,7 +127,8 @@ class _ShareTrackState extends State<ShareTrack> {
                       ),
                       createRowData(
                         'Duration',
-                        Text('${printDuration(widget.track.durationMs, false)}'),
+                        Text(
+                            '${printDuration(widget.track.durationMs, false)}'),
                       ),
                       SizedBox(
                         height: 8.0,
@@ -225,8 +222,9 @@ class _ShareTrackState extends State<ShareTrack> {
                                         try {
                                           var spUser = state.myUser;
 
-                                          var mySug = await state.getMySuggestion();
-                                          if(mySug != null)
+                                          var mySug =
+                                              await state.getMySuggestion();
+                                          if (mySug != null)
                                             localdb.insertSuggestion(mySug);
 
                                           var sug = await state.updateUserData(
@@ -255,7 +253,6 @@ class _ShareTrackState extends State<ShareTrack> {
                                                       'Updated Suggestion!')));
 
                                           Navigator.pop(context);
-
                                         } catch (e) {
                                           Scaffold.of(context).showSnackBar(
                                               SnackBar(
@@ -281,5 +278,4 @@ class _ShareTrackState extends State<ShareTrack> {
       return LoadingScreen();
     }
   }
-
 }

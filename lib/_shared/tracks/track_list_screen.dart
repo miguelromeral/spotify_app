@@ -1,5 +1,6 @@
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_bloc.dart';
@@ -53,7 +54,6 @@ class _TrackListScreenState extends State<TrackListScreen> {
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class _TrackListScreenState extends State<TrackListScreen> {
   }
 
   Widget _buildBody() {
-    if(widget.loading != null && widget.loading == true){
+    if (widget.loading != null && widget.loading == true) {
       return LoadingScreen();
     }
 
@@ -151,10 +151,12 @@ class _TrackListScreenState extends State<TrackListScreen> {
           /*return SliverToBoxAdapter(
             child: LoadingScreen(),
           );*/
-          return ErrorScreen(title: 'No Tracks Found Here',);
+          return ErrorScreen(
+            title: 'No Tracks Found Here',
+          );
         }
         final list = snapshot.data;
-        if(list == null){
+        if (list == null) {
           return LoadingScreen();
         }
         return ListView.builder(
@@ -239,7 +241,30 @@ class _TrackListScreenState extends State<TrackListScreen> {
                     ],
                   )
                 : Container()),
-            (widget.widget ?? Container()),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: (widget.widget ?? Container()),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: StreamBuilder(
+                      stream: tlb.filteredData,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return widgetHeaderTrackList(snapshot.data);
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

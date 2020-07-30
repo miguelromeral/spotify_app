@@ -194,7 +194,8 @@ Widget widgetHeaderTrackList(List<Track> list) {
           children: [
               createRowData(
                   "Tracks",
-                  Text("${NumberFormat("#,###", "en_US").format(list.length)}")),
+                  Text(
+                      "${NumberFormat("#,###", "en_US").format(list.length)}")),
               SizedBox(
                 height: 4.0,
               ),
@@ -239,7 +240,8 @@ Widget widgetHeaderPlaylistsList(List<PlaylistSimple> list, UserPublic me) {
           children: [
               createRowData(
                   "Playlists",
-                  Text("${NumberFormat("#,###", "en_US").format(list.length)}")),
+                  Text(
+                      "${NumberFormat("#,###", "en_US").format(list.length)}")),
               SizedBox(
                 height: 4.0,
               ),
@@ -297,6 +299,11 @@ int playlistsPrivate(List<PlaylistSimple> list) {
     }
   }
   return total;
+}
+
+String getArtists(Track track) {
+  var str = track.artists.map((e) => e.name).toString();
+  return str.substring(1, str.length - 1);
 }
 
 int playlistsCollab(List<PlaylistSimple> list) {

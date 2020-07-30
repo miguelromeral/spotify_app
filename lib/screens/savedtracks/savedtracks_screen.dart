@@ -76,23 +76,9 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
   }
 
   Widget _createWidgetHeader(SpotifyService state, List<Track> list) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: ProfilePicture(
-              size: 100.0,
-              user: state.myUser,
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: widgetHeaderTrackList(list),
-          ),
-        ],
-      ),
+    return ProfilePicture(
+      size: 100.0,
+      user: state.myUser,
     );
   }
 

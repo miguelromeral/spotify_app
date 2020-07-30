@@ -71,29 +71,15 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
   }
 
   Widget _createWidgetHeader(List<Track> list) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Hero(
-              tag: widget.playlist.id,
-              child: SizedBox(
-                height: 100.0,
-                width: 100.0,
-                child: PlaylistImage(
-                  playlist: widget.playlist,
-                  size: 25.0,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: widgetHeaderTrackList(list),
-          ),
-        ],
+    return Hero(
+      tag: widget.playlist.id,
+      child: SizedBox(
+        height: 100.0,
+        width: 100.0,
+        child: PlaylistImage(
+          playlist: widget.playlist,
+          size: 25.0,
+        ),
       ),
     );
   }

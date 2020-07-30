@@ -84,7 +84,7 @@ class _TrackItemState extends State<TrackItem> {
     ));
     list.add(SizedBox(height: 4.0));
     list.add(Text(
-      "${widget.track.artists[0].name}",
+      "${getArtists(widget.track)}",
       style: styleFeedTrack,
     ));
     list.add(SizedBox(height: 4.0));
