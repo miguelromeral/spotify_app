@@ -169,6 +169,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
   }
 
   Widget _createHeaderUser(SpotifyService state) {
+    var myUser = state.myUser;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -178,9 +179,12 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ProfilePicture(
-                user: state.myUser,
-                size: 100.0,
+              Hero(
+                tag: myUser.id,
+                child: ProfilePicture(
+                  user: myUser,
+                  size: 100.0,
+                ),
               ),
               IconButton(
                 icon: Icon(Icons.settings),
@@ -197,14 +201,14 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
             height: 16.0,
           ),
           Text(
-            state.myUser.displayName,
+            myUser.displayName,
             style: styleCardContent,
           ),
           SizedBox(
             height: 8.0,
           ),
           Text(
-            state.myUser.email,
+            myUser.email,
             style: styleCardHeader,
           ),
         ],

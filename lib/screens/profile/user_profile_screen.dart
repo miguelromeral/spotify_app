@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
+import 'package:ShareTheMusic/_shared/following/following_item.dart';
+import 'package:ShareTheMusic/_shared/following/following_list.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
@@ -87,7 +89,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       CardInfo(
                         title: 'Latest Suggestion Total Likes',
-                        content: (suggestion != null ? NumberFormat("#,###", "en_US").format(suggestion.likes) : 'None'),
+                        content: (suggestion != null
+                            ? NumberFormat("#,###", "en_US")
+                                .format(suggestion.likes)
+                            : 'None'),
                       ),
                       StreamBuilder(
                         stream: state.following,
@@ -156,9 +161,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 padding: EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    ProfilePicture(
-                      user: user,
-                      size: 100.0,
+                    Hero(
+                      tag: user.id,
+                      child: ProfilePicture(
+                        user: user,
+                        size: 100.0,
+                      ),
                     ),
                   ],
                 ),
@@ -188,8 +196,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _buildContent(SpotifyService state) {
-    if(_noSug){
-      return ErrorScreen(title: "This user hasen't sent any suggestion yet", stringBelow: [''],);
+    if (_noSug) {
+      return ErrorScreen(
+        title: "This user hasen't sent any suggestion yet",
+        stringBelow: [''],
+      );
     }
 
     if (suggestion == null) {
@@ -205,12 +216,54 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         title: 'Loading Track...',
       );
     }
-
     return SuggestionItem(
       //user: widget.user,
       suggestion: suggestion,
       track: track,
     );
+/*
+    return Column(
+      children: [
+        SuggestionItem(
+          //user: widget.user,
+          suggestion: suggestion,
+          track: track,
+        ),
+        FutureBuilder(
+            future: state.getMyFollowing(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                var myFollowing = snapshot.data;
+                return FutureBuilder(
+                  future: state.getFollowers(suggestion.suserid),
+                  builder: (context, snp) {
+                    final list = snp.data;
+                    if (list == null) {
+                      return LoadingScreen();
+                    }
+
+                    return SizedBox(
+                      height: 500.0,
+                      child: ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            var item = list[index];
+                            return FollowingItem(
+                              key: Key(item.suserid),
+                              myFollowings: myFollowing,
+                              suserid: item.suserid,
+                              //following: item,
+                            );
+                          }),
+                    );
+                  },
+                );
+              } else {
+                return Text('unk');
+              }
+            }),
+      ],
+    );*/
   }
 
   Future<void> _getData() async {

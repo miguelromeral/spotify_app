@@ -28,17 +28,19 @@ The data is provided by the [Spotify API](https://developer.spotify.com/document
 
 * DEMO Version of the app to try it (not credentials needed)
 
+<img src="https://lh3.googleusercontent.com/Fgi5QOJ31XI7A7revgHEsD4TVzlOoHDLvgJTkkj89IOo8b6prQxDa7Xgc5QPig2Z2Dg=w1600-h734-rw" height="400px" width="auto">
+
 * Browse through your playlists
 
 <img src="https://lh3.googleusercontent.com/7lIriI3gH3qnYIsJDrymJnak9AnQu9XkcoeE8CxuxY5_Bt8d6ChDzeFhlT3i5Mrct60E=w1600-h734-rw" height="400px" width="auto">
 
 * Filter the track list 
 
-<img src="https://lh3.googleusercontent.com/eRpjs1sXn5CIK_K87ShFB0FOytWP-fZWC5H_KK-4sGVR1L4OuMCK08PfXV-hx-fEqQ=w1600-h734-rw" height="400px" width="auto">
+<img src="https://lh3.googleusercontent.com/XbDLnXizt07XpaAYX2q7wrsyjqUIzZEGoYeSSPX4uL9n0Aq0bm7-Md9lxOkCPVlRqKw=w1600-h734-rw" height="400px" width="auto">
 
 * Update your suggestion track
 
-
+<img src="https://lh3.googleusercontent.com/yQ90AFMbOB1ZpGN34siQYz9imeha6ZO1bgr57vjNGN3eaPMJrwKaBmutf2z9vBy-rmw=w1600-h734-rw" height="400px" width="auto">
 
 * Look for your Spotify friends and follow their suggestions
 

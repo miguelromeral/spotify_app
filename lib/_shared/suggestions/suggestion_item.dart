@@ -94,10 +94,13 @@ class _SuggestionItemState extends State<SuggestionItem> {
           onTap: () {
             navigateProfile(context, user);
           },
-          child: ProfilePicture(
-            key: Key(user.id),
-            user: user,
-            size: maxsize,
+          child: Hero(
+            tag: user.id,
+            child: ProfilePicture(
+              key: Key(user.id),
+              user: user,
+              size: maxsize,
+            ),
           ),
         ),
       );

@@ -76,9 +76,12 @@ class _FollowingItemState extends State<FollowingItem> {
                               onTap: () {
                                 navigateProfile(context, user);
                               },
-                              child: ProfilePicture(
-                                user: user,
-                                size: 50.0,
+                              child: Hero(
+                                tag: user.id,
+                                child: ProfilePicture(
+                                  user: user,
+                                  size: 60.0,
+                                ),
                               ),
                             ),
                           ),
@@ -156,7 +159,7 @@ class _FollowingItemState extends State<FollowingItem> {
         Text('Following: ${fol.followingCount}'),
       ],
     ));
-    /*list.add(Row(
+    list.add(Row(
       children: [
         MyIcon(
           icon: 'user_broadcast',
@@ -165,9 +168,19 @@ class _FollowingItemState extends State<FollowingItem> {
         SizedBox(
           width: 4.0,
         ),
-        Text('Followers: ${fol.followedBy}'),
+        FutureBuilder(
+          future: state.getFollowers(user.id),
+          builder: (context, snp){
+            String text = '?';
+            if(snp.hasData){
+              var list = snp.data;
+              text = list.length.toString();
+            }
+            return Text('Followers: $text');
+          },
+        ),
       ],
-    ));*/
+    ));
     return list;
   }
 

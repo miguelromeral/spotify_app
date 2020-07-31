@@ -34,12 +34,51 @@ void navigateAllUsers(BuildContext context) {
 
 void navigateProfile(BuildContext context, UserPublic user) {
   Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder: (context) => UserProfileScreen(
-              user: user,
-            )),
+      context,
+      FadeRoute(
+          page: UserProfileScreen(
+        user: user,
+      )));
+}
+
+Route createRoute(Widget widget) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => widget,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var tween = Tween(begin: begin, end: end);
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
   );
+}
+
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute({this.page})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
 }
 
 void showMyDialog(BuildContext context, String title, String subtitle) {
