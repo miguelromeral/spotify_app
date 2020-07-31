@@ -55,6 +55,7 @@ The data is provided by the [Spotify API](https://developer.spotify.com/document
 
 Version|Code|Changes
 --- | --- | ---
+0.1.4|5|Added followers list in profile screen
 0.1.3|4|Fixed bugs in DEMO version
 0.1.2|3|Stats added to playlist and track lists
 0.1.1|2|Demo Version Adapted
