@@ -4,6 +4,7 @@ import 'package:ShareTheMusic/_shared/app_logo.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progress_indicators/progress_indicators.dart';
@@ -43,6 +44,7 @@ class _AuthenticateState extends State<Authenticate> {
       });
     }
   }
+
 /*
   Future _answerLoginError() async {
     setState(() {
@@ -131,8 +133,8 @@ class _AuthenticateState extends State<Authenticate> {
                                       height: 16.0,
                                     ),
                                     RaisedButton(
-                                        child: Text(
-                                            "Try the app's DEMO version"),
+                                        child:
+                                            Text("Try the app's DEMO version"),
                                         textColor: Colors.white,
                                         color: colorThirdBackground,
                                         shape: RoundedRectangleBorder(
@@ -147,9 +149,8 @@ class _AuthenticateState extends State<Authenticate> {
                                           final spotify =
                                               SpotifyApi(mycredentials);
 
-                                          BlocProvider.of<ApiBloc>(context)
-                                              .add(UpdateApiEvent(
-                                                  newOne: spotify));
+                                          BlocProvider.of<ApiBloc>(context).add(
+                                              UpdateApiEvent(newOne: spotify));
 
                                           context
                                               .bloc<SpotifyBloc>()
@@ -176,17 +177,13 @@ class _AuthenticateState extends State<Authenticate> {
                                             'Click here to read the Privacy Policy'),
                                         textColor: Colors.white70,
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    WebViewContainer(
-                                                        'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
-                                                        "ShareTheTrack's Privacy Policy",
-                                                        (_) =>
-                                                            NavigationDecision
-                                                                .navigate)),
-                                          );
+                                          navigate(
+                                              context,
+                                              WebViewContainer(
+                                                  'https://github.com/miguelromeral/spotify_app/blob/master/PRIVACY-POLICY.md',
+                                                  "ShareTheTrack's Privacy Policy",
+                                                  (_) => NavigationDecision
+                                                      .navigate));
                                         }),
                                   ],
                                 ),
@@ -384,7 +381,7 @@ class _AuthenticateState extends State<Authenticate> {
           scopes: scopes,
           expiration: expiration,
         );
-      }else{
+      } else {
         return null;
       }
     } catch (e) {

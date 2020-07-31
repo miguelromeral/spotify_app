@@ -32,16 +32,12 @@ class TrackItem extends StatefulWidget {
 class _TrackItemState extends State<TrackItem> {
   @override
   Widget build(BuildContext context) {
-   return BlocBuilder<SpotifyBloc, SpotifyService>(
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
             try {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ShareTrack(track: widget.track)),
-              );
+              navigate(context, ShareTrack(track: widget.track));
             } catch (err) {
               print('Error when navigating from playlist: $err');
               Scaffold.of(context).showSnackBar(

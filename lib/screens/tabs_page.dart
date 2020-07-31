@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ShareTheMusic/_shared/animated_background.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -105,10 +106,7 @@ class _TabsPageState extends State<TabsPage> {
       if (type != "track") throw Exception("Only tracks available to share");
 
       Track track = await api.tracks.get(id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ShareTrack(track: track)),
-      );
+      navigate(context, ShareTrack(track: track));
     } catch (e) {
       print("Error while extracting song: $e.");
     }

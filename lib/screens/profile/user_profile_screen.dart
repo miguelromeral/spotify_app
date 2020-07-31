@@ -200,7 +200,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget _buildSuggestion(SpotifyService state) {
     if (_noSug) {
       return ErrorScreen(
-        title: "This user hasen't sent any suggestion yet",
+        title: "This user hasn't sent any suggestion yet",
         stringBelow: [''],
       );
     }
@@ -234,16 +234,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             myFollowing = snapshot.data;
           }
           if (myFollowing == null) {
-            return Text('unk');
+            return LoadingScreen();
           }
 
           return FutureBuilder(
             key: Key(myFollowing.containsUser(widget.user.id).toString()),
             future: state.getFollowers(widget.user.id),
             builder: (context, snp) {
+              if(snp.hasError){
+                return ErrorScreen(title: 'Problem while getting followers',);
+              }
+
               final list = snp.data;
               if (list == null) {
                 return LoadingScreen();
+              }
+
+              if(list.isEmpty){
+                return ErrorScreen(title: "This user doesn't have any followers yet",);
               }
 
               return SizedBox(

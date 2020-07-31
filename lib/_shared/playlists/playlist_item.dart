@@ -29,13 +29,8 @@ class PlaylistItem extends StatelessWidget {
           return GestureDetector(
             onTap: () async {
               try {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PlaylistTrackScreen(api: api.get(), playlist: playlist),
-                  ),
-                );
+                navigate(context,
+                    PlaylistTrackScreen(api: api.get(), playlist: playlist));
               } catch (err) {
                 print('Error when navigating from playlist: $err');
                 Scaffold.of(context).showSnackBar(

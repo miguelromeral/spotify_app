@@ -25,21 +25,16 @@ Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
   }
 }
 
-void navigateAllUsers(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => AllUsersScreen()),
-  );
+void navigate(BuildContext context, Widget child) {
+  Navigator.push(context, FadeRoute(page: child));
 }
 
-void navigateProfile(BuildContext context, UserPublic user) {
-  Navigator.push(
-      context,
-      FadeRoute(
-          page: UserProfileScreen(
-        user: user,
-      )));
-}
+void navigateAllUsers(BuildContext context) =>
+    navigate(context, AllUsersScreen());
+
+void navigateProfile(BuildContext context, UserPublic user) =>
+    navigate(context, UserProfileScreen(user: user));
+
 
 Route createRoute(Widget widget) {
   return PageRouteBuilder(
@@ -58,6 +53,8 @@ Route createRoute(Widget widget) {
   );
 }
 
+/// https://medium.com/flutter-community/everything-you-need-to-know-about-flutter-page-route-transition-9ef5c1b32823
+///
 class FadeRoute extends PageRouteBuilder {
   final Widget page;
   FadeRoute({this.page})

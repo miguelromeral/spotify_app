@@ -47,27 +47,13 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
                   height: 8.0,
                 ),
                 _buildSection(context, 'Discover Users', [
-                  /*_createTile(context, "Search Users", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchUserScreen()),
-                    );
-                  }, 'searchuser'),
-                  SizedBox(
-                    height: 8.0,
-                  ),*/
                   _createTile(context, "All Users", () {
                     navigateAllUsers(context);
                   }, 'allusers'),
                 ]),
                 _buildSection(context, 'Your Activity', [
                   _createTile(context, "My Suggestions", () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MySuggestionsScreen()),
-                    );
+                    navigate(context, MySuggestionsScreen());
                   }, 'mysugs'),
                 ]),
               ],
@@ -189,10 +175,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
               IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MySettingsScreen()),
-                  );
+                  navigate(context, MySettingsScreen());
                 },
               ),
             ],
@@ -231,10 +214,7 @@ class _MySpaceScreenState extends State<MySpaceScreen> {
             IconButton(
               icon: Icon(Icons.settings),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MySettingsScreen()),
-                );
+                navigate(context, MySettingsScreen());
               },
             ),
           ],

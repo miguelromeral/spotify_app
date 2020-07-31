@@ -87,18 +87,7 @@ class ErrorScreen extends StatelessWidget {
   List<Widget> _getContentBelow() {
     if (below == null) {
       if (stringBelow == null) {
-        return [
-          Text(
-            "We couldn't load this part of the app.",
-            style: _styleErrorBellow,
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            "Please, try again later.",
-            style: _styleErrorBellow,
-            textAlign: TextAlign.center,
-          ),
-        ];
+        return List();
       } else {
         return stringBelow
             .map((e) => Text(
