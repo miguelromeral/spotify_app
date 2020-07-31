@@ -81,16 +81,20 @@ class _FollowingButtonState extends State<FollowingButton> {
     if (!state.firebaseUserIdEquals(widget.userFollowing.fuserid)) {
       if (currentlyFollowing) {
         await state.removeFollowing(widget.myFollowings, widget.user.id);
+        print("Unfollowing ${widget.user.id}");
         //Scaffold.of(context).showSnackBar(SnackBar(
         //    content: Text('You no longer follow ${widget.user.displayName}!')));
       } else {
         await state.addFollowing(widget.myFollowings, widget.user.id);
+        print("Following ${widget.user.id}");
+        
         //Scaffold.of(context).showSnackBar(SnackBar(
         //    content: Text('You followed ${widget.user.displayName}!')));
       }
 
       sb.add(UpdateFollowing());
       hb.add(UpdateFeedHomeEvent(suggestions: await state.getsuggestions()));
+      print("Updated Following and Feed");
     } else {
       Scaffold.of(context).showSnackBar(
           SnackBar(content: Text('You Can Not Unfollow Yourself!')));
