@@ -3,10 +3,11 @@ import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 
+// Opens a track in Spotify app
 class PopupItemOpenTrack extends PopupItemBase {
   Track track;
 
-  PopupItemOpenTrack({this.track})
+  PopupItemOpenTrack({@required this.track})
       : super(
           icon: 'spotify',
           text: 'Listen in Spotify',

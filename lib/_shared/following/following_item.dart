@@ -1,5 +1,6 @@
 import 'package:ShareTheMusic/_shared/following/following_button.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
+import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
@@ -17,45 +18,35 @@ import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
+/// Widget to show Following info for one user
 class FollowingItem extends StatefulWidget {
   final Key key;
+
+  /// Following info for the current user
   final Following myFollowings;
-  //final Following following;
+
+  /// Spotify User ID
   final String suserid;
 
-  FollowingItem({this.myFollowings, /*this.following,*/ this.suserid, this.key})
-      : super(key: key);
+  FollowingItem({this.myFollowings, this.suserid, this.key}) : super(key: key);
 
   @override
   _FollowingItemState createState() => _FollowingItemState();
 }
 
 class _FollowingItemState extends State<FollowingItem> {
-  bool liked;
-
-  bool get currentlyFollowing =>
-      widget.myFollowings.usersList.contains(widget.suserid);
-
-  @override
-  void initState() {
-    liked = false;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _newListTile(context);
-  }
-
-  Widget _newListTile(BuildContext context) {
     return BlocBuilder<ApiBloc, MyApi>(
       builder: (context, api) =>
           BlocBuilder<SpotifyBloc, SpotifyService>(builder: (context, state) {
+        // Get the Firestore data for this user.
         return FutureBuilder(
           future: state.getFollowingBySpotifyUserID(widget.suserid),
           builder: (context, snp) {
             if (snp.hasData) {
               Following fol = snp.data;
+              // Once we get our following info, we retrieve the Spotify User info.
               return FutureBuilder(
                   future: api.getUser(widget.suserid),
                   builder: (context, snapshot) {
@@ -64,18 +55,17 @@ class _FollowingItemState extends State<FollowingItem> {
                       return Container(
                         margin: EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 8.0),
-                        decoration: BoxDecoration(
-                          color: colorAccent.withAlpha(150),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
+                        decoration: followingBoxDecoration,
                         child: CustomListTile(
                           key: Key(widget.suserid),
+                          // Profile Picture
                           leadingIcon: Container(
                             padding: EdgeInsets.all(2.0),
                             child: GestureDetector(
                               onTap: () {
                                 navigateProfile(context, user);
                               },
+                              // Animation for next screen
                               child: Hero(
                                 tag: user.id,
                                 child: ProfilePicture(
@@ -85,6 +75,7 @@ class _FollowingItemState extends State<FollowingItem> {
                               ),
                             ),
                           ),
+                          // Following button in case it's not your own user.
                           trailingIcon: Container(
                             padding: EdgeInsets.all(2.0),
                             child: FollowingButton(
@@ -94,27 +85,42 @@ class _FollowingItemState extends State<FollowingItem> {
                               userFollowing: fol,
                             ),
                           ),
+                          // Card info
                           content: _createContent(user),
+                          // Following info
                           bottomIcons:
                               _createBottomBar(fol, context, state, user),
+                          // Menu buttons
                           menuItems: _getActions(state, user),
                         ),
                       );
                     } else if (snapshot.hasError) {
-                      return ErrorScreen(
-                        title: "Couldn't get the user info",
+                      // Not connection with Spotify API for user
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        decoration: errorDecoration,
+                        child: CustomListTile(
+                          leadingIcon: netErrorIcon,
+                          content: [
+                            Text("Couldn't get info for user:"),
+                            Text(widget.suserid),
+                          ],
+                          key: Key(widget.suserid),
+                        ),
                       );
                     } else {
-                      /*return LoadingScreen(
-                        title: 'Loading User...',
-                      );*/
                       return Center(child: CircularProgressIndicator());
                     }
                   });
+            } else if (snp.hasError) {
+              // No single following info retrieved from Firestore
+              return ErrorScreen(
+                collapsed: true,
+                title: 'Not User Following Info',
+                stringBelow: ["Please, try again later"],
+              );
             } else {
-              /*return LoadingScreen(
-                title: 'Loading User...',
-              );*/
               return Center(child: CircularProgressIndicator());
             }
           },
@@ -123,74 +129,77 @@ class _FollowingItemState extends State<FollowingItem> {
     );
   }
 
+  // Content of the custom tile
   List<Widget> _createContent(UserPublic user) {
     return [
+      // Display Name
       Container(
-        //color: Colors.green,
         child: Text(
           user.displayName,
           style: styleFeedTitle,
         ),
       ),
       SizedBox(height: 4.0),
+      // Spotify User ID
       Container(
-        //color: Colors.yellow[100],
         child: Text(
           "ID: ${widget.suserid}",
-          style: TextStyle(color: Colors.black),
+          style: styleFeedTrack,
         ),
       ),
     ];
   }
 
+  // Bottom bar to show following info activity
   List<Widget> _createBottomBar(Following fol, BuildContext context,
       SpotifyService state, UserPublic user) {
-    List<Widget> list = List();
+    return [
+      // Number of users who follow
+      Row(
+        children: [
+          MyIcon(
+            icon: 'user',
+            size: 20.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
+          Text('Following: ${fol.followingCount}'),
+        ],
+      ),
 
-    list.add(Row(
-      children: [
-        MyIcon(
-          icon: 'user',
-          size: 20.0,
-        ),
-        SizedBox(
-          width: 4.0,
-        ),
-        Text('Following: ${fol.followingCount}'),
-      ],
-    ));
-    list.add(Row(
-      children: [
-        MyIcon(
-          icon: 'user_broadcast',
-          size: 20.0,
-        ),
-        SizedBox(
-          width: 4.0,
-        ),
-        FutureBuilder(
-          future: state.getFollowers(user.id),
-          builder: (context, snp){
-            String text = '?';
-            if(snp.hasData){
-              var list = snp.data;
-              text = list.length.toString();
-            }
-            return Text('Followers: $text');
-          },
-        ),
-      ],
-    ));
-    return list;
+      // Number of followers this user has
+      Row(
+        children: [
+          MyIcon(
+            icon: 'user_broadcast',
+            size: 20.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
+          FutureBuilder(
+            future: state.getFollowers(user.id),
+            builder: (context, snp) {
+              String text = '?';
+              if (snp.hasData) {
+                var list = snp.data;
+                text = list.length.toString();
+              }
+              return Text('Followers: $text');
+            },
+          ),
+        ],
+      )
+    ];
   }
 
+  // Menu Buttons
   List<PopupMenuItem<PopupItemBase>> _getActions(
       SpotifyService state, UserPublic user) {
-    List<PopupMenuItem<PopupItemBase>> list = List();
-
-//    list.add(PopupItem.createFollowUserOption(user, currentlyFollowing, _followUnfollowCallback(state)));
-    list.add(PopupItemOpenUser(user: user).create());
-    list.add(PopupItemOpenProfile(user: user).create());
-    return list;
+    return [
+      PopupItemOpenUser(user: user).create(),
+      PopupItemOpenProfile(user: user).create(),
+    ];
   }
 }

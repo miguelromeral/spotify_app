@@ -15,31 +15,45 @@ import 'package:ShareTheMusic/blocs/track_list_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 
+/// Screen to show all the playlist items.
 class PlaylistsScreen extends StatefulWidget {
   final Key key;
+
+  /// Title of the screen
   final String title;
+
+  /// List of playlists to show
   final List<PlaylistSimple> list;
-  final Widget widget;
+
+  /// widget header to show at the left of the sliver app bar
+  final Widget header;
+
+  /// Indicates if the screen is still loading
   final bool loading;
 
-  PlaylistsScreen({this.key, this.list, this.title, this.widget, this.loading});
+  PlaylistsScreen(
+      {this.key, @required this.list, this.title, this.header, this.loading});
 
   @override
   _PlaylistsScreenState createState() => _PlaylistsScreenState();
 }
 
 class _PlaylistsScreenState extends State<PlaylistsScreen> {
+  // Bloc to manage the playlist items.
   PlaylistBloc tlb;
-
-  BuildContext _context;
-  TextEditingController _textController;
-  bool _textEmpty = true;
+  // Search bloc to allow the playlist filter the results
   SearchBloc<PlaylistSimple> sb;
+
+  TextEditingController _textController;
+  // Indicates if the text field is empty
+  bool _textEmpty = true;
 
   @override
   void initState() {
+    // Initialize the bloc
     tlb = PlaylistBloc(widget.list);
 
+    // Listen when the text field is empty or not
     _textController = TextEditingController();
     _textController.addListener(() {
       setState(() {
@@ -47,6 +61,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
       });
     });
 
+    // Search criteria for the bloc
     sb = SearchBloc(
       searcher: tlb,
       filter: (PlaylistSimple str, String query) =>
@@ -57,19 +72,31 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     super.initState();
   }
 
-  Future<void> _getData() async {
-    if (_context != null) {
-      RefreshListNotification().dispatch(_context);
-      await Future.delayed(Duration(seconds: 10));
-    }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SpotifyBloc, SpotifyService>(
+      builder: (context, state) => Scaffold(
+        backgroundColor: Colors.transparent,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxScrolled) => [
+            _buildSliverAppBar(context, state),
+          ],
+          // Refresh the playlist by pulling the list
+          body: RefreshIndicator(
+            onRefresh: () => _getData(context),
+            child: _buildBody(),
+          ),
+        ),
+      ),
+    );
   }
 
+  // Build the sliver app bar content
   Widget _buildSliverAppBar(BuildContext context, SpotifyService state) {
     return SliverAppBar(
       title: Text(widget.title),
       centerTitle: true,
       backgroundColor: Colors.transparent,
-      //expandedHeight: MediaQuery.of(context).size.height / 3,
       expandedHeight: 300.0,
       floating: false,
       pinned: false,
@@ -78,6 +105,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
         background: _buildAppBar(context, state),
       ),
       actions: [
+        // Allow to filter the results only when the list is not empty
         (widget.list != null && widget.list.isNotEmpty
             ? PopupMenuButton<String>(
                 onSelected: (String value) {
@@ -100,63 +128,35 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     );
   }
 
+  // Content of the flexible space in the sliver app bar
   Widget _buildAppBar(BuildContext context, SpotifyService state) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
+            // Space to avoid the title of the screen
             SizedBox(
               height: 50.0,
             ),
-            (widget.list != null || widget.list.isNotEmpty
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: TextField(
-                          controller: _textController,
-                          showCursor: true,
-                          onChanged: sb.onSearchQueryChanged,
-                          decoration: new InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(100.0),
-                            ),
-                            filled: false,
-                            hintStyle: new TextStyle(color: Colors.grey[800]),
-                            hintText: "Search playlists by name or owner",
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: (_textEmpty
-                            ? Container()
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () {
-                                  _textController.clear();
-                                  sb.onSearchQueryChanged('');
-                                },
-                              )),
-                      ),
-                    ],
-                  )
-                : Container()),
+            // Search TextField
+            getSearchTextField(widget.list, _textController, _textEmpty,
+                "Search playlists by name or owner", sb),
+
             Container(
               padding: EdgeInsets.all(16.0),
               child: Row(
                 children: [
+                  // Header of the screen
                   Expanded(
                     flex: 1,
                     child:
-                        (widget.widget != null ? widget.widget : Container()),
+                        (widget.header != null ? widget.header : Container()),
                   ),
+                  // Stats of the results
                   Expanded(
                     flex: 1,
+                    // Stream to listen to any changes in the list when filtering.
                     child: StreamBuilder<List<PlaylistSimple>>(
                         stream: tlb.filteredData,
                         builder: (context, snapshot) {
@@ -177,6 +177,7 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     );
   }
 
+  // Action when sorting the list
   Future choiceAction(String choice) async {
     if (choice == ConstantsOrderOptions.PlaylistName) {
       tlb.add(OrderPlaylistName());
@@ -185,53 +186,21 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    /*return Scaffold(
-      body: Center(child: widget.widget),
-    );*/
-    if (_context == null) {
-      _context = context;
-    }
-
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) => Scaffold(
-        backgroundColor: Colors.transparent,
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxScrolled) => [
-            _buildSliverAppBar(context, state),
-          ],
-          body: RefreshIndicator(
-            onRefresh: _getData,
-            child: _buildBody(),
-          ),
-          /*slivers: <Widget>[
-              _buildBody(),
-            ],*/
-        ),
-      ),
-    );
-  }
-
+  // Build the body of the list
   Widget _buildBody() {
+    // If it's not the final list, show loading screen.
     if (widget.loading != null && widget.loading == true) {
-      return LoadingScreen();
+      return LoadingScreen(
+        title: 'Loading Playlists...',
+      );
     }
 
+    // Stream to listen to any changes in list.
     return StreamBuilder<List<PlaylistSimple>>(
       stream: tlb.filteredData,
       builder: (context, snapshot) {
-        /*if (!snapshot.hasData) {
-          if (widget.list == null) return LoadingScreen();
-          if (widget.list.isEmpty == null)
-            return ErrorScreen(
-              title: 'No tracks found here',
-            );
-        }*/
-        if (widget.list == null || widget.list.isEmpty) {
-          /*return SliverToBoxAdapter(
-            child: LoadingScreen(),
-          );*/
+        // Error message if not list at all
+        if (widget.list == null || widget.list.isEmpty || snapshot.hasError) {
           return ErrorScreen(
             title: 'No Playlists Found Here',
             stringBelow: [
@@ -240,6 +209,8 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
             ],
           );
         }
+
+        // Get the filtered list.
         final list = snapshot.data;
         if (list == null) {
           return LoadingScreen();
@@ -260,5 +231,14 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
         );
       },
     );
+  }
+
+  // Refresh callback. When the user pulls down the list.
+  Future<void> _getData(BuildContext context) async {
+    // Context required in order to dispatch the refresh
+    if (context != null) {
+      RefreshListNotification().dispatch(context);
+      await Future.delayed(Duration(seconds: 10));
+    }
   }
 }

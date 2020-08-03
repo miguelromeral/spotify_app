@@ -13,26 +13,28 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 
 import '../custom_listtile.dart';
 
+/// Playlist item in lists
 class PlaylistItem extends StatelessWidget {
+  /// Playlist to show
+  final PlaylistSimple playlist;
+
   const PlaylistItem({
     Key key,
     @required this.playlist,
   }) : super(key: key);
-
-  final PlaylistSimple playlist;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ApiBloc, MyApi>(
       builder: (context, api) => BlocBuilder<SpotifyBloc, SpotifyService>(
         builder: (context, state) {
+          // When tapped, go to navigate its tracks
           return GestureDetector(
             onTap: () async {
               try {
                 navigate(context,
                     PlaylistTrackScreen(api: api.get(), playlist: playlist));
               } catch (err) {
-                print('Error when navigating from playlist: $err');
                 Scaffold.of(context).showSnackBar(
                     SnackBar(content: Text("Couldn't open the playlist.")));
               }
@@ -45,10 +47,13 @@ class PlaylistItem extends StatelessWidget {
   }
 
   Container _buildTile() {
+    // Set a full container to allow the gesture detector listen to any tap throughout the tile.
+    // otherwise, it only be possible to be tapped in the texts.
     return Container(
       color: Colors.transparent,
       child: CustomListTile(
         key: Key(playlist.id),
+        // Playlist Image
         leadingIcon: Container(
           width: 60.0,
           height: 60.0,
@@ -56,20 +61,22 @@ class PlaylistItem extends StatelessWidget {
             tag: playlist.id,
             child: PlaylistImage(
               playlist: playlist,
-              size: 25.0,
             ),
           ),
         ),
         content: [
+          // Playlist name
           Text('${(playlist.collaborative ? '🔘 ' : '')}${playlist.name}',
               style: styleFeedTitle),
           SizedBox(
             height: 4.0,
           ),
+          // Playlist owner
           Text('by ${playlist.owner.displayName}', style: styleFeedTrack),
           SizedBox(
             height: 4.0,
           ),
+          // Public or private
           Text(playlist.public ? 'Public' : '🔒 Private',
               style: styleFeedTrack),
         ],
@@ -81,7 +88,6 @@ class PlaylistItem extends StatelessWidget {
   List<PopupMenuItem<PopupItemBase>> _getActions() {
     return [
       PopupItemOpenPlaylist(playlist: playlist).create(),
-      //PopupItemUpdateSuggestion(track: widget.track).create(),
     ];
   }
 }

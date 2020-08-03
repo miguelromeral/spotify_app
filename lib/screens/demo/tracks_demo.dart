@@ -75,7 +75,6 @@ class _SavedTracksDemoState extends State<SavedTracksDemo> {
       width: 100.0,
       child: PlaylistImage(
         playlist: _playlist,
-        size: 25.0,
       ),
     );
   }

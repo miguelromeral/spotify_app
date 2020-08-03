@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/playlists/playlist_item.dart';
@@ -7,7 +7,9 @@ import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
+/// List of playlist items
 class PlaylistList extends StatefulWidget {
+
   final List<PlaylistSimple> tracks;
   final String title;
   final bool refresh;
@@ -78,3 +80,4 @@ class _PlaylistListState extends State<PlaylistList> {
   }
 }
 
+*/

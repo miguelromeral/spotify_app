@@ -78,7 +78,7 @@ class _MyPlaylistsScreenState extends State<MyPlaylistsScreen> {
       key: Key(liked.hashCode.toString()),
       list: l,
       title: 'My Playlists',
-      widget: _createWidgetHeader(state, _list),
+      header: _createWidgetHeader(state, _list),
       loading: loading,
     );
   }

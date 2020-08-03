@@ -4,12 +4,13 @@ import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_base.dart';
 import 'package:ShareTheMusic/screens/share_track/share_track.dart';
 
+/// Navigate to the share track screen to update your suggestion.
 class PopupItemUpdateSuggestion extends PopupItemBase {
   Track track;
 
-  PopupItemUpdateSuggestion({this.track})
+  PopupItemUpdateSuggestion({@required this.track})
       : super(
-          icon: 'add',
+          icon: 'mysugs',
           text: 'Update Suggestion',
         );
 

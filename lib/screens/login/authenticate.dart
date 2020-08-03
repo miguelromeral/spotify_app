@@ -84,9 +84,9 @@ class _AuthenticateState extends State<Authenticate> {
                         content: Text(
                             ));
                     _scaffoldKey.currentState.showSnackBar(sb);*/
-                    _showSnackBar(
+                    /*_showSnackBar(
                         'Your session has expired. Please, log in manually.',
-                        context);
+                        context);*/
                     //Scaffold.of(context).showSnackBar(sb);
                   }
                   return Scaffold(

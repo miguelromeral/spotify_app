@@ -1,6 +1,7 @@
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/following_bloc.dart';
+import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
@@ -10,31 +11,41 @@ import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_bloc.dart';
 
+/// List that shows and manage all following info
 class FollowingList extends StatefulWidget {
   final Key key;
+
+  /// List of following to show
   final List<Following> list;
+
+  /// Indicates if the list passed is the final list or if it
+  /// has to be updated, so meanwhile show a loading screen
   final bool loading;
 
-  FollowingList({this.list, this.loading, this.key}) : super(key: key);
+  FollowingList({this.list, @required this.loading, this.key})
+      : super(key: key);
 
   @override
   _FollowingListState createState() => _FollowingListState();
 }
 
 class _FollowingListState extends State<FollowingList> {
+  // Bloc that manages the following search
   FollowingBloc fb;
+  // Search Bloc, allows to use filters
+  SearchBloc<Following> sb;
 
-  BuildContext _context;
   TextEditingController _textController;
   bool _textEmpty = true;
-  SearchBloc<Following> sb;
 
   @override
   void initState() {
     super.initState();
 
+    // Initialize the following bloc
     fb = FollowingBloc(widget.list);
 
+    // Listen when the textfield is not empty so as to show a delete icon if not.
     _textController = TextEditingController();
     _textController.addListener(() {
       setState(() {
@@ -42,6 +53,7 @@ class _FollowingListState extends State<FollowingList> {
       });
     });
 
+    // Filters for this list.
     sb = SearchBloc(
       searcher: fb,
       filter: (Following str, String query) =>
@@ -52,13 +64,6 @@ class _FollowingListState extends State<FollowingList> {
 
   @override
   Widget build(BuildContext context) {
-    if (_context == null) {
-      _context = context;
-    }
-
-    /*var bloc = BlocProvider.of<SpotifyBloc>(context);
-    return _buildTree(bloc);*/
-
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) => Scaffold(
         backgroundColor: Colors.transparent,
@@ -77,7 +82,6 @@ class _FollowingListState extends State<FollowingList> {
       title: Text('ShareTheTrack Users'),
       centerTitle: true,
       backgroundColor: Colors.transparent,
-      //expandedHeight: MediaQuery.of(context).size.height / 3,
       expandedHeight: 300.0,
       floating: false,
       pinned: false,
@@ -86,6 +90,7 @@ class _FollowingListState extends State<FollowingList> {
         background: _buildAppBar(context),
       ),
       actions: [
+        // Sort list items if not empty
         (widget.list != null && widget.list.isNotEmpty
             ? PopupMenuButton<String>(
                 onSelected: (String value) {
@@ -116,16 +121,23 @@ class _FollowingListState extends State<FollowingList> {
     if (widget.list == null || widget.list.isEmpty) {
       return ErrorScreen(
         title: 'No Users Found Here',
+        stringBelow: ["Please, try again later"],
       );
     }
-    final list = widget.list;
-    if (list == null) {
-      return LoadingScreen();
-    }
 
+    // From all the list of followings that we have, get ours,
+    // so we can see wether we are following a user or not.
     Following myFollowings = widget.list
         .firstWhere((element) => element.fuserid == state.myFirebaseUserId);
 
+    // We must have our info, if not, prevent the user to see the whole list.
+    if (myFollowings == null)
+      return ErrorScreen(
+        title: "Problem while getting your following info",
+        stringBelow: ["Please, try again later"],
+      );
+
+    // Listen to changes in search criteria
     return StreamBuilder<List<Following>>(
         stream: fb.filteredData,
         builder: (context, snapshot) {
@@ -133,6 +145,11 @@ class _FollowingListState extends State<FollowingList> {
           if (list == null) {
             return LoadingScreen();
           }
+
+          if (list.isEmpty)
+            return ErrorScreen(
+              title: "No users with the info provided",
+            );
 
           return ListView.builder(
               itemCount: list.length,
@@ -154,46 +171,14 @@ class _FollowingListState extends State<FollowingList> {
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
+            // Space to avoid being behind the Scaffold title
             SizedBox(
               height: 50.0,
             ),
-            (widget.list != null || widget.list.isNotEmpty
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: TextField(
-                          controller: _textController,
-                          showCursor: true,
-                          onChanged: sb.onSearchQueryChanged,
-                          decoration: new InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(100.0),
-                            ),
-                            filled: false,
-                            hintStyle: new TextStyle(color: Colors.grey[800]),
-                            hintText: "Search users by name or ID",
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: (_textEmpty
-                            ? Container()
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () {
-                                  _textController.clear();
-                                  sb.onSearchQueryChanged('');
-                                },
-                              )),
-                      ),
-                    ],
-                  )
-                : Container()),
+            // TextField if the list is not null
+            getSearchTextField(widget.list, _textController, _textEmpty,
+                "Search users by name or ID", sb),
+            // Rest of the header
             Expanded(
                 child: Container(
                     child: Center(
@@ -205,6 +190,7 @@ class _FollowingListState extends State<FollowingList> {
     );
   }
 
+  // Filter the list with the proper option choosen
   Future choiceAction(String choice) async {
     if (choice == ConstantsOrderOptionsFollowing.FollowingName) {
       fb.add(OrderUsersNameEvent());

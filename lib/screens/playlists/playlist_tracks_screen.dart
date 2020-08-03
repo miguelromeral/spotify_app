@@ -78,7 +78,6 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
         width: 100.0,
         child: PlaylistImage(
           playlist: widget.playlist,
-          size: 25.0,
         ),
       ),
     );

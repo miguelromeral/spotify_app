@@ -9,6 +9,7 @@ const kShrineErrorRed = const Color(0xFFC5032B);
 const kShrineSurfaceWhite = const Color(0xFFFFFBFA);
 const kShrineBackgroundWhite = Colors.white;
 
+Color colorErrorCard = Colors.red[500];
 Color colorAccent = Colors.green[500];
 Color colorPrimary = Colors.green[900];
 Color colorBackground = Colors.black;
