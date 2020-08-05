@@ -23,13 +23,18 @@ import 'package:ShareTheMusic/models/suggestion.dart';
 
 import '../custom_listtile.dart';
 
+/// Widget that shows a suggestion in a list
 class SuggestionItem extends StatefulWidget {
+  /// Track of the suggestion
   final Track track;
-  final UserPublic user;
-  final Suggestion suggestion;
-  final key;
 
-  SuggestionItem({this.track, this.user, this.suggestion, this.key})
+  /// User who sent the suggestion
+  final UserPublic user;
+
+  /// Suggestion data
+  final Suggestion suggestion;
+
+  SuggestionItem({this.track, this.user, this.suggestion, Key key})
       : super(key: key);
 
   @override
@@ -37,28 +42,41 @@ class SuggestionItem extends StatefulWidget {
 }
 
 class _SuggestionItemState extends State<SuggestionItem> {
-  bool liked;
-
-  @override
-  void initState() {
-    liked = false;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SpotifyBloc, SpotifyService>(
       builder: (context, state) {
-        return _createTile(widget.track, widget.user, widget.suggestion);
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          decoration: BoxDecoration(
+            color: colorBackground.withAlpha(175),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: CustomListTile(
+            key: Key(widget.suggestion.suserid),
+            // Left Icon
+            leadingIcon: _createLeadingIcon(widget.user, widget.track),
+            // Right Icon
+            trailingIcon: _createTrailingIcon(widget.user, widget.track),
+            // Content
+            content: _content(),
+            // Bottom icons
+            bottomIcons: _createBottomBar(context, state),
+            // Menu items
+            menuItems: _getActions(widget.track, widget.user, widget.suggestion,
+                state.mySpotifyUserId, state),
+          ),
+        );
       },
     );
   }
 
+  /// Set the actions in the popup menu item
   List<PopupMenuItem<PopupItemBase>> _getActions(Track track, UserPublic user,
       Suggestion suggestion, String mySpotifyUserId, SpotifyService state) {
     List<PopupMenuItem<PopupItemBase>> list = List();
-
     list.add(PopupItemOpenTrack(track: track).create());
+    // If it's not my suggestion, show the vote action
     if (suggestion.suserid != mySpotifyUserId) {
       list.add(PopupItemVote(track: track, suggestion: suggestion, state: state)
           .create());
@@ -67,6 +85,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
             shareContent: _getShareContent(), title: 'Share Suggestion')
         .create());
 
+    // Open the profile of the user if loged
     if (user != null && !state.demo) {
       list.add(PopupItemOpenProfile(user: user).create());
     }
@@ -74,6 +93,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
     return list;
   }
 
+  /// Text to share in the intent
   String _getShareContent() {
     if (widget.user == null) {
       return '${widget.track.name}, by ${widget.track.artists[0].name}';
@@ -82,14 +102,16 @@ class _SuggestionItemState extends State<SuggestionItem> {
     }
   }
 
+  /// Set the icon in the left of the tile
   Widget _createLeadingIcon(UserPublic user, Track track) {
     var maxsize = albumIconSize;
+    // If there's a user, show their profile picture
     if (user != null) {
       return Container(
         width: maxsize,
         height: maxsize,
         padding: EdgeInsets.all(2.0),
-        //color: Colors.red,
+        // If clicked, navigate to their profile screen
         child: GestureDetector(
           onTap: () {
             navigateProfile(context, user);
@@ -105,11 +127,11 @@ class _SuggestionItemState extends State<SuggestionItem> {
         ),
       );
     } else {
+      // If not user provided, show at the left the album cover
       return Container(
         width: maxsize,
         height: maxsize,
         padding: EdgeInsets.all(2.0),
-        //color: Colors.red,
         child: AlbumPicture(
           key: Key(track.album.id),
           showDuration: Settings.getValue<bool>(settingsTrackDuration, true),
@@ -120,14 +142,17 @@ class _SuggestionItemState extends State<SuggestionItem> {
     }
   }
 
+  /// Right icon in the tile
   Widget _createTrailingIcon(UserPublic user, Track track) {
     var maxsize = albumIconSize;
+
+    /// If there's a user, their profile will be shown at the left, so
+    /// then show the album cover at the right
     if (user != null) {
       return Container(
         width: maxsize,
         height: maxsize,
         padding: EdgeInsets.all(2.0),
-        //color: Colors.red,
         child: AlbumPicture(
           showDuration: Settings.getValue<bool>(settingsTrackDuration, true),
           track: track,
@@ -135,77 +160,29 @@ class _SuggestionItemState extends State<SuggestionItem> {
         ),
       );
     } else {
+      // if the cover is already shown at the left, nothing to show at the right
       return Container();
     }
   }
 
-  String _createTitle(Track track, UserPublic user) {
-    if (user != null) {
-      return user.displayName;
-    } else {
-      return track.name;
-    }
-  }
-
-  Widget _createSubtitle() {
-    if (widget.user != null) {
-      return RichText(
-          text: TextSpan(
-              // set the default style for the children TextSpans
-              style: styleFeedTrack,
-              children: [
-            TextSpan(
-              text: '${widget.track.name}',
-            ),
-            TextSpan(
-                text: ' - ${widget.track.artists[0].name}',
-                style: styleFeedArtist),
-          ]));
-    } else {
-      return Text('${widget.track.artists[0].name}', style: styleFeedTrack);
-    }
-  }
-
-  Widget _createTile(Track track, UserPublic user, Suggestion suggestion) {
-    return BlocBuilder<SpotifyBloc, SpotifyService>(
-      builder: (context, state) {
-        return Container(
-          margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          decoration: BoxDecoration(
-            color: colorBackground.withAlpha(175),
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: CustomListTile(
-            key: Key(suggestion.suserid),
-            leadingIcon: _createLeadingIcon(user, track),
-            trailingIcon: _createTrailingIcon(user, track),
-            content: _content(),
-            bottomIcons: _createBottomBar(context, state),
-            menuItems: _getActions(widget.track, widget.user, widget.suggestion,
-                state.mySpotifyUserId, state),
-          ),
-        );
-      },
-    );
-  }
+  /// Content of the list tile
 
   List<Widget> _content() {
     return [
       Container(
-        //color: Colors.green,
         child: _getFirstTitle(),
       ),
       _getSecondTitle(),
       SizedBox(height: 4.0),
       Container(
-        //color: Colors.yellow[100],
         child: _createSubtitle(),
       ),
       (widget.track.explicit ? SizedBox(height: 4.0) : Container()),
+      // Explicit badge
       (widget.track.explicit ? ExplicitBadge() : Container()),
       SizedBox(height: 4.0),
+      // Message from the user
       Container(
-        //color: Colors.yellow[200],
         child: Text(
           widget.suggestion.text,
           style: styleFeedContent,
@@ -214,6 +191,32 @@ class _SuggestionItemState extends State<SuggestionItem> {
     ];
   }
 
+  /// Title of the tile
+  String _createTitle(Track track, UserPublic user) {
+    if (user != null) {
+      return user.displayName;
+    } else {
+      return track.name;
+    }
+  }
+
+  /// Sub content of the tile
+  Widget _createSubtitle() {
+    if (widget.user != null) {
+      return RichText(
+          text: TextSpan(style: styleFeedTrack, children: [
+        TextSpan(
+          text: '${widget.track.name}',
+        ),
+        TextSpan(
+            text: ' - ${widget.track.artists[0].name}', style: styleFeedArtist),
+      ]));
+    } else {
+      return Text('${widget.track.artists[0].name}', style: styleFeedTrack);
+    }
+  }
+
+  /// Main title of the tile
   Widget _getFirstTitle() {
     if (widget.user != null) {
       return RichText(
@@ -222,6 +225,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
           style: styleFeedTitle,
           text: _createTitle(widget.track, widget.user),
         ),
+        // Show the time ago
         TextSpan(
             text:
                 '  (${timeago.format(widget.suggestion.date, locale: 'en_short')})',
@@ -235,6 +239,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
     }
   }
 
+  /// Second title of the tile
   Widget _getSecondTitle() {
     if (widget.user != null) {
       return Container();
@@ -246,10 +251,13 @@ class _SuggestionItemState extends State<SuggestionItem> {
     }
   }
 
+  /// Bottom bar with the icons
   List<Widget> _createBottomBar(BuildContext context, SpotifyService state) {
     List<Widget> list = List();
 
+    // If there's like counter, show it
     if (widget.suggestion.likes != null) {
+      // When tapped, vote for it
       list.add(GestureDetector(
         onTap: () async {
           vote(context, state, widget.suggestion, widget.track);
@@ -257,20 +265,17 @@ class _SuggestionItemState extends State<SuggestionItem> {
         child: Container(
           child: Row(
             children: [
+              // Vote Icon
               MyIcon(
                   icon: 'vote',
                   size: 15.0,
                   callback: () async {
-                    if (state.demo) {
-                      showMyDialog(context, "You can't Vote Songs in DEMO",
-                          "Please, log in with Spotify if you want to vote for this song.");
-                    } else {
-                      vote(context, state, widget.suggestion, widget.track);
-                    }
+                    vote(context, state, widget.suggestion, widget.track);
                   }),
               SizedBox(
                 width: 4.0,
               ),
+              // Likes counter
               ShowUp(
                 key: Key(
                     '${widget.suggestion.suserid}-${widget.suggestion.likes}'),
@@ -285,9 +290,9 @@ class _SuggestionItemState extends State<SuggestionItem> {
         width: 8.0,
       ));
     }
-
+    // Open in spotify icon
     list.add(Container(
-      padding: EdgeInsets.all(8.0),
+      //padding: EdgeInsets.all(8.0),
       child: MyIcon(
           icon: 'spotify',
           size: 15.0,
@@ -297,8 +302,9 @@ class _SuggestionItemState extends State<SuggestionItem> {
       width: 8.0,
     ));
 
+    // Share content button
     list.add(Container(
-      padding: EdgeInsets.all(8.0),
+      //padding: EdgeInsets.all(8.0),
       child: MyIcon(
           icon: 'share',
           size: 15.0,
@@ -308,6 +314,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
     return list;
   }
 
+  /// Print the number of likes formatted
   String _likesFormatted(int likes) {
     if (likes >= 1000000) {
       int miles = (likes / 1000000).truncate();

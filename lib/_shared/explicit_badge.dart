@@ -1,6 +1,7 @@
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:flutter/material.dart';
 
+/// Shows a explicit badge in the track info
 class ExplicitBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,6 @@ class ExplicitBadge extends StatelessWidget {
               fontSize: 10.0,
               fontStyle: FontStyle.italic,
               color: Colors.grey,
-              //fontWeight: FontWeight.bold,
             ),
           )),
     );

@@ -46,14 +46,14 @@ class _PlaylistTrackScreenState extends State<PlaylistTrackScreen> {
         list: List(),
         loading: tracks == null,
         title: widget.playlist.name,
-        widget: _createWidgetHeader(tracks),
+        header: _createWidgetHeader(tracks),
       );
     } else {
       return TrackListScreen(
         key: Key(tracks.length.toString()),
         list: filterLocalFiles(tracks),
         title: widget.playlist.name,
-        widget: _createWidgetHeader(tracks),
+        header: _createWidgetHeader(tracks),
       );
     }
   }

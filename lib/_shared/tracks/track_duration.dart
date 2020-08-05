@@ -1,10 +1,10 @@
-
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 
+/// Widget that prints the duration of a track given the duration in milliseconds
 class TrackDuration extends StatelessWidget {
-  
+  /// Duration in milliseconds
   final int duration;
 
   TrackDuration({

@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
+/// Loading screen to show while main content being loaded
 class LoadingScreen extends StatelessWidget {
+  /// Title of the screen
   final String title;
-  final List<Widget> below;
+  /// Secondary text of the screen
   final List<String> stringBelow;
+  /// Indicates if the content should be wrapped in a safe area
   final bool safeArea;
 
   LoadingScreen({
     Key key,
     this.title,
     this.stringBelow,
-    this.below,
     this.safeArea,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (safeArea != null && safeArea) {
+      // Wrap in a safe are if needed
       return Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: _buildContent(context),
-          //child: _buildContent(context),
         ),
       );
     } else {
@@ -30,13 +32,14 @@ class LoadingScreen extends StatelessWidget {
     }
   }
 
+  /// Build the main content of the loading screen
   Widget _buildContent(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FadingText(
-            _getTitle(),
+            mainTitle,
             style: _styleLoading,
           ),
           SizedBox(
@@ -48,22 +51,19 @@ class LoadingScreen extends StatelessWidget {
     );
   }
 
-  String _getTitle() => title ?? 'Loading...';
+  /// Main title of the screen. If not provided, set the default
+  String get mainTitle => title ?? 'Loading...';
 
+  /// Set descriptive details of the loading screen.
   List<Widget> _getContentBelow() {
-    if (below == null) {
-      if (stringBelow == null) {
-        return [
-          Text(
-            "Please, wait a moment.",
-          ),
-          //Text("Please, try again later."),
-        ];
-      } else {
-        return stringBelow.map((e) => Text(e)).toList();
-      }
+    if (stringBelow == null) {
+      return [
+        Text(
+          "Please, wait a moment.",
+        ),
+      ];
     } else {
-      return below;
+      return stringBelow.map((e) => Text(e)).toList();
     }
   }
 
@@ -72,3 +72,4 @@ class LoadingScreen extends StatelessWidget {
     fontWeight: FontWeight.bold,
   );
 }
+

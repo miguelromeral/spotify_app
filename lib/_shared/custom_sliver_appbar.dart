@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 import '../_shared/users/profile_picture.dart';
@@ -50,3 +50,4 @@ class CustomSliverAppBar extends StatelessWidget {
     }
   }
 }
+*/

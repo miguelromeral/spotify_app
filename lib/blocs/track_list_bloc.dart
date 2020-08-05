@@ -31,8 +31,6 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
 
   @override
   get onDataFiltered => _filteredData.add;
-  //get onDataFiltered => () => List<String>();
-  //Function(List<String> p1, String p2) get onDataFiltered => (list) => _filteredData.add(list);
 
   @override
   List<Track> get data => initialList;
@@ -43,9 +41,6 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
   @override
   Stream<List<Track>> mapEventToState(TrackBlocEvent event) async* {
     if (event is OrderTrackName) {
-      /*_order = _order == Order.name ? Order.nameReverse : Order.name;
-      initialList = _setOrder(initialList);
-      _filteredData.add(initialList);*/
       await _choiceAction(Order.name);
       yield initialList;
     } else if (event is OrderTrackArtist) {

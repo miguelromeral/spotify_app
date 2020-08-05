@@ -56,7 +56,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
 
             list.sort((one, two) => two.date.compareTo(one.date));
             return SuggestionsScreen(
-              widget: _buildWidgetHeader(),
+              header: _buildWidgetHeader(),
               title: 'My Suggestions',
               list: list,
               loading: false,
@@ -85,7 +85,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
             }*/
           } else {
             return SuggestionsScreen(
-              widget: _buildWidgetHeader(),
+              header: _buildWidgetHeader(),
               title: 'My Suggestions',
               list: List(),
               loading: true,
@@ -99,7 +99,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
       BlocProvider.of<SpotifyBloc>(context).add((UpdateMySuggestion()));
 
       return SuggestionsScreen(
-        widget: _buildWidgetHeader(),
+        header: _buildWidgetHeader(),
         title: 'My Suggestions',
         list: List(),
         loading: true,

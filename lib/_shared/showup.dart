@@ -31,15 +31,6 @@ class _ShowUpState extends State<ShowUp> with TickerProviderStateMixin {
             .animate(curve);
 
     anim();
-/*
-    if (widget.delay == null) {
-      _animController.forward();
-    } else {
-      Timer(Duration(milliseconds: widget.delay), () {
-        //_animController.forward();
-        anim();
-      });
-    }*/
   }
 
   Future anim() async {

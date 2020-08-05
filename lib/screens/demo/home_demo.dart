@@ -134,7 +134,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
       child: SuggestionsScreen(
         title: 'Public Suggestions (DEMO)',
         list: l,
-        widget: widget,
+        header: widget,
         loading: loading,
         api: api,
       ),

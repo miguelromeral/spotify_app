@@ -67,7 +67,7 @@ class _SavedTracksScreenState extends State<SavedTracksScreen> {
       loading = true;
     }
     return TrackListScreen(
-      widget: _createWidgetHeader(state, l),
+      header: _createWidgetHeader(state, l),
       key: Key(liked.hashCode.toString()),
       list: l,
       loading: loading,

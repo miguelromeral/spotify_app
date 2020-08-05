@@ -15,15 +15,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future vote(BuildContext context, SpotifyService state, Suggestion suggestion,
     Track track) async {
-  if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
-    await state.likeSuggestion(suggestion);
-
-    UpdatedFeedNotification().dispatch(context);
-
-    //Scaffold.of(context).showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
+  if (state.demo) {
+    showMyDialog(context, "You can't Vote Songs in DEMO",
+        "Please, log in with Spotify if you want to vote for this song.");
   } else {
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+    if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
+      await state.likeSuggestion(suggestion);
+
+      UpdatedFeedNotification().dispatch(context);
+
+      //Scaffold.of(context).showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+    }
   }
 }
 

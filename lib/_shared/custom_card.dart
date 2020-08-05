@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 
 class CustomCard extends StatefulWidget {
@@ -33,3 +33,4 @@ class _CustomCardState extends State<CustomCard> {
     });
   }
 }
+*/

@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: SuggestionsScreen(
         title: 'My Friends Suggestions',
-        widget: widget,
+        header: widget,
         //key: Key(l.hashCode.toString()),
         list: l,
         loading: loading,

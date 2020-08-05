@@ -11,7 +11,7 @@ import 'package:supercharged/supercharged.dart';
 
 class FancyBackgroundApp extends StatelessWidget {
 
-  Widget child;
+  final Widget child;
 
   FancyBackgroundApp({this.child});
 

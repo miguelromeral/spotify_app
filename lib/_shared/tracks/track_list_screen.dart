@@ -11,32 +11,46 @@ import 'package:ShareTheMusic/blocs/track_list_bloc.dart';
 import 'package:ShareTheMusic/screens/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 
+/// Creates the screen that shows a list of tracks
 class TrackListScreen extends StatefulWidget {
+  /// Key of this list of tracks
   final Key key;
+
+  /// Title of the screen
   final String title;
+
+  /// List of tracks to be shown
   final List<Track> list;
-  final Widget widget;
+
+  /// Header of the sliver app bar
+  final Widget header;
+
+  /// Loading indicator, if the content below (the list) is not final
   final bool loading;
 
-  TrackListScreen({this.key, this.list, this.title, this.widget, this.loading});
+  TrackListScreen({this.key, this.list, this.title, this.header, this.loading});
 
   @override
   _TrackListScreenState createState() => _TrackListScreenState();
 }
 
 class _TrackListScreenState extends State<TrackListScreen> {
+  /// Track list bloc that filters the bloc according user preferences
   TrackListBloc tlb;
 
-  BuildContext _context;
-  TextEditingController _textController;
-  bool _textEmpty = true;
+  /// Search bloc that uses the text filters in the lsit
   SearchBloc<Track> sb;
+
+  TextEditingController _textController;
+  // Indicates if the text field is empty
+  bool _textEmpty = true;
 
   @override
   void initState() {
-    //tlb = TrackListBloc(widget.list.map((e) => e.name).toList());
+    // Initializes the bloc with the original list
     tlb = TrackListBloc(widget.list);
 
+    // Listen to changes in the field
     _textController = TextEditingController();
     _textController.addListener(() {
       setState(() {
@@ -44,11 +58,13 @@ class _TrackListScreenState extends State<TrackListScreen> {
       });
     });
 
+    // Init the search using the filters
     sb = SearchBloc(
       searcher: tlb,
       filter: (Track str, String query) =>
           Filters.contains(str.name, query) ||
-          Filters.contains(str.artists[0].name, query) ||
+          Filters.contains(getArtists(str), query) ||
+//          Filters.contains(str.artists[0].name, query) ||
           Filters.contains(str.album.name, query),
     );
 
@@ -57,13 +73,6 @@ class _TrackListScreenState extends State<TrackListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /*return Scaffold(
-      body: Center(child: widget.widget),
-    );*/
-    if (_context == null) {
-      _context = context;
-    }
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: NestedScrollView(
@@ -71,29 +80,27 @@ class _TrackListScreenState extends State<TrackListScreen> {
           _buildSliverAppBar(context),
         ],
         body: RefreshIndicator(
-          onRefresh: _getData,
+          onRefresh: () => _getData(context),
           child: _buildBody(),
         ),
-        /*slivers: <Widget>[
-            _buildBody(),
-          ],*/
       ),
     );
   }
 
-  Future<void> _getData() async {
-    if (_context != null) {
-      RefreshListNotification().dispatch(_context);
+  /// Dispatchs a notification for the upper widget to refresh the list
+  Future<void> _getData(BuildContext context) async {
+    if (context != null) {
+      RefreshListNotification().dispatch(context);
       await Future.delayed(Duration(seconds: 10));
     }
   }
 
+  /// Creates the sliver app bar
   Widget _buildSliverAppBar(BuildContext context) {
     return SliverAppBar(
       title: Text(widget.title),
       centerTitle: true,
       backgroundColor: Colors.transparent,
-      //expandedHeight: MediaQuery.of(context).size.height / 3,
       expandedHeight: 300.0,
       floating: false,
       pinned: false,
@@ -102,6 +109,7 @@ class _TrackListScreenState extends State<TrackListScreen> {
         background: _buildAppBar(context),
       ),
       actions: [
+        // Show sort button only if the list is not empty
         (widget.list != null && widget.list.isNotEmpty
             ? PopupMenuButton<String>(
                 onSelected: (String value) {
@@ -132,33 +140,35 @@ class _TrackListScreenState extends State<TrackListScreen> {
     );
   }
 
+  /// Creates the actual body of the screen, with the list of tracks
   Widget _buildBody() {
+    // Shows a loading screen meanwhile
     if (widget.loading != null && widget.loading == true) {
       return LoadingScreen();
     }
 
+    // Streambuild to listen all changes in search criteria
     return StreamBuilder<List<Track>>(
       stream: tlb.filteredData,
       builder: (context, snapshot) {
-        /*if (!snapshot.hasData) {
-          if (widget.list == null) return LoadingScreen();
-          if (widget.list.isEmpty == null)
-            return ErrorScreen(
-              title: 'No tracks found here',
-            );
-        }*/
+        // If no original list, show an error
         if (widget.list == null || widget.list.isEmpty) {
-          /*return SliverToBoxAdapter(
-            child: LoadingScreen(),
-          );*/
           return ErrorScreen(
             title: 'No Tracks Found Here',
           );
         }
+
         final list = snapshot.data;
         if (list == null) {
           return LoadingScreen();
         }
+        
+        if (snapshot.hasError || list == null || list.isEmpty) {
+          return ErrorScreen(
+            title: 'No Tracks Found Here',
+          );
+        }
+
         return ListView.builder(
           itemBuilder: (context, index) {
             return Container(
@@ -174,83 +184,36 @@ class _TrackListScreenState extends State<TrackListScreen> {
           },
           itemCount: list.length,
         );
-
-/*
-        return SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-          if (index < list.length) {
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              decoration: BoxDecoration(
-                color: colorThirdBackground.withAlpha(150),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: TrackItem(
-                track: list[index],
-              ),
-            );
-          }
-        }, childCount: list.length));*/
       },
     );
   }
 
+  /// Creates the app bar
   Widget _buildAppBar(BuildContext context) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
+            // Space to avoid the text field be hidden by the app bar title
             SizedBox(
               height: 50.0,
             ),
-            (widget.list != null || widget.list.isNotEmpty
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: TextField(
-                          controller: _textController,
-                          showCursor: true,
-                          onChanged: sb.onSearchQueryChanged,
-                          decoration: new InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(100.0),
-                            ),
-                            filled: false,
-                            hintStyle: new TextStyle(color: Colors.grey[800]),
-                            hintText: "Search tracks by name, album or artist",
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: (_textEmpty
-                            ? Container()
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () {
-                                  _textController.clear();
-                                  sb.onSearchQueryChanged('');
-                                },
-                              )),
-                      ),
-                    ],
-                  )
-                : Container()),
+            // Search text field
+            getSearchTextField(widget.list, _textController, _textEmpty,
+                "Search tracks by name, album or artist", sb),
             Container(
               padding: EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   Expanded(
                     flex: 1,
-                    child: (widget.widget ?? Container()),
+                    // Header of the sliver app bar
+                    child: (widget.header ?? Container()),
                   ),
                   Expanded(
                     flex: 2,
+                    // Track stats with the filtered data
                     child: StreamBuilder(
                       stream: tlb.filteredData,
                       builder: (context, snapshot) {
@@ -271,6 +234,7 @@ class _TrackListScreenState extends State<TrackListScreen> {
     );
   }
 
+  /// Send an event depend on the sort choice
   Future choiceAction(String choice) async {
     if (choice == ConstantsOrderOptions.TrackName) {
       tlb.add(OrderTrackName());

@@ -62,7 +62,7 @@ class _SavedTracksDemoState extends State<SavedTracksDemo> {
       loading = true;
     }
     return TrackListScreen(
-      widget: _createWidgetHeader(state),
+      header: _createWidgetHeader(state),
       list: l,
       loading: loading,
       title: 'My Saved Songs (DEMO)',

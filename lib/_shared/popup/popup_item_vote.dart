@@ -24,12 +24,6 @@ class PopupItemVote extends PopupItemBase {
 
   @override
   void execute(BuildContext context) async {
-    // If we're in demo version, prevent the user to vote
-    if (state.demo) {
-      showMyDialog(context, "You can't Vote Songs in DEMO",
-          "Please, log in with Spotify if you want to vote for this song.");
-    } else {
-      await vote(context, state, suggestion, track);
-    }
+    await vote(context, state, suggestion, track);
   }
 }
