@@ -3,12 +3,15 @@ import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
+/// Class that manages the connection with the local database in the user device
 class LocalDB {
+  /// Indicates if the db is already initialized or not
   bool isInit = false;
+  /// Local database insstance
   static Future<Database> database;
 
   LocalDB() {
-    //init();
+    // Only init if not yet
     if (database == null || !isInit) {
       init();
     } else {
@@ -16,6 +19,7 @@ class LocalDB {
     }
   }
 
+/// Initializes 
   Future init() async {
     // Open the database and store the reference.
     print("Openning Database");
@@ -48,6 +52,7 @@ class LocalDB {
       //
       // In this case, replace any previous data.
       var map = sug.toMap();
+      map[Suggestion.fprivate] = (sug.private ? 1 : 0);
       await db.insert(
         Suggestion.databaseName,
         map,

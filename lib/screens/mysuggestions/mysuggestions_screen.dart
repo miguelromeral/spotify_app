@@ -11,6 +11,8 @@ import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
 
 class MySuggestionsScreen extends StatefulWidget {
+
+
   @override
   _MySuggestionsScreenState createState() => _MySuggestionsScreenState();
 }
@@ -56,6 +58,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
 
             list.sort((one, two) => two.date.compareTo(one.date));
             return SuggestionsScreen(
+              heroAnimation: false,
               header: _buildWidgetHeader(),
               title: 'My Suggestions',
               list: list,
@@ -85,6 +88,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
             }*/
           } else {
             return SuggestionsScreen(
+              heroAnimation: false,
               header: _buildWidgetHeader(),
               title: 'My Suggestions',
               list: List(),
@@ -99,6 +103,7 @@ class _MySuggestionsScreenState extends State<MySuggestionsScreen> {
       BlocProvider.of<SpotifyBloc>(context).add((UpdateMySuggestion()));
 
       return SuggestionsScreen(
+        heroAnimation: false,
         header: _buildWidgetHeader(),
         title: 'My Suggestions',
         list: List(),

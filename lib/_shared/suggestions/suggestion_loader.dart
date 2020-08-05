@@ -10,11 +10,15 @@ class SuggestionLoader extends StatefulWidget {
   final Suggestion suggestion;
   /// Spotify Api to retrieve data
   final MyApi api;
+  
+  /// Hero Animation for users in 
+  final bool heroAnimation;
 
   const SuggestionLoader({
     Key key,
     this.suggestion,
     this.api,
+    this.heroAnimation,
   }) : super(key: key);
 
   @override
@@ -51,6 +55,7 @@ class _SuggestionLoaderState extends State<SuggestionLoader> {
               builder: (context, track) {
                 if (track.hasData) {
                   return SuggestionItem(
+                    heroAnimation: widget.heroAnimation,
                     key: Key(
                         '${widget.suggestion.suserid}-${widget.suggestion.trackid}'),
                     track: track.data,

@@ -26,7 +26,7 @@ class _TabsPageState extends State<TabsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int _currentIndex = 0;
-  List<TabNavigationItem> _pages = TabNavigationItem.items();
+  List<TabNavigationItem> _pages = TabNavigationItem.items;
 
   StreamSubscription _intentDataStreamSubscription;
   String _sharedText;

@@ -19,7 +19,7 @@ class _TabsPageDemoState extends State<TabsPageDemo> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   int _currentIndex = 0;
-  List<TabNavigationItem> _pages = TabNavigationItem.itemsDemo();
+  List<TabNavigationItem> _pages = TabNavigationItem.itemsDemo;
 
   PageController pageController = PageController(
     initialPage: 0,

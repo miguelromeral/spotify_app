@@ -8,9 +8,15 @@ import 'package:flutter/widgets.dart';
 import 'package:ShareTheMusic/screens/home/home_screen.dart';
 import 'package:ShareTheMusic/screens/savedtracks/savedtracks_screen.dart';
 
+/// Class with the info of every bottom menu item
 class TabNavigationItem {
+  /// Page to display
   final Widget page;
+
+  /// Title of the screen (shown below the icon in the bottom bar)
   final Widget title;
+
+  /// Icon of the item
   final Icon icon;
 
   TabNavigationItem({
@@ -19,74 +25,56 @@ class TabNavigationItem {
     @required this.icon,
   });
 
-  static List<TabNavigationItem> items() {
-    return [
-      TabNavigationItem(
-        page: PageStorage(
-          child: new HomeScreen(),
-          bucket: new PageStorageBucket(),
-          key: HomeScreen.pageKey,
-        ),
-        icon: Icon(Icons.home),
-        title: Text("Home"),
+  /// Items of the bottom bar in the app
+  static List<TabNavigationItem> items = [
+    // Home Page
+    TabNavigationItem(
+      page: PageStorage(
+        child: new HomeScreen(),
+        bucket: new PageStorageBucket(),
+        key: HomeScreen.pageKey,
       ),
-      /*TabNavigationItem(
-          page: SearchUserScreen(),
-          icon: Icon(Icons.tag_faces),
-          title: Text("Users"),
-        ),*/
-      TabNavigationItem(
-        page: MyPlaylistsScreen(),
-        icon: Icon(Icons.library_music),
-        title: Text("Playlists"),
-      ),
-      TabNavigationItem(
-        page: SavedTracksScreen(),
-        icon: Icon(Icons.music_note),
-        title: Text("Saved Songs"),
-      ),
-      TabNavigationItem(
-        page: MySpaceScreen(),
-        icon: Icon(Icons.record_voice_over),
-        title: Text("My Space"),
-      ),
-      /*TabNavigationItem(
-          page: UserProfileScreen(
-            user: state.myUser,
-          ),
-          icon: Icon(Icons.face),
-          title: Text("Profile"),
-        ),*/
+      icon: Icon(Icons.home),
+      title: Text("Home"),
+    ),
+    // Playlists page
+    TabNavigationItem(
+      page: MyPlaylistsScreen(),
+      icon: Icon(Icons.library_music),
+      title: Text("Playlists"),
+    ),
+    // Saved Tracks Page
+    TabNavigationItem(
+      page: SavedTracksScreen(),
+      icon: Icon(Icons.music_note),
+      title: Text("Saved Songs"),
+    ),
+    // My Space Page
+    TabNavigationItem(
+      page: MySpaceScreen(),
+      icon: Icon(Icons.record_voice_over),
+      title: Text("My Space"),
+    ),
+  ];
 
-      /*   TabNavigationItem(
-          page: MySettingsScreen(),
-          icon: Icon(Icons.settings),
-          title: Text("Settings"),
-        ),*/
-    ];
-  }
-
-  static List<TabNavigationItem> itemsDemo(/*SpotifyApi api*/) => [
-        /*TabNavigationItem(
-          page: Text('Test'),
-          icon: Icon(Icons.home),
-          title: Text("Home"),
-        ),*/
-        TabNavigationItem(
-          page: HomeScreenDemo(),
-          icon: Icon(Icons.home),
-          title: Text("Home"),
-        ),
-        
-        TabNavigationItem(
-          page: SavedTracksDemo(/*api: api*/),
-          icon: Icon(Icons.music_note),
-          title: Text("Saved Songs"),
-        ),
-        TabNavigationItem(
-          page: DemoMoreScreen(),
-          icon: Icon(Icons.add),
-          title: Text("More"),
-        ),
-      ];
+  static List<TabNavigationItem> itemsDemo = [
+    // Home Demo Page
+    TabNavigationItem(
+      page: HomeScreenDemo(),
+      icon: Icon(Icons.home),
+      title: Text("Home"),
+    ),
+    // Saved Tracks Demo Page
+    TabNavigationItem(
+      page: SavedTracksDemo(),
+      icon: Icon(Icons.music_note),
+      title: Text("Saved Songs"),
+    ),
+    // More Demo Page
+    TabNavigationItem(
+      page: DemoMoreScreen(),
+      icon: Icon(Icons.add),
+      title: Text("More"),
+    ),
+  ];
 }

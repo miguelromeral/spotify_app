@@ -28,8 +28,12 @@ class SuggestionsScreen extends StatefulWidget {
   /// Header widget to show between the sliver app bar and the actual content of the screen
   final Widget header;
 
+
+  /// Hero Animation for users in 
+  final bool heroAnimation;
+
   SuggestionsScreen(
-      {Key key, this.loading, this.list, this.api, this.title, this.header})
+      {Key key, this.loading, this.list, this.api, this.title, this.heroAnimation, this.header})
       : super(key: key);
 
   @override
@@ -134,14 +138,11 @@ class SuggestionsScreenState extends State<SuggestionsScreen> {
 
   /// Creates a tile for the list with the suggestion.
   Widget _createListElement(Suggestion item, SpotifyService state, MyApi api) {
-    if (item.trackid == FirestoreService.defaultTrackId) {
-      return Container();
-    } else {
-      return SuggestionLoader(
-        key: Key('${item.suserid}-${item.trackid}'),
-        suggestion: item,
-        api: api,
-      );
-    }
+    return SuggestionLoader(
+      heroAnimation: widget.heroAnimation,
+      key: Key('${item.suserid}-${item.trackid}'),
+      suggestion: item,
+      api: api,
+    );
   }
 }

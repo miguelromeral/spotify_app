@@ -10,12 +10,12 @@ class HomeBloc extends Bloc<HomeEventBase, HomeData> {
   @override
   Stream<HomeData> mapEventToState(HomeEventBase event) async* {
     if (event is UpdateFeedHomeEvent) {
-      state.updateFeed(event.suggestions);
+      if (event.suggestions != null) state.updateFeed(event.suggestions);
       yield state;
     }
   }
 
-  dipose(){
+  dipose() {
     state.dispose();
   }
 }

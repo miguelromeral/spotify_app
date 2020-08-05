@@ -34,7 +34,11 @@ class SuggestionItem extends StatefulWidget {
   /// Suggestion data
   final Suggestion suggestion;
 
-  SuggestionItem({this.track, this.user, this.suggestion, Key key})
+  /// Hero animation for the user
+  final bool heroAnimation;
+
+  SuggestionItem(
+      {this.track, this.user, this.suggestion, this.heroAnimation, Key key})
       : super(key: key);
 
   @override
@@ -116,14 +120,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
           onTap: () {
             navigateProfile(context, user);
           },
-          child: Hero(
-            tag: user.id,
-            child: ProfilePicture(
-              key: Key(user.id),
-              user: user,
-              size: maxsize,
-            ),
-          ),
+          child: _createHeroProfile(user, maxsize),
         ),
       );
     } else {
@@ -138,6 +135,25 @@ class _SuggestionItemState extends State<SuggestionItem> {
           track: track,
           size: maxsize,
         ),
+      );
+    }
+  }
+
+  Widget _createHeroProfile(UserPublic user, double maxsize) {
+    if (widget.heroAnimation == null || widget.heroAnimation) {
+      return Hero(
+        tag: user.id,
+        child: ProfilePicture(
+          key: Key(user.id),
+          user: user,
+          size: maxsize,
+        ),
+      );
+    } else {
+      return ProfilePicture(
+        key: Key(user.id),
+        user: user,
+        size: maxsize,
       );
     }
   }
