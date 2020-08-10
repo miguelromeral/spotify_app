@@ -6,6 +6,8 @@ import 'package:ShareTheMusic/blocs/home_bloc.dart';
 import 'package:ShareTheMusic/blocs/localdb_bloc.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
 import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotify_stats.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';

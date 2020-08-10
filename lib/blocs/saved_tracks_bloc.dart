@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 
+/// Bloc that shows our saved tracks
 class SavedTracksBloc extends Bloc<SavedTracksEventBase, SavedTracksData> {
   @override
   SavedTracksData get initialState => SavedTracksData();
@@ -15,7 +16,7 @@ class SavedTracksBloc extends Bloc<SavedTracksEventBase, SavedTracksData> {
     }
   }
 
-  dipose(){
+  dipose() {
     state.dispose();
   }
 }

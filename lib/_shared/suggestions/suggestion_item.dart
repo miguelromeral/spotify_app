@@ -2,7 +2,8 @@ import 'package:ShareTheMusic/_shared/explicit_badge.dart';
 import 'package:ShareTheMusic/_shared/popup/popup_item_open_profile.dart';
 import 'package:ShareTheMusic/_shared/showup.dart';
 import 'package:ShareTheMusic/screens/settings_screen.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
+import 'package:ShareTheMusic/services/firestore_db.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:share/share.dart';
@@ -276,7 +277,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
       // When tapped, vote for it
       list.add(GestureDetector(
         onTap: () async {
-          vote(context, state, widget.suggestion, widget.track);
+          FirestoreService.vote(context, state, widget.suggestion, widget.track);
         },
         child: Container(
           child: Row(
@@ -286,7 +287,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
                   icon: 'vote',
                   size: 15.0,
                   callback: () async {
-                    vote(context, state, widget.suggestion, widget.track);
+                    FirestoreService.vote(context, state, widget.suggestion, widget.track);
                   }),
               SizedBox(
                 width: 4.0,

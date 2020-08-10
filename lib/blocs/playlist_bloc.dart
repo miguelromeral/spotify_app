@@ -1,8 +1,8 @@
 import 'package:ShareTheMusic/blocs/track_list_bloc.dart';
+import 'package:ShareTheMusic/models/order.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_app_bar/searcher.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:rxdart/subjects.dart';
 
 class PlaylistBloc extends Bloc<TrackBlocEvent, List<PlaylistSimple>>

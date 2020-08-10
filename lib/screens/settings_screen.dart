@@ -3,6 +3,7 @@ import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';

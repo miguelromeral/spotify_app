@@ -7,6 +7,7 @@ import 'package:sqflite/sqlite_api.dart';
 class LocalDB {
   /// Indicates if the db is already initialized or not
   bool isInit = false;
+
   /// Local database insstance
   static Future<Database> database;
 
@@ -19,7 +20,7 @@ class LocalDB {
     }
   }
 
-/// Initializes 
+  /// Initializes the database
   Future init() async {
     // Open the database and store the reference.
     print("Openning Database");
@@ -42,7 +43,7 @@ class LocalDB {
     isInit = true;
   }
 
-// Define a function that inserts dogs into the database
+// Define a function that inserts suggestions into the database
   Future<bool> insertSuggestion(Suggestion sug) async {
     try {
       // Get a reference to the database.
@@ -52,6 +53,7 @@ class LocalDB {
       //
       // In this case, replace any previous data.
       var map = sug.toMap();
+      //avoid using boolean in local db
       map[Suggestion.fprivate] = (sug.private ? 1 : 0);
       await db.insert(
         Suggestion.databaseName,
@@ -65,29 +67,19 @@ class LocalDB {
     }
   }
 
-  // A method that retrieves all the dogs from the dogs table.
+  /// A method that retrieves all the suggestions from the table in the local db.
   Future<List<Suggestion>> suggestions(String mySpotifyUserId) async {
     try {
       // Get a reference to the database.
       final Database db = await database;
-      // Query the table for all The Dogs.
+      // Query the table for all my suggestions (of the current user loged).
       String whereString = '${Suggestion.fsuserid} = ?';
       final List<Map<String, dynamic>> maps = await db.query(
           Suggestion.databaseName,
           where: whereString,
           whereArgs: [mySpotifyUserId]);
-      // Convert the List<Map<String, dynamic> into a List<Dog>.
-      return List.generate(maps.length, (i) {
-        return Suggestion(
-          trackid: maps[i][Suggestion.ftrackid],
-          fuserid: maps[i][Suggestion.ffuserid],
-          suserid: maps[i][Suggestion.fsuserid],
-          text: maps[i][Suggestion.ftext],
-          date: DateTime.parse(maps[i][Suggestion.fdate]),
-          likes: maps[i][Suggestion.flikes],
-          private: (maps[i][Suggestion.fprivate] == 1 ? true : false),
-        );
-      });
+      // Convert the List<Map<String, dynamic> into a List<Suggestion>.
+      return List.generate(maps.length, (i) => Suggestion.fromMap(maps[i]));
     } catch (e) {
       print("Exception while getting your suggestions: $e");
       return List();

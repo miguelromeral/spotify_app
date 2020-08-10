@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 
 /// Shows the profile picture of an Spotify User
 class ProfilePicture extends StatefulWidget {

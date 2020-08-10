@@ -41,13 +41,7 @@ class _SavedTracksDemoState extends State<SavedTracksDemo> {
         future: _getData(context, api),
         builder: (context, snp) {
           if (snp.hasData) {
-            return NotificationListener<RefreshListNotification>(
-              onNotification: (notification) {
-                _getData(context, api);
-                return true;
-              },
-              child: _create(context, api, state),
-            );
+            return _create(context, api, state);
           } else {
             return LoadingScreen();
           }

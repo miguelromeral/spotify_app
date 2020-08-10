@@ -1,3 +1,4 @@
+import 'package:ShareTheMusic/services/firestore_db.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify/spotify.dart';
@@ -24,6 +25,6 @@ class PopupItemVote extends PopupItemBase {
 
   @override
   void execute(BuildContext context) async {
-    await vote(context, state, suggestion, track);
+    await FirestoreService.vote(context, state, suggestion, track);
   }
 }

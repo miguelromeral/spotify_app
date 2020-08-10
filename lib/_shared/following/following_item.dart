@@ -2,7 +2,7 @@ import 'package:ShareTheMusic/_shared/following/following_button.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/_shared/custom_listtile.dart';

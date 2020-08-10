@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:provider/provider.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/screens/wrapper.dart';
 import 'package:ShareTheMusic/services/firebase_auth.dart';
 import 'blocs/home_bloc.dart';

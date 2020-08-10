@@ -1,4 +1,4 @@
-import 'package:ShareTheMusic/blocs/api_bloc.dart';
+/*import 'package:ShareTheMusic/blocs/api_bloc.dart';
 import 'package:ShareTheMusic/services/my_spotify_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +7,7 @@ import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/_shared/suggestions/suggestion_item.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
-import '../styles.dart';
+import '../../services/styles.dart';
 
 class SuggestionsList extends StatefulWidget {
   final List<Suggestion> suggestions;
@@ -59,3 +59,4 @@ class _SuggestionsListState extends State<SuggestionsList> {
     );
   }
 }
+*/

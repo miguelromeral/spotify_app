@@ -1,44 +1,37 @@
 import 'package:flutter/material.dart';
 
-const kShrinePink50 = const Color(0xFFFEEAE6);
-const kShrinePink100 = const Color(0xFFFEDBD0);
-const kShrinePink300 = const Color(0xFFFBB8AC);
-const kShrinePink400 = const Color(0xFFEAA4A4);
-const kShrineBrown900 = const Color(0xFF442B2D);
-const kShrineErrorRed = const Color(0xFFC5032B);
-const kShrineSurfaceWhite = const Color(0xFFFFFBFA);
-const kShrineBackgroundWhite = Colors.white;
-
+/// Card Error Color
 Color colorErrorCard = Colors.red[500];
+/// Main Color
 Color colorAccent = Colors.green[500];
+/// Secondary Color
 Color colorPrimary = Colors.green[900];
+/// Background color, just black
 Color colorBackground = Colors.black;
+/// A slightly more light background color
 Color colorSemiBackground = Colors.black38;
+/// A not so dark black
 Color colorThirdBackground = Colors.grey[900];
+/// Icons color
 Color colorIcon = Colors.white;
-Color colorSeprator = Colors.white70;
-
+/// Color of the title screen error
 Color colorError = Colors.red.shade200;
+/// Color of the error screen details
 Color colorErrorDetail = Colors.red.shade400;
 
-/*
-Color _hexToColor(String code) {
-  return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-}*/
-
+/// Gets the app theme
 final ThemeData appTheme = _buildAppTheme();
 
-//const backgroundColor = const Colors;
-
+/// Gradient for the background of the app (without fancy background)
 BoxDecoration backgroundGradient = BoxDecoration(
     gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [colorThirdBackground, Colors.black, colorPrimary]));
 
+/// Builds the app theme
 ThemeData _buildAppTheme() {
   final ThemeData base = ThemeData.dark();
-  //return base;
   return base.copyWith(
     brightness: Brightness.dark,
     primaryColor: colorPrimary,
@@ -52,10 +45,6 @@ ThemeData _buildAppTheme() {
       ),
     ),
     cardColor: colorThirdBackground,
-    /*cardTheme: base.cardTheme.copyWith(
-      color: Colors.red,
-      elevation: 0,      
-    ),*/
     snackBarTheme: base.snackBarTheme.copyWith(
       backgroundColor: colorAccent,
     ),
@@ -68,3 +57,40 @@ ThemeData _buildAppTheme() {
     ),
   );
 }
+
+/// Style of the title in the feed elements
+TextStyle styleFeedTitle = TextStyle(
+  fontSize: 14.0,
+  fontWeight: FontWeight.bold,
+);
+
+/// Style of the text with the time of an item
+TextStyle styleFeedAgo = TextStyle(
+  color: Colors.white38,
+  fontStyle: FontStyle.italic,
+  fontSize: 10.0,
+  fontWeight: FontWeight.normal,
+);
+
+/// Style of the text in a track
+TextStyle styleFeedTrack = TextStyle(
+  color: Colors.green[600],
+);
+
+/// Style of the text for the artists
+TextStyle styleFeedArtist = TextStyle(
+  color: Colors.green[900],
+);
+
+/// Style of the content in the list item
+TextStyle styleFeedContent = TextStyle(
+  fontSize: 16.0,
+);
+
+/// Style of the title in a card
+TextStyle styleCardHeader =
+    TextStyle(fontSize: 14.0, fontStyle: FontStyle.italic);
+
+/// Style of the content in a card
+TextStyle styleCardContent =
+    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);

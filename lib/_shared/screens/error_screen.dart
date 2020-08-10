@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ShareTheMusic/_shared/custom_listtile.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 
 /// Show an error in the current screen
 class ErrorScreen extends StatelessWidget {

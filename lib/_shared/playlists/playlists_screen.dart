@@ -1,7 +1,9 @@
+import 'package:ShareTheMusic/_shared/playlists/header_playlist_list.dart';
 import 'package:ShareTheMusic/_shared/playlists/playlist_item.dart';
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
+import 'package:ShareTheMusic/models/order.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,11 @@ import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/blocs/playlist_bloc.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/blocs/track_list_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
+
+import '../search_text_field.dart';
 
 /// Screen to show all the playlist items.
 class PlaylistsScreen extends StatefulWidget {
@@ -139,9 +142,15 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
             SizedBox(
               height: 50.0,
             ),
-            // Search TextField
-            getSearchTextField(widget.list, _textController, _textEmpty,
-                "Search playlists by name or owner", sb),
+
+            // TextField if the list is not null
+            SearchTextField(
+              list: widget.list,
+              controller: _textController,
+              textEmpty: _textEmpty,
+              hint: "Search users by name or ID",
+              searchbloc: sb,
+            ),
 
             Container(
               padding: EdgeInsets.all(16.0),
@@ -159,14 +168,8 @@ class _PlaylistsScreenState extends State<PlaylistsScreen> {
                     // Stream to listen to any changes in the list when filtering.
                     child: StreamBuilder<List<PlaylistSimple>>(
                         stream: tlb.filteredData,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return widgetHeaderPlaylistsList(
-                                snapshot.data, state.myUser);
-                          } else {
-                            return Container();
-                          }
-                        }),
+                        builder: (context, snapshot) => HeaderPlaylistList(
+                            list: snapshot.data, me: state.myUser)),
                   ),
                 ],
               ),

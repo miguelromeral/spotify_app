@@ -1,4 +1,4 @@
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 

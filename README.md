@@ -2,7 +2,26 @@
 
 ## Introduction
 
+- Love music?
+Yes!
+- Prepared to find new songs?
+Yep!
+- Friends who share all their favorite songs?
+Aye!
+
+Then we're ready to discover more about your friends likes!
+
 ShareTheTrack is the perfect application for those who want to discover new amazing songs from their friends.  Recommend new songs to your friends and listen to their suggestions and if you like them, give them as many likes as you want.
+
+Browse in your saved tracks list from Spotify and even through your playlists to get the perfect song for the moment and allow your followers knowing you a little bit more. In case you need something more than just the lyrics to convey why is your choice for today, you also have the option to include a brief text for the occasion.
+
+The people you're following is also sending their own suggestions, so click in the Spotify icon in their suggestions and you'll be redirected to the official app in order you to listen the actual track.
+
+The votes are free! That means you can vote any suggestion from your friends as many times as you want. The only condition is you can not vote to your own suggestions, that's up to your followers.
+
+The app doesn't store any of your suggestion but the latest. However, all the suggestions sent by a device and a user are stored in their devices locally, so the user can see their history.
+
+You need a Spotify account to join all the features of the app. Nevertheless, a Demo version is included so you can see how the app looks with no extra need more than just clicking a button in the login screen.
 
 ## Availability
 
@@ -55,18 +74,12 @@ The data is provided by the [Spotify API](https://developer.spotify.com/document
 
 Version|Code|Changes
 --- | --- | ---
+1.0.0|6|Fixed bugs and refactored code
 0.1.4|5|Added followers list in profile screen
 0.1.3|4|Fixed bugs in DEMO version
 0.1.2|3|Stats added to playlist and track lists
 0.1.1|2|Demo Version Adapted
 0.1|1|Alpha Release
-
-## TO BE DONE
-
-* Add Screenshots
-* Refactor code
-* Comment code
-* Test features
 
 ## About
 

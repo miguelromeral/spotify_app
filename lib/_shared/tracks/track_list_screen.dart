@@ -1,15 +1,19 @@
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/_shared/tracks/header_track_list.dart';
+import 'package:ShareTheMusic/models/order.dart';
 import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/spotify_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:search_app_bar/filter.dart';
 import 'package:search_app_bar/search_bloc.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/_shared/tracks/track_item.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:ShareTheMusic/blocs/track_list_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
+
+import '../search_text_field.dart';
 
 /// Creates the screen that shows a list of tracks
 class TrackListScreen extends StatefulWidget {
@@ -162,7 +166,7 @@ class _TrackListScreenState extends State<TrackListScreen> {
         if (list == null) {
           return LoadingScreen();
         }
-        
+
         if (snapshot.hasError || list == null || list.isEmpty) {
           return ErrorScreen(
             title: 'No Tracks Found Here',
@@ -199,9 +203,16 @@ class _TrackListScreenState extends State<TrackListScreen> {
             SizedBox(
               height: 50.0,
             ),
-            // Search text field
-            getSearchTextField(widget.list, _textController, _textEmpty,
-                "Search tracks by name, album or artist", sb),
+
+            // TextField if the list is not null
+            SearchTextField(
+              list: widget.list,
+              controller: _textController,
+              textEmpty: _textEmpty,
+              hint: "Search users by name or ID",
+              searchbloc: sb,
+            ),
+
             Container(
               padding: EdgeInsets.all(16.0),
               child: Row(
@@ -216,13 +227,9 @@ class _TrackListScreenState extends State<TrackListScreen> {
                     // Track stats with the filtered data
                     child: StreamBuilder(
                       stream: tlb.filteredData,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return widgetHeaderTrackList(snapshot.data);
-                        } else {
-                          return Container();
-                        }
-                      },
+                      builder: (context, snapshot) => HeaderTrackList(
+                        list: snapshot.data,
+                      ),
                     ),
                   ),
                 ],

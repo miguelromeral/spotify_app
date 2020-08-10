@@ -1,19 +1,26 @@
+import 'package:ShareTheMusic/models/order.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_app_bar/searcher.dart';
 import 'package:spotify/spotify.dart';
-import 'package:ShareTheMusic/blocs/spotify_events.dart';
 import 'package:rxdart/subjects.dart';
 
+/// Bloc that manages the filtering of a list of tracks
 class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     implements Searcher<Track> {
+  /// Initial list, without any filter
   List<Track> initialList;
+
+  /// Initial list with the default order, in case the user needs it
   List<Track> originalList = new List();
+
+  /// Allows us to filter the initial list
   final _filteredData = BehaviorSubject<List<Track>>();
+
+  /// Sort choice set to display the list of tracks
   Order _order = Order.byDefault;
 
   TrackListBloc(List<Track> list) {
     initialList = list;
-    //originalList = list;
     copyList(list);
     _filteredData.add(initialList);
   }
@@ -27,17 +34,22 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     }
   }
 
+  /// Stream that gives us the filtered list
   Stream<List<Track>> get filteredData => _filteredData.stream;
 
+  /// Method of filtering the list
   @override
   get onDataFiltered => _filteredData.add;
 
+  /// Original list
   @override
   List<Track> get data => initialList;
 
+  /// First initial state, an empty list
   @override
   List<Track> get initialState => List();
 
+  /// Sets a sorting method depending in the option selected by the user
   @override
   Stream<List<Track>> mapEventToState(TrackBlocEvent event) async* {
     if (event is OrderTrackName) {
@@ -55,6 +67,7 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     }
   }
 
+  /// Sets the new sorting method and sorts the list
   Future _choiceAction(Order choice) async {
     if (choice == Order.name) {
       _order = _order == Order.name ? Order.nameReverse : Order.name;
@@ -66,31 +79,30 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
       _order =
           _order == Order.byDefault ? Order.byDefaultReverse : Order.byDefault;
     }
-    //list = _setOrder(list);
-
     initialList = _setOrder(initialList);
     _filteredData.add(initialList);
   }
 
+  /// Sorts the list in function of the sorting method
   List<Track> _setOrder(List<Track> list) {
     switch (_order) {
       case Order.name:
-        list.sort((a, b) => _orderName(a, b));
+        list.sort((a, b) => orderName(a, b));
         break;
       case Order.nameReverse:
-        list.sort((a, b) => _orderName(b, a));
+        list.sort((a, b) => orderName(b, a));
         break;
       case Order.artist:
-        list.sort((a, b) => _orderArtistName(a, b));
+        list.sort((a, b) => orderArtistName(a, b));
         break;
       case Order.artistReverse:
-        list.sort((a, b) => _orderArtistName(b, a));
+        list.sort((a, b) => orderArtistName(b, a));
         break;
       case Order.album:
-        list.sort((a, b) => _orderAlbumName(a, b));
+        list.sort((a, b) => orderAlbumName(a, b));
         break;
       case Order.albumReverse:
-        list.sort((a, b) => _orderAlbumName(b, a));
+        list.sort((a, b) => orderAlbumName(b, a));
         break;
       case Order.byDefault:
         return originalList;
@@ -101,45 +113,4 @@ class TrackListBloc extends Bloc<TrackBlocEvent, List<Track>>
     }
     return list;
   }
-}
-
-int _orderName(Track a, Track b) =>
-    a.name.toLowerCase().compareTo(b.name.toLowerCase());
-int _orderArtistName(Track a, Track b) =>
-    a.artists[0].name.toLowerCase().compareTo(b.artists[0].name.toLowerCase());
-int _orderAlbumName(Track a, Track b) =>
-    a.album.name.toLowerCase().compareTo(b.album.name.toLowerCase());
-
-enum Order {
-  name,
-  nameReverse,
-  artist,
-  artistReverse,
-  album,
-  albumReverse,
-  byDefault,
-  byDefaultReverse,
-  playlistName,
-  playlistNameReverse,
-}
-
-class ConstantsOrderOptions {
-  static const String TrackName = 'By Track Name';
-  static const String Artist = 'By Artist';
-  static const String Album = 'By Album';
-  static const String ByDefault = 'By Default';
-
-  static const String PlaylistName = 'By Playlist Name';
-
-  static const List<String> choices = <String>[
-    TrackName,
-    Artist,
-    Album,
-    ByDefault,
-  ];
-
-  static const List<String> choicesPL = [
-    PlaylistName,
-    ByDefault,
-  ];
 }

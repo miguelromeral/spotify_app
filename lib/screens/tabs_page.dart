@@ -12,7 +12,7 @@ import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/tab_navigation_item.dart';
 import 'package:ShareTheMusic/screens/share_track/share_track.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 

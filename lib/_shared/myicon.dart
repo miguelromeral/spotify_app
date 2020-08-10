@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 
 /// Icon that uses a custom asset in the app
 class MyIcon extends StatefulWidget {

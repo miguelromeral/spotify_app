@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ShareTheMusic/blocs/spotify_bloc.dart';
 import 'package:ShareTheMusic/models/tab_navigation_item.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
@@ -65,51 +65,46 @@ class _TabsPageDemoState extends State<TabsPageDemo> {
     );
   }
 
-  Widget _fullTree(SpotifyService state) {
-    return NotificationListener<OpenDrawerNotification>(
-      onNotification: (notification) {
-        _scaffoldKey.currentState.openDrawer();
-        return true;
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        body: buildPageView(),
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-              canvasColor: colorSemiBackground,
-              textTheme: Theme.of(context).textTheme.copyWith(
-                  caption: new TextStyle(
-                      color: Colors
-                          .yellow))), // sets the inactive color of the `BottomNavigationBar`
 
-          /*child: BottomNavigationBar(
-            fixedColor: colorAccent,
-            unselectedItemColor: colorPrimary,
-            currentIndex: _currentIndex,
-            onTap: (int index) => setState(() => _currentIndex = index),
-            items: [
-              for (final tabItem in pages)
-                BottomNavigationBarItem(
-                  icon: tabItem.icon,
-                  title: tabItem.title,
-                )
-            ],
-          ),*/
-          child: BottomNavigationBar(
-            unselectedItemColor: colorThirdBackground,
-            selectedItemColor: colorAccent,
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              bottomTapped(index);
-            },
-            items: [
-              for (final tabItem in _pages)
-                BottomNavigationBarItem(
-                  icon: tabItem.icon,
-                  title: tabItem.title,
-                )
-            ],
-          ),
+  Widget _fullTree(SpotifyService state) {
+    return Scaffold(
+      key: _scaffoldKey,
+      body: buildPageView(),
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+            canvasColor: colorSemiBackground,
+            textTheme: Theme.of(context).textTheme.copyWith(
+                caption: new TextStyle(
+                    color: Colors
+                        .yellow))), // sets the inactive color of the `BottomNavigationBar`
+
+        /*child: BottomNavigationBar(
+          fixedColor: colorAccent,
+          unselectedItemColor: colorPrimary,
+          currentIndex: _currentIndex,
+          onTap: (int index) => setState(() => _currentIndex = index),
+          items: [
+            for (final tabItem in pages)
+              BottomNavigationBarItem(
+                icon: tabItem.icon,
+                title: tabItem.title,
+              )
+          ],
+        ),*/
+        child: BottomNavigationBar(
+          unselectedItemColor: colorThirdBackground,
+          selectedItemColor: colorAccent,
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            bottomTapped(index);
+          },
+          items: [
+            for (final tabItem in _pages)
+              BottomNavigationBarItem(
+                icon: tabItem.icon,
+                title: tabItem.title,
+              )
+          ],
         ),
       ),
     );

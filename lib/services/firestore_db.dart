@@ -1,5 +1,9 @@
 import 'package:ShareTheMusic/screens/settings_screen.dart';
+import 'package:ShareTheMusic/services/gui.dart';
+import 'package:ShareTheMusic/services/notifications.dart';
+import 'package:ShareTheMusic/services/spotifyservice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:spotify/spotify.dart';
 import 'package:ShareTheMusic/models/following.dart';
@@ -48,7 +52,8 @@ class FirestoreService {
         suserid: spotifyuserid,
         text: text);
 
-    await cSuggestions.document(spotifyuserid).setData(sug.toMap());
+    var map = sug.toMap();
+    await cSuggestions.document(spotifyuserid).setData(map);
     return sug;
   }
 
@@ -131,6 +136,26 @@ class FirestoreService {
     return cSuggestions.snapshots().map(_suggestionListFromSnapshot);
   }
 
+  /// A user votes for a suggestion of a different user
+  static Future vote(BuildContext context, SpotifyService state,
+      Suggestion suggestion, Track track) async {
+    if (state.demo) {
+      showMyDialog(context, "You can't Vote Songs in DEMO",
+          "Please, log in with Spotify if you want to vote for this song.");
+    } else {
+      if (!state.firebaseUserIdEquals(suggestion.fuserid)) {
+        await state.likeSuggestion(suggestion);
+
+        UpdatedFeedNotification().dispatch(context);
+
+        //Scaffold.of(context).showSnackBar(SnackBar(content: Text('You liked "${track.name}"!')));
+      } else {
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text('You Can Not Vote For Your Own Song.')));
+      }
+    }
+  }
+
   /// *******************************************
   ///
   /// FOLLOWING
@@ -174,7 +199,6 @@ class FirestoreService {
   /// Add to this following the next spotify user id
   Future<bool> addFollowing(Following fol, String suserid) async {
     try {
-
       fol.concatenateUser(suserid);
       // Avoid follow users who are not in the app yet
       Following toFollow = await getFollowingBySpotifyUserID(suserid);
@@ -237,11 +261,11 @@ class FirestoreService {
   }
 
   /// Delete the user info in the app.
-  /// 
-  /// 
+  ///
+  ///
   /// TBD
-  /// 
-  /// 
+  ///
+  ///
   Future<bool> deleteUserInfo(String suserid) async {
     try {
       await Future.delayed(Duration(seconds: 10));

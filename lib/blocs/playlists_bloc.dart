@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/spotify.dart';
 
+/// Bloc with our playslists
 class PlaylistsBloc extends Bloc<PlaylistsEventBase, PlaylistsData> {
   @override
   PlaylistsData get initialState => PlaylistsData();

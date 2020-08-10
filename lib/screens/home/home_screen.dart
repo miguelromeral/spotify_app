@@ -12,7 +12,7 @@ import 'package:ShareTheMusic/models/suggestion.dart';
 import 'package:ShareTheMusic/services/notifications.dart';
 import 'package:ShareTheMusic/services/spotifyservice.dart';
 
-import '../styles.dart';
+import '../../services/styles.dart';
 
 class HomeScreen extends StatefulWidget {
   static Key pageKey = new PageStorageKey("homescreen");

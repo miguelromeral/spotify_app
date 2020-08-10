@@ -1,5 +1,6 @@
 import 'package:ShareTheMusic/_shared/screens/error_screen.dart';
 import 'package:ShareTheMusic/_shared/screens/loading_screen.dart';
+import 'package:ShareTheMusic/_shared/search_text_field.dart';
 import 'package:ShareTheMusic/blocs/following_bloc.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
@@ -176,8 +177,13 @@ class _FollowingListState extends State<FollowingList> {
               height: 50.0,
             ),
             // TextField if the list is not null
-            getSearchTextField(widget.list, _textController, _textEmpty,
-                "Search users by name or ID", sb),
+            SearchTextField(
+              list: widget.list,
+              controller: _textController,
+              textEmpty: _textEmpty,
+              hint: "Search users by name or ID",
+              searchbloc: sb,
+            ),
             // Rest of the header
             Expanded(
                 child: Container(

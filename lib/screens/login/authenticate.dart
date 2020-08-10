@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ShareTheMusic/_shared/app_logo.dart';
 import 'package:ShareTheMusic/_shared/myicon.dart';
 import 'package:ShareTheMusic/blocs/api_bloc.dart';
-import 'package:ShareTheMusic/screens/styles.dart';
+import 'package:ShareTheMusic/services/styles.dart';
 import 'package:ShareTheMusic/services/gui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

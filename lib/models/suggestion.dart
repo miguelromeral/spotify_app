@@ -69,6 +69,17 @@ class Suggestion {
     reference = doc.reference;
   }
 
+  /// Creates a suggestion from a map retrieved in the local DB
+  Suggestion.fromMap(Map<String, dynamic> map) {
+    trackid = map[ftrackid];
+    fuserid = map[ffuserid];
+    suserid = map[fsuserid];
+    text = map[ftext];
+    date = DateTime.parse(map[fdate]);
+    likes = map[flikes];
+    private = (map[fprivate] == 1 ? true : false);
+  }
+
   /// Parses the following instance into a map
   Map<String, dynamic> toMap() {
     return {
